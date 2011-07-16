@@ -1,6 +1,5 @@
 import QtQuick 1.0
 import Conboy 1.0
-import "TextAreaHelper.js" as TextAreaHelper
 
 Rectangle {
     width: 800
@@ -15,26 +14,10 @@ Rectangle {
         anchors.right: parent.right
         anchors.bottom: toolbar.top
 
-        TextEditor {
+        ConboyEditor {
             id: editor
-            width: flickable.width
-            // We want the editor always at least as high as the flickable
+            width:  flickable.width
             minHeight: flickable.height
-            fontSize: 40
-            onCursorPositionChanged: {
-                if (rect.y + rect.height > flickable.height) {
-                    contentMovingAnimation.to = rect.y + rect.height - flickable.height
-                    contentMovingAnimation.running = true
-                }
-            }
-
-            PropertyAnimation {
-                id: contentMovingAnimation
-                property: "contentY"
-                duration: 200
-                target: flickable
-                easing.type: Easing.InOutCubic
-            }
         }
     }
 

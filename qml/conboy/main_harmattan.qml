@@ -17,12 +17,10 @@ Window {
         anchors.right: parent.right
         anchors.bottom: toolbar.top
 
-        TextEditor {
+        ConboyEditor {
             id: editor
-            width: flickable.width
-            // We want the editor always at least as high as the flickable
+            width:  flickable.width
             minHeight: flickable.height
-            fontSize: 40
         }
     }
 
