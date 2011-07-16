@@ -24,6 +24,9 @@ public:
 signals:
     void minHeightChanged();
     void fontSizeChanged();
+    void textChanged();
+    void cursorPositionChanged(QRect rect);
+
 
 public slots:
     void makeBold();
@@ -31,6 +34,7 @@ public slots:
 private slots:
     void onWidthChanged();
     void onTextEditHeightChanged(int height);
+    void onCursorPositionChanged();
 
 
 private:

@@ -11,6 +11,8 @@ QMLTextEditor::QMLTextEditor(QDeclarativeItem *parent) :
 
     connect(this, SIGNAL(widthChanged()), this, SLOT(onWidthChanged()));
     connect(textEdit, SIGNAL(heightChanged(int)), this, SLOT(onTextEditHeightChanged(int)));
+    connect(textEdit, SIGNAL(textChanged()), this, SIGNAL(textChanged()));
+    connect(textEdit, SIGNAL(cursorPositionChanged()), this, SLOT(onCursorPositionChanged()));
 }
 
 void QMLTextEditor::onTextEditHeightChanged(int height)
@@ -32,6 +34,12 @@ void QMLTextEditor::setMinHeight(int height)
 {
     textEdit->setQmlHeight(height);
     textEdit->setMinimumHeight(height);
+}
+
+void QMLTextEditor::onCursorPositionChanged()
+{
+    QRect rect = textEdit->cursorRect();
+    emit cursorPositionChanged(rect);
 }
 
 qreal QMLTextEditor::getFontSize() const
