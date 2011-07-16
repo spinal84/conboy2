@@ -34,3 +34,20 @@ void QMLTextEditor::setMinHeight(int height)
     textEdit->setMinimumHeight(height);
 }
 
+qreal QMLTextEditor::getFontSize() const
+{
+    return fontSize;
+}
+
+void QMLTextEditor::setFontSize(qreal size)
+{
+    if (fontSize != size) {
+        fontSize = size;
+        textEdit->setFont(QFont("Arial", fontSize));
+    }
+}
+
+void QMLTextEditor::makeBold()
+{
+    textEdit->setFontWeight(QFont::Bold);
+}

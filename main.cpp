@@ -13,8 +13,14 @@ int main(int argc, char *argv[])
 
     QmlApplicationViewer viewer;
     viewer.setOrientation(QmlApplicationViewer::ScreenOrientationAuto);
-    viewer.setMainQmlFile(QLatin1String("qml/conboy/main.qml"));
-    viewer.showExpanded();
+
+    if (app.arguments().contains("--desktop")) {
+        viewer.setMainQmlFile(QLatin1String("qml/conboy/main_desktop.qml"));
+        viewer.showExpanded();
+    } else {
+        viewer.setMainQmlFile(QLatin1String("qml/conboy/main_harmattan.qml"));
+        viewer.showFullScreen();
+    }
 
     return app.exec();
 }

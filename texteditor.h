@@ -19,7 +19,7 @@ signals:
 public slots:
 
 private slots:
-    void onTextChanged();
+    void resizeHeight();
 
 private:
     int qmlHeight;

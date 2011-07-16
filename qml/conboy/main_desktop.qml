@@ -4,6 +4,7 @@ import Conboy 1.0
 Rectangle {
     width: 800
     height: 480
+    color: "lightgreen"
 
     Flickable {
         id: flickable
@@ -18,6 +19,7 @@ Rectangle {
             width: flickable.width
             // We want the editor always at least as high as the flickable
             minHeight: flickable.height
+            fontSize: 40
         }
     }
 
@@ -39,14 +41,14 @@ Rectangle {
             anchors.verticalCenter: parent.verticalCenter
 
             Text {
-                text: "Quit"
+                text: "Bold"
                 anchors.centerIn: parent
             }
 
             MouseArea {
                 anchors.fill: parent
                 onClicked: {
-                    Qt.quit();
+                    editor.makeBold()
                 }
             }
         }
