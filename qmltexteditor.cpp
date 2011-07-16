@@ -9,10 +9,13 @@ QMLTextEditor::QMLTextEditor(QDeclarativeItem *parent) :
     proxy->setWidget(textEdit);
     proxy->setPos(0, 0);
 
+    bold = false;
+
     connect(this, SIGNAL(widthChanged()), this, SLOT(onWidthChanged()));
     connect(textEdit, SIGNAL(heightChanged(int)), this, SLOT(onTextEditHeightChanged(int)));
     connect(textEdit, SIGNAL(textChanged()), this, SIGNAL(textChanged()));
     connect(textEdit, SIGNAL(cursorPositionChanged()), this, SLOT(onCursorPositionChanged()));
+    connect(textEdit, SIGNAL(currentCharFormatChanged(QTextCharFormat)), this, SLOT(onCurrentCharFormatChanged(QTextCharFormat)));
 }
 
 void QMLTextEditor::onTextEditHeightChanged(int height)
@@ -55,11 +58,30 @@ void QMLTextEditor::setFontSize(qreal size)
     }
 }
 
-void QMLTextEditor::makeBold(bool bold)
+void QMLTextEditor::toggleBold()
 {
     if (bold) {
-        textEdit->setFontWeight(QFont::Bold);
-    } else {
         textEdit->setFontWeight(QFont::Normal);
+    } else {
+        textEdit->setFontWeight(QFont::Bold);
     }
+}
+
+bool QMLTextEditor::getBold() const
+{
+    return bold;
+}
+
+//void QMLTextEditor::setBold(bool isBold)
+//{
+//    if (bold != isBold) {
+//        bold = isBold;
+//        emit boldChanged();
+//    }
+//}
+
+void QMLTextEditor::onCurrentCharFormatChanged(QTextCharFormat format)
+{
+    bold = (format.fontWeight() == QFont::Bold);
+    emit boldChanged();
 }

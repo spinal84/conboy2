@@ -31,15 +31,10 @@ Window {
 
         tools: ToolBarLayout {
             ToolButton {
+                id: boldBut
                 text: "Bold"
-                checkable: true
-                onCheckedChanged: {
-                    if (checked) {
-                        editor.makeBold(true);
-                    } else {
-                        editor.makeBold(false)
-                    }
-                }
+                checked: editor.bold
+                onClicked: editor.toggleBold()
             }
         }
     }

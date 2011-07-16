@@ -21,7 +21,7 @@ Rectangle {
 
     MouseArea {
         anchors.fill: parent
-        onClicked: root.toggled = !root.toggled
+        onClicked: root.clicked()
     }
 
     states: [

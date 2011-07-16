@@ -11,6 +11,7 @@ class QMLTextEditor : public QDeclarativeItem
     Q_OBJECT
     Q_PROPERTY(int minHeight READ getMinHeight WRITE setMinHeight NOTIFY minHeightChanged)
     Q_PROPERTY(qreal fontSize READ getFontSize WRITE setFontSize NOTIFY fontSizeChanged)
+    Q_PROPERTY(bool bold READ getBold NOTIFY boldChanged)
 
 public:
     explicit QMLTextEditor(QDeclarativeItem *parent = 0);
@@ -21,19 +22,25 @@ public:
     qreal getFontSize() const;
     void setFontSize(qreal size);
 
+    bool getBold() const;
+    //void setBold(bool isBold);
+
+
 signals:
     void minHeightChanged();
     void fontSizeChanged();
     void textChanged();
     void cursorPositionChanged(QRect rect);
+    void boldChanged();
 
 public slots:
-    void makeBold(bool bold);
+    void toggleBold();
 
 private slots:
     void onWidthChanged();
     void onTextEditHeightChanged(int height);
     void onCursorPositionChanged();
+    void onCurrentCharFormatChanged(QTextCharFormat format);
 
 private:
     QGraphicsProxyWidget *proxy;
@@ -41,6 +48,7 @@ private:
     int qmlWidth;
     int qmlHeight;
     qreal fontSize;
+    bool bold;
 
 };
 

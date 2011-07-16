@@ -31,14 +31,10 @@ Rectangle {
         anchors.right: parent.right
 
         ToggleButton {
+            id: boldBut
             text: "Bold"
-            onToggledChanged: {
-                if (toggled) {
-                    editor.makeBold(true);
-                } else {
-                    editor.makeBold(false)
-                }
-            }
+            toggled: editor.bold
+            onClicked: editor.toggleBold()
         }
     }
 }
