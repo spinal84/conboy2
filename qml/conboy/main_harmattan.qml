@@ -20,6 +20,7 @@ Window {
         ConboyEditor {
             id: editor
             width:  flickable.width
+            // We want the editor always at least as high as the flickable
             minHeight: flickable.height
         }
     }
@@ -31,7 +32,14 @@ Window {
         tools: ToolBarLayout {
             ToolButton {
                 text: "Bold"
-                onClicked: editor.makeBold()
+                checkable: true
+                onCheckedChanged: {
+                    if (checked) {
+                        editor.makeBold(true);
+                    } else {
+                        editor.makeBold(false)
+                    }
+                }
             }
         }
     }

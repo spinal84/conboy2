@@ -55,7 +55,11 @@ void QMLTextEditor::setFontSize(qreal size)
     }
 }
 
-void QMLTextEditor::makeBold()
+void QMLTextEditor::makeBold(bool bold)
 {
-    textEdit->setFontWeight(QFont::Bold);
+    if (bold) {
+        textEdit->setFontWeight(QFont::Bold);
+    } else {
+        textEdit->setFontWeight(QFont::Normal);
+    }
 }

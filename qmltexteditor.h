@@ -27,15 +27,13 @@ signals:
     void textChanged();
     void cursorPositionChanged(QRect rect);
 
-
 public slots:
-    void makeBold();
+    void makeBold(bool bold);
 
 private slots:
     void onWidthChanged();
     void onTextEditHeightChanged(int height);
     void onCursorPositionChanged();
-
 
 private:
     QGraphicsProxyWidget *proxy;

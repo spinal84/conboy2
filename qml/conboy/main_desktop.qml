@@ -17,6 +17,7 @@ Rectangle {
         ConboyEditor {
             id: editor
             width:  flickable.width
+            // We want the editor always at least as high as the flickable
             minHeight: flickable.height
         }
     }
@@ -29,24 +30,13 @@ Rectangle {
         anchors.bottom: parent.bottom
         anchors.right: parent.right
 
-        Rectangle {
-            color: "gray"
-            radius: 10
-            height: 60
-            width: 100
-            anchors.left: parent.left
-            anchors.leftMargin: 20
-            anchors.verticalCenter: parent.verticalCenter
-
-            Text {
-                text: "Bold"
-                anchors.centerIn: parent
-            }
-
-            MouseArea {
-                anchors.fill: parent
-                onClicked: {
-                    editor.makeBold()
+        ToggleButton {
+            text: "Bold"
+            onToggledChanged: {
+                if (toggled) {
+                    editor.makeBold(true);
+                } else {
+                    editor.makeBold(false)
                 }
             }
         }
