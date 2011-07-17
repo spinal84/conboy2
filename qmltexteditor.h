@@ -35,6 +35,9 @@ signals:
 
 public slots:
     void toggleBold();
+    void increaseIndent();
+    void decreaseIndent();
+
 
 private slots:
     void onWidthChanged();

@@ -30,11 +30,26 @@ Rectangle {
         anchors.bottom: parent.bottom
         anchors.right: parent.right
 
-        ToggleButton {
-            id: boldBut
-            text: "Bold"
-            toggled: editor.bold
-            onClicked: editor.toggleBold()
+        Row {
+            spacing: 20
+            anchors.fill: parent
+            anchors.margins: 10
+
+            Button {
+                text: "Bold"
+                checked: editor.bold
+                onClicked: editor.toggleBold()
+            }
+
+            Button {
+                text: "Increase"
+                onClicked: editor.increaseIndent()
+            }
+
+            Button {
+                text: "Decrease"
+                onClicked: editor.decreaseIndent()
+            }
         }
     }
 }

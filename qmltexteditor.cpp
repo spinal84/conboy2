@@ -1,3 +1,6 @@
+#include <QTextList>
+#include <QTextListFormat>
+
 #include "qmltexteditor.h"
 
 QMLTextEditor::QMLTextEditor(QDeclarativeItem *parent) :
@@ -10,6 +13,8 @@ QMLTextEditor::QMLTextEditor(QDeclarativeItem *parent) :
     proxy->setPos(0, 0);
 
     bold = false;
+
+    //textEdit->setAutoFormatting(QTextEdit::AutoBulletList);
 
     connect(this, SIGNAL(widthChanged()), this, SLOT(onWidthChanged()));
     connect(textEdit, SIGNAL(heightChanged(int)), this, SLOT(onTextEditHeightChanged(int)));
@@ -84,4 +89,38 @@ void QMLTextEditor::onCurrentCharFormatChanged(QTextCharFormat format)
 {
     bold = (format.fontWeight() == QFont::Bold);
     emit boldChanged();
+}
+
+void QMLTextEditor::increaseIndent()
+{
+    QTextCursor cursor = textEdit->textCursor();
+
+    QTextListFormat listFormat;
+    QTextList *list = cursor.currentList();
+
+    if (list) {
+        listFormat = list->format();
+        listFormat.setIndent(listFormat.indent() + 1);
+    }
+
+    listFormat.setStyle(QTextListFormat::ListDisc);
+    cursor.createList(listFormat);
+}
+
+// TODO: List item needs to get attached to parent list
+// if current list has a parent list
+void QMLTextEditor::decreaseIndent()
+{
+    QTextCursor cursor = textEdit->textCursor();
+    QTextListFormat listFormat;
+    QTextList *list = cursor.currentList();
+    QTextBlock block = cursor.block();
+
+    if (list) {
+        listFormat = list->format();
+        listFormat.setIndent(listFormat.indent() - 1);
+        listFormat.setStyle(QTextListFormat::ListDisc);
+        list->setFormat(listFormat);
+        list->remove(block);
+    }
 }
