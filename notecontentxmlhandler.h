@@ -22,6 +22,9 @@ private:
     QString errorStr;
     QMLTextEditor *editor;
     QTextCursor cursor;
+    bool createNextListItem;
+    bool listHasEnded;
+    QStack<QTextList*> listStack;
 
 };
 

@@ -1,4 +1,9 @@
+#include <QTextList>
+#include <QTextFormat>
+#include <QTextListFormat>
+
 #include "notecontentxmlhandler.h"
+
 
 NoteContentXmlHandler::NoteContentXmlHandler(QMLTextEditor *textEditor)
 {
@@ -7,6 +12,9 @@ NoteContentXmlHandler::NoteContentXmlHandler(QMLTextEditor *textEditor)
 
     cursor.document()->clear();
     cursor.setPosition(0);
+
+    createNextListItem = false;
+    listHasEnded = false;
 }
 
 bool NoteContentXmlHandler::fatalError(const QXmlParseException& exception)
@@ -23,7 +31,7 @@ bool NoteContentXmlHandler::startElement(const QString &namepsaceURI, const QStr
     Q_UNUSED(namepsaceURI);
     Q_UNUSED(localName);
     Q_UNUSED(atts);
-    qDebug() << "<" + qName + ">";
+    //qDebug() << "<" + qName + ">";
 
     if (qName == "bold") {
         QTextCharFormat format = cursor.charFormat();
@@ -67,6 +75,66 @@ bool NoteContentXmlHandler::startElement(const QString &namepsaceURI, const QStr
         return true;
     }
 
+    if (qName == "list") {
+        // The first list item is created implicitly, therefore we
+        // do not create another one.
+        createNextListItem = false;
+
+        QTextList *list = cursor.currentList();
+        QTextListFormat format;
+        if (list) {
+            format = list->format();
+            format.setIndent(format.indent() + 2);
+            format.setStyle(QTextListFormat::ListDisc);
+        } else {
+            format.setIndent(2);
+            format.setStyle(QTextListFormat::ListDisc);
+        }
+
+        QTextList *newList = cursor.insertList(format);
+        listStack.push(newList);
+    }
+
+    if (qName == "list-item") {
+        QTextList *list = cursor.currentList();
+
+        if (listHasEnded) {
+
+            if (listStack.count() > 1) {
+                // Attach next list item to parent list
+                listStack.pop();
+
+                cursor.insertBlock();
+                listStack.top()->add(cursor.block());
+
+                listHasEnded = false;
+                return true;
+            }
+        }
+
+        if (list) {
+
+
+
+            // The first list item is created implicitly, therefore we
+            // do not create another one.
+            if (createNextListItem == true) {
+                cursor.insertBlock();
+            }
+
+            // After inserting the first item we have to create the following
+            // list item explicitly.
+            if (list->count() == 1) {
+                createNextListItem = true;
+            }
+
+            return true;
+        }
+
+        qDebug() << "ERROR: New <list-item> but not in <list>.";
+        return false;
+    }
+
     return true;
 }
 
@@ -100,7 +168,11 @@ bool NoteContentXmlHandler::endElement(const QString &namespaceURI, const QStrin
         return true;
     }
 
-    qDebug() << "WARN: Found unknown tag in <note-content>. Tag: " << qName;
+    if (qName == "list") {
+        listHasEnded = true;
+    }
+
+    //qDebug() << "WARN: Found unknown tag in <note-content>. Tag: " << qName;
     return true;
 }
 

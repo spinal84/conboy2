@@ -3,6 +3,8 @@
 #include <QtXml/QXmlSimpleReader>
 #include <QDebug>
 
+#include <QTextListFormat>
+
 #include "qmltexteditor.h"
 #include "notecontentxmlhandler.h"
 
@@ -142,18 +144,57 @@ void QMLTextEditor::showTestNote()
             "And now some bullets"
             "<list><list-item dir=\"ltr\">One"
             "</list-item><list-item dir=\"ltr\">Two"
+            "</list-item><list-item dir=\"ltr\">TwoAndAHalf"
+            "</list-item><list-item dir=\"ltr\">TwoAndSomeMore"
             "<list><list-item dir=\"ltr\">Two One"
             "</list-item><list-item dir=\"ltr\">Two Two"
             "<list><list-item dir=\"ltr\">Two Two One"
-            "</list-item></list></list-item><list-item dir=\"ltr\">Three Three"
-            "<list><list-item dir=\"ltr\">Three Three One"
-            "</list-item><list-item dir=\"ltr\">Three Three Two"
             "</list-item></list></list-item><list-item dir=\"ltr\">Two Three"
+            "<list><list-item dir=\"ltr\">Two Three One"
+            "</list-item><list-item dir=\"ltr\">Two Three Two"
+            "</list-item></list></list-item><list-item dir=\"ltr\">Two Four"
             "</list-item></list></list-item><list-item dir=\"ltr\">Three"
-            "</list-item><list-item dir=\"ltr\">Four</list-item></list>\n\n"
+            "</list-item><list-item dir=\"ltr\">Four</list-item></list>\n"
+            "Now we continue normally...\n"
             "</note-content>";
 
     // TODO: Display in widget
+
+
+//    QTextCursor c = textEdit->textCursor();
+//    c.document()->clear();
+
+//    QTextListFormat f;
+//    f.setIndent(2);
+//    f.setStyle(QTextListFormat::ListDisc);
+
+//    QTextList *l1 = c.insertList(f);
+//    c.insertText("One");
+
+//    c.insertBlock();
+//    c.insertText("Two");
+
+//    QTextListFormat f2 = c.currentList()->format();
+//    f2.setIndent(4);
+
+//    QTextList *l2 = c.insertList(f2);
+//    c.insertText("Two-One");
+
+//    c.insertBlock();
+//    c.insertText("Two-Two");
+
+//    // First insert the block, then move it to the parent list
+//    c.insertBlock();
+//    l1->add(c.block());
+//    c.insertText("Three");
+
+//    if (c.currentList()) {
+//        c.insertBlock();
+//        c.insertText("Still on list!");
+//    }
+
+
+//    return;
 
     QXmlSimpleReader xmlReader;
     QXmlInputSource source;
