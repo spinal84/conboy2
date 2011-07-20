@@ -13,6 +13,8 @@ NoteContentXmlHandler::NoteContentXmlHandler(QMLTextEditor *textEditor)
     cursor.document()->clear();
     cursor.setPosition(0);
 
+    defaultBlockFormat = cursor.blockFormat();
+
     createNextListItem = false;
     listHasEnded = false;
 }
@@ -99,7 +101,6 @@ bool NoteContentXmlHandler::startElement(const QString &namepsaceURI, const QStr
         QTextList *list = cursor.currentList();
 
         if (listHasEnded) {
-
             if (listStack.count() > 1) {
                 // Attach next list item to parent list
                 listStack.pop();
@@ -113,9 +114,6 @@ bool NoteContentXmlHandler::startElement(const QString &namepsaceURI, const QStr
         }
 
         if (list) {
-
-
-
             // The first list item is created implicitly, therefore we
             // do not create another one.
             if (createNextListItem == true) {
@@ -169,7 +167,32 @@ bool NoteContentXmlHandler::endElement(const QString &namespaceURI, const QStrin
     }
 
     if (qName == "list") {
-        listHasEnded = true;
+        if (listStack.count() > 1) {
+            listHasEnded = true;
+            return true;
+        }
+
+        /* We're on the root list element */
+        // Extra check to be save
+        if (cursor.currentList() != listStack.top()) {
+            qDebug() << "ERROR: Something wrong";
+            return false;
+        }
+
+        // Add the next block
+        cursor.insertBlock();
+
+        // Remove this block from the list. It's now on the root level
+        cursor.currentList()->remove(cursor.block());
+
+        // Apply default format, otherwise it's still indented
+        cursor.setBlockFormat(defaultBlockFormat);
+
+        // Throw away the last list element
+        listStack.pop();
+
+        // TODO: There is an empty line after the list that shouldn't be there.
+        // but using cursor.deletePreviousChar(); does not work.
     }
 
     //qDebug() << "WARN: Found unknown tag in <note-content>. Tag: " << qName;

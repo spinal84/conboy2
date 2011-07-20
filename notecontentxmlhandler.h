@@ -25,6 +25,7 @@ private:
     bool createNextListItem;
     bool listHasEnded;
     QStack<QTextList*> listStack;
+    QTextBlockFormat defaultBlockFormat;
 
 };
 

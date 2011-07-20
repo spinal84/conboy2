@@ -137,6 +137,9 @@ void QMLTextEditor::decreaseIndent()
 
 void QMLTextEditor::showTestNote()
 {
+    /*
+     * Demo <note-content> for testing purpose
+     */
     QString content = "<note-content version=\"0.1\">The Title\n\n"
             "This is some text. Next is a line break.\n"
             "Yea. Next empty line.\n\n"
@@ -158,44 +161,6 @@ void QMLTextEditor::showTestNote()
             "Now we continue normally...\n"
             "</note-content>";
 
-    // TODO: Display in widget
-
-
-//    QTextCursor c = textEdit->textCursor();
-//    c.document()->clear();
-
-//    QTextListFormat f;
-//    f.setIndent(2);
-//    f.setStyle(QTextListFormat::ListDisc);
-
-//    QTextList *l1 = c.insertList(f);
-//    c.insertText("One");
-
-//    c.insertBlock();
-//    c.insertText("Two");
-
-//    QTextListFormat f2 = c.currentList()->format();
-//    f2.setIndent(4);
-
-//    QTextList *l2 = c.insertList(f2);
-//    c.insertText("Two-One");
-
-//    c.insertBlock();
-//    c.insertText("Two-Two");
-
-//    // First insert the block, then move it to the parent list
-//    c.insertBlock();
-//    l1->add(c.block());
-//    c.insertText("Three");
-
-//    if (c.currentList()) {
-//        c.insertBlock();
-//        c.insertText("Still on list!");
-//    }
-
-
-//    return;
-
     QXmlSimpleReader xmlReader;
     QXmlInputSource source;
     source.setData(content);
@@ -207,8 +172,4 @@ void QMLTextEditor::showTestNote()
     if (!xmlReader.parse(&source)) {
         qDebug() << "ERROR: Parsing content failed";
     }
-
-
-
-
 }
