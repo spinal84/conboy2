@@ -3,6 +3,8 @@ folder_01.source = qml/conboy
 folder_01.target = qml
 DEPLOYMENTFOLDERS = folder_01
 
+QT += xml
+
 # Additional import path used to resolve QML modules in Creator's code model
 QML_IMPORT_PATH =
 
@@ -29,7 +31,8 @@ SOURCES += main.cpp \
     texteditor.cpp \
     tomboystorage.cpp \
     notelistmodel.cpp \
-    notedata.cpp
+    notedata.cpp \
+    notecontentxmlhandler.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -40,7 +43,8 @@ HEADERS += \
     texteditor.h \
     tomboystorage.h \
     notelistmodel.h \
-    notedata.h
+    notedata.h \
+    notecontentxmlhandler.h
 
 OTHER_FILES += \
     qtc_packaging/debian_harmattan/rules \

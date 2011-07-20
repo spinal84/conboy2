@@ -25,6 +25,8 @@ public:
     bool getBold() const;
     //void setBold(bool isBold);
 
+    QTextCursor textCursor();
+
 
 signals:
     void minHeightChanged();
@@ -37,14 +39,13 @@ public slots:
     void toggleBold();
     void increaseIndent();
     void decreaseIndent();
-
+    void showTestNote();
 
 private slots:
     void onWidthChanged();
     void onTextEditHeightChanged(int height);
     void onCursorPositionChanged();
     void onCurrentCharFormatChanged(QTextCharFormat format);
-    void showTestNote();
 
 private:
     QGraphicsProxyWidget *proxy;

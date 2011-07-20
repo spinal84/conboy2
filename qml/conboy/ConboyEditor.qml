@@ -3,7 +3,11 @@ import Conboy 1.0
 
 TextEditor {
     id: editor
-    fontSize: 40
+    fontSize: 20
+
+    Component.onCompleted: {
+        editor.showTestNote()
+    }
 
     // TODO: Should only scroll if cursor is near widget borders
     onCursorPositionChanged: {
@@ -48,9 +52,4 @@ TextEditor {
         }
         return null
     }
-
-    Component.onCompleted: {
-        showTestNote();
-    }
-
 }

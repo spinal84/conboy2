@@ -1,7 +1,10 @@
 #include <QTextList>
 #include <QTextListFormat>
+#include <QtXml/QXmlSimpleReader>
+#include <QDebug>
 
 #include "qmltexteditor.h"
+#include "notecontentxmlhandler.h"
 
 QMLTextEditor::QMLTextEditor(QDeclarativeItem *parent) :
     QDeclarativeItem(parent)
@@ -91,6 +94,11 @@ void QMLTextEditor::onCurrentCharFormatChanged(QTextCharFormat format)
     emit boldChanged();
 }
 
+QTextCursor QMLTextEditor::textCursor()
+{
+    return textEdit->textCursor();
+}
+
 void QMLTextEditor::increaseIndent()
 {
     QTextCursor cursor = textEdit->textCursor();
@@ -146,6 +154,19 @@ void QMLTextEditor::showTestNote()
             "</note-content>";
 
     // TODO: Display in widget
+
+    QXmlSimpleReader xmlReader;
+    QXmlInputSource source;
+    source.setData(content);
+
+    NoteContentXmlHandler handler(this);
+    xmlReader.setContentHandler(&handler);
+    xmlReader.setErrorHandler(&handler);
+
+    if (!xmlReader.parse(&source)) {
+        qDebug() << "ERROR: Parsing content failed";
+    }
+
 
 
 
