@@ -44,6 +44,7 @@ private slots:
     void onTextEditHeightChanged(int height);
     void onCursorPositionChanged();
     void onCurrentCharFormatChanged(QTextCharFormat format);
+    void showTestNote();
 
 private:
     QGraphicsProxyWidget *proxy;

@@ -124,3 +124,29 @@ void QMLTextEditor::decreaseIndent()
         list->remove(block);
     }
 }
+
+void QMLTextEditor::showTestNote()
+{
+    QString content = "<note-content version=\"0.1\">The Title\n\n"
+            "This is some text. Next is a line break.\n"
+            "Yea. Next empty line.\n\n"
+            "Ok. Now some formatting: <bold>bold</bold> <italic>italic</italic> <highlight>hightlight</highlight> <size:large>large</size:large> <size:small>small</size:small> <size:huge>huge</size:huge> <bold><italic>bolditalic</italic></bold> <bold><highlight>highlightbold</highlight></bold> <italic><highlight>italichighlight</highlight></italic> <bold><italic><highlight>bolditalichighlight</highlight></italic></bold>\n\n"
+            "And now some bullets"
+            "<list><list-item dir=\"ltr\">One"
+            "</list-item><list-item dir=\"ltr\">Two"
+            "<list><list-item dir=\"ltr\">Two One"
+            "</list-item><list-item dir=\"ltr\">Two Two"
+            "<list><list-item dir=\"ltr\">Two Two One"
+            "</list-item></list></list-item><list-item dir=\"ltr\">Three Three"
+            "<list><list-item dir=\"ltr\">Three Three One"
+            "</list-item><list-item dir=\"ltr\">Three Three Two"
+            "</list-item></list></list-item><list-item dir=\"ltr\">Two Three"
+            "</list-item></list></list-item><list-item dir=\"ltr\">Three"
+            "</list-item><list-item dir=\"ltr\">Four</list-item></list>\n\n"
+            "</note-content>";
+
+    // TODO: Display in widget
+
+
+
+}

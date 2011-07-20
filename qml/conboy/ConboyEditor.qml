@@ -48,4 +48,9 @@ TextEditor {
         }
         return null
     }
+
+    Component.onCompleted: {
+        showTestNote();
+    }
+
 }
