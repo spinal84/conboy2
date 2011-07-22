@@ -11,7 +11,7 @@ Rectangle {
 
     width: 600
     height: 60
-    color: "lightgreen"
+    color: mouse.pressed ? "orange" : "lightgreen"
 
     Text {
         text: title
@@ -36,6 +36,7 @@ Rectangle {
     }
 
     MouseArea {
+        id: mouse
         anchors.fill: parent
         onClicked: root.clicked(uuid)
     }
