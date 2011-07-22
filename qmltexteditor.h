@@ -4,7 +4,9 @@
 #include <QDeclarativeItem>
 #include <QGraphicsProxyWidget>
 #include <QTextEdit>
+
 #include "texteditor.h"
+#include "notedata.h"
 
 class QMLTextEditor : public QDeclarativeItem
 {
@@ -40,6 +42,7 @@ public slots:
     void increaseIndent();
     void decreaseIndent();
     void showTestNote();
+    void showNote(NoteData *note);
 
 private slots:
     void onWidthChanged();
@@ -54,6 +57,8 @@ private:
     int qmlHeight;
     qreal fontSize;
     bool bold;
+    void formatTitle();
+
 
 };
 

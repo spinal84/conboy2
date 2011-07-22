@@ -135,6 +135,39 @@ void QMLTextEditor::decreaseIndent()
     }
 }
 
+void QMLTextEditor::formatTitle()
+{
+    // Set the note title to big/underlined/blue
+    QTextCursor cursor = textCursor();
+    cursor.movePosition(QTextCursor::Start);
+    cursor.movePosition(QTextCursor::EndOfLine, QTextCursor::KeepAnchor);
+
+    QTextCharFormat titleFormat;
+    titleFormat.setFontPointSize(28);
+    titleFormat.setFontUnderline(true);
+    titleFormat.setForeground(QBrush(QColor("blue")));
+    cursor.setCharFormat(titleFormat);
+}
+
+void QMLTextEditor::showNote(NoteData *note)
+{
+    QXmlSimpleReader xmlReader;
+    QXmlInputSource source;
+    source.setData(note->getContent());
+
+    NoteContentXmlHandler handler(this);
+    xmlReader.setContentHandler(&handler);
+    xmlReader.setErrorHandler(&handler);
+
+    textCursor().beginEditBlock();
+    if (!xmlReader.parse(&source)) {
+        qDebug() << "ERROR: Parsing content failed";
+    }
+
+    formatTitle();
+    textCursor().endEditBlock();
+}
+
 void QMLTextEditor::showTestNote()
 {
     /*
@@ -161,27 +194,8 @@ void QMLTextEditor::showTestNote()
             "Now we continue normally...\n"
             "</note-content>";
 
-    QXmlSimpleReader xmlReader;
-    QXmlInputSource source;
-    source.setData(content);
-
-    NoteContentXmlHandler handler(this);
-    xmlReader.setContentHandler(&handler);
-    xmlReader.setErrorHandler(&handler);
-
-    if (!xmlReader.parse(&source)) {
-        qDebug() << "ERROR: Parsing content failed";
-    }
-
-    // Set the note title to big/underlined/blue
-    QTextCursor cursor = textCursor();
-    cursor.movePosition(QTextCursor::Start);
-    cursor.movePosition(QTextCursor::EndOfLine, QTextCursor::KeepAnchor);
-
-    QTextCharFormat titleFormat;
-    titleFormat.setFontPointSize(28);
-    titleFormat.setFontUnderline(true);
-    titleFormat.setForeground(QBrush(QColor("blue")));
-    cursor.setCharFormat(titleFormat);
-
+    // Create dummy note and show it
+    NoteData *note = new NoteData();
+    note->setContent(content);
+    showNote(note);
 }
