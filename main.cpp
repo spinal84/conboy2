@@ -21,11 +21,11 @@ int main(int argc, char *argv[])
     viewer.setOrientation(QmlApplicationViewer::ScreenOrientationAuto);
 
     if (app.arguments().contains("--desktop")) {
-        //viewer.setMainQmlFile(QLatin1String("qml/conboy/main_desktop.qml"));
+        //viewer.setMainQmlFile(QLatin1String("qml/conboy/DesktopWindow.qml"));
         viewer.setMainQmlFile(QLatin1String("qml/conboy/NoteListPage.qml"));
         viewer.showExpanded();
     } else {
-        viewer.setMainQmlFile(QLatin1String("qml/conboy/main_harmattan.qml"));
+        viewer.setMainQmlFile(QLatin1String("qml/conboy/HarmattanWindow.qml"));
         viewer.showFullScreen();
     }
 
