@@ -1,3 +1,4 @@
+#include <QDebug>
 #include "notelistmodel.h"
 
 NoteListModel::NoteListModel(QObject *parent) :
@@ -8,6 +9,19 @@ NoteListModel::NoteListModel(QObject *parent) :
     roles[TitleRole] = "title";
     roles[LastChangeDateRole] = "lastChangeDate";
     setRoleNames(roles);
+
+    ////////// TEST - TODO: Remove ////////////
+    NoteData *note1 = new NoteData();
+    note1->setTitle("Note One");
+    notes.append(note1);
+
+    NoteData *note2 = new NoteData();
+    note2->setTitle("Note Two");
+    notes.append(note2);
+
+    NoteData *note3 = new NoteData();
+    note3->setTitle("Note Three");
+    notes.append(note3);
 }
 
 int NoteListModel::rowCount(const QModelIndex &parent) const

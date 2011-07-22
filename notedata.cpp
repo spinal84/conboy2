@@ -4,7 +4,7 @@ NoteData::NoteData(QObject *parent) :
     QObject(parent)
 {
     uuid = QUuid::createUuid();
-    QDateTime currentTime;
+    QDateTime currentTime = QDateTime::currentDateTime();
     createDate = currentTime;
     lastChangeDate = currentTime;
     lastMetadataChangeDate = currentTime;
