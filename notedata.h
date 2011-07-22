@@ -56,7 +56,7 @@ signals:
     void createDateChanged();
 
 private:
-    QUuid guid;
+    QUuid uuid;
     QString title;
     QString content;
     QDateTime lastChangeDate;
