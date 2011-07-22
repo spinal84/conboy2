@@ -172,4 +172,16 @@ void QMLTextEditor::showTestNote()
     if (!xmlReader.parse(&source)) {
         qDebug() << "ERROR: Parsing content failed";
     }
+
+    // Set the note title to big/underlined/blue
+    QTextCursor cursor = textCursor();
+    cursor.movePosition(QTextCursor::Start);
+    cursor.movePosition(QTextCursor::EndOfLine, QTextCursor::KeepAnchor);
+
+    QTextCharFormat titleFormat;
+    titleFormat.setFontPointSize(28);
+    titleFormat.setFontUnderline(true);
+    titleFormat.setForeground(QBrush(QColor("blue")));
+    cursor.setCharFormat(titleFormat);
+
 }

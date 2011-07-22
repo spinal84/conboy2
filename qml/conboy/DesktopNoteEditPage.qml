@@ -29,6 +29,11 @@ Item {
         anchors.bottom: parent.bottom
         anchors.right: parent.right
 
+        // Prevent clicks from going through
+        MouseArea {
+            anchors.fill: parent
+        }
+
         Row {
             spacing: 20
             anchors.fill: parent
