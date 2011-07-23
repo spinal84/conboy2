@@ -19,8 +19,6 @@ QMLTextEditor::QMLTextEditor(QDeclarativeItem *parent) :
 
     bold = false;
 
-    //textEdit->setAutoFormatting(QTextEdit::AutoBulletList);
-
     connect(this, SIGNAL(widthChanged()), this, SLOT(onWidthChanged()));
     connect(textEdit, SIGNAL(heightChanged(int)), this, SLOT(onTextEditHeightChanged(int)));
     connect(textEdit, SIGNAL(textChanged()), this, SIGNAL(textChanged()));
