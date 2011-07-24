@@ -12,10 +12,15 @@ Page {
     }
 
     NoteList {
+        id: noteList
         anchors.fill: parent
         onClicked: {
             editor.showNote(uuid)
             pageStack.pop()
         }
+    }
+
+    ScrollDecorator {
+        flickableItem: noteList
     }
 }

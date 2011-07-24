@@ -23,6 +23,10 @@ Page {
         }
     }
 
+    ScrollDecorator {
+        flickableItem: flickable
+    }
+
     tools: ToolBarLayout {
         ToolButton {
             id: boldBut
