@@ -11,15 +11,18 @@ Rectangle {
         id: itemModel
 
         DesktopNoteEditPage {
+            id: editPage
             width: root.width
             height: root.height
             listView: view
         }
 
         DesktopNoteListPage {
+            id: listPage
             width: root.width
             height: root.height
             listView: view
+            editor: editPage
         }
     }
 

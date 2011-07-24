@@ -4,6 +4,7 @@
 #include <QAbstractListModel>
 
 #include "notedata.h"
+#include "notestore.h"
 
 /*
   A list that can be sorted and filtered. The content of this list
@@ -27,20 +28,18 @@ public:
         LastChangeDateRole
     };
 
-    explicit NoteListModel(QObject *parent = 0);
+    explicit NoteListModel(NoteStore *store, QObject *parent = 0);
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
     void sort(int column, Qt::SortOrder order);
-    void append(NoteData *note);
-    void append(QList<NoteData*> notes);
 
 signals:
 
 public slots:
 
 private:
-    QList<NoteData*> notes;
+    NoteStore *store;
 
 };
 

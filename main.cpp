@@ -2,6 +2,7 @@
 #include <QDeclarativeEngine>
 #include <QDeclarativeContext>
 #include <QTimer>
+#include <notestore.h>
 
 #include "qmlapplicationviewer.h"
 #include "qmltexteditor.h"
@@ -14,25 +15,21 @@ int main(int argc, char *argv[])
 
     // Export our text editor to QML
     qmlRegisterType<QMLTextEditor>("Conboy", 1, 0, "TextEditor");
+    qmlRegisterType<NoteData>();
 
     // Holds all notes
-    NoteListModel noteList;
+    NoteStore noteStore;
+    // TODO: Call this from QML, not from here
+    noteStore.loadAll();
 
-    QTime startTime;
-    startTime.start();
+    // Model to visualize notes
+    NoteListModel noteList(&noteStore);
 
-    TomboyStorage storage;
-    QList<QUuid> allUuids = storage.getAllUuids();
-
-    for (int i = 0; i < allUuids.count(); i++) {
-        NoteData *note = storage.load(allUuids[i]);
-        noteList.append(note);
-    }
-
-    qDebug() << "Parsing " << allUuids.length() << " notes took " << startTime.elapsed() << " ms.";
 
     QmlApplicationViewer viewer;
     viewer.rootContext()->setContextProperty("noteListModel", &noteList);
+    viewer.rootContext()->setContextProperty("noteStore", &noteStore);
+
     viewer.setOrientation(QmlApplicationViewer::ScreenOrientationAuto);
 
     if (app.arguments().contains("--desktop")) {

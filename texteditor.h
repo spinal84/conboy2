@@ -16,8 +16,6 @@ public:
 signals:
     void heightChanged(int height);
 
-public slots:
-
 private slots:
     void resizeHeight();
 

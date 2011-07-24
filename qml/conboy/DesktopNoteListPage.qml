@@ -2,6 +2,7 @@ import QtQuick 1.0
 
 Item {
     property QtObject listView
+    property QtObject editor
 
     width: 800
     height: 480
@@ -11,6 +12,10 @@ Item {
         anchors.top: parent.top
         anchors.right: parent.right
         anchors.bottom: toolbar.top
+        onClicked: {
+            editor.showNote(uuid)
+            listView.decrementCurrentIndex()
+        }
     }
 
     Rectangle {

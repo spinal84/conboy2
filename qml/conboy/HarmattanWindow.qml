@@ -23,13 +23,14 @@ Window {
     }
 
     HarmattanNoteEditPage {
-        id: editor
-        onShowList: stack.push(noteList)
+        id: editPage
+        onShowList: stack.push(listPage)
     }
 
     HarmattanNoteListPage {
-        id: noteList
+        id: listPage
+        editor: editPage
     }
 
-    Component.onCompleted: stack.push(editor)
+    Component.onCompleted: stack.push(editPage)
 }

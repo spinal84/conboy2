@@ -6,6 +6,13 @@ FocusScope {
     property alias bold: editor.bold
     property alias fontSize: editor.fontSize
 
+    function showNote(uuid)
+    {
+        console.log("Open note with uuid: " + uuid)
+        var note = noteStore.findNote(uuid)
+        editor.showNote(note)
+    }
+
     function toggleBold() {
         editor.toggleBold()
     }

@@ -6,6 +6,10 @@ Page {
 
     signal showList
 
+    function showNote(uuid) {
+        editor.showNote(uuid)
+    }
+
     Flickable {
         id: flickable
         contentHeight: editor.height

@@ -1,8 +1,8 @@
 #include <QDebug>
 #include "notelistmodel.h"
 
-NoteListModel::NoteListModel(QObject *parent) :
-    QAbstractListModel(parent)
+NoteListModel::NoteListModel(NoteStore *store, QObject *parent) :
+    QAbstractListModel(parent), store(store)
 {
     QHash<int, QByteArray> roles;
     roles[UuidRole] = "uuid";
@@ -14,16 +14,16 @@ NoteListModel::NoteListModel(QObject *parent) :
 int NoteListModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
-    return notes.count();
+    return store->count();
 }
 
 QVariant NoteListModel::data(const QModelIndex &index, int role) const
 {
-    if (index.row() < 0 || index.row() > notes.count()) {
+    if (index.row() < 0 || index.row() > store->count()) {
         return QVariant();
     }
 
-    NoteData *note = notes[index.row()];
+    NoteData *note = store->get(index.row());
 
     switch (role) {
     case UuidRole: return note->getUuid().toString();
@@ -55,6 +55,7 @@ bool compareLastChangeDate(const NoteData *n1, const NoteData *n2)
 void NoteListModel::sort(int column, Qt::SortOrder order)
 {
     Q_UNUSED(order);
+    QList<NoteData*> notes = store->getNotes();
     emit layoutAboutToBeChanged();
     if (column == 0) {
         qStableSort(notes.begin(), notes.end(), compareTitle);
@@ -62,28 +63,4 @@ void NoteListModel::sort(int column, Qt::SortOrder order)
         qStableSort(notes.begin(), notes.end(), compareLastChangeDate);
     }
     emit layoutChanged();
-}
-
-void NoteListModel::append(NoteData *note)
-{
-    beginInsertRows(QModelIndex(), rowCount(), rowCount());
-    notes.append(note);
-    endInsertRows();
-
-    // Listen to changes
-    // TODO: We probably need to listen to changes in notes. But maybe a noteChanged() signal is enought
-    //connect(note, SIGNAL(titleChanged()), this, SLOT(onTitleChanged()));
-}
-
-void NoteListModel::append(QList<NoteData*> notes)
-{
-    beginInsertRows(QModelIndex(), rowCount(), rowCount() + notes.length() - 1);
-    this->notes.append(notes);
-    endInsertRows();
-
-    // Listen to changes
-    // TODO: Listen to changes
-    //    for (all new notes) {
-    //        connect()
-    //    }
 }

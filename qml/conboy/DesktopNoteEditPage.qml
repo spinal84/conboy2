@@ -4,6 +4,10 @@ Item {
     id: root
     property QtObject listView
 
+    function showNote(uuid) {
+        editor.showNote(uuid)
+    }
+
     Flickable {
         id: flickable
 
