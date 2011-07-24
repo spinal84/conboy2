@@ -10,7 +10,10 @@ Item {
     ListView {
         id: noteList
         model: noteListModel
-        anchors.fill: parent
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.top: parent.top
+        anchors.bottom: toolbar.top
 
         delegate: DesktopNoteListDelegate {
             width: noteList.width
