@@ -9,19 +9,6 @@ NoteListModel::NoteListModel(QObject *parent) :
     roles[TitleRole] = "title";
     roles[LastChangeDateRole] = "lastChangeDate";
     setRoleNames(roles);
-
-    ////////// TEST - TODO: Remove ////////////
-    NoteData *note1 = new NoteData();
-    note1->setTitle("Note One");
-    notes.append(note1);
-
-    NoteData *note2 = new NoteData();
-    note2->setTitle("Note Two");
-    notes.append(note2);
-
-    NoteData *note3 = new NoteData();
-    note3->setTitle("Note Three");
-    notes.append(note3);
 }
 
 int NoteListModel::rowCount(const QModelIndex &parent) const
@@ -77,4 +64,26 @@ void NoteListModel::sort(int column, Qt::SortOrder order)
     emit layoutChanged();
 }
 
+void NoteListModel::append(NoteData *note)
+{
+    beginInsertRows(QModelIndex(), rowCount(), rowCount());
+    notes.append(note);
+    endInsertRows();
 
+    // Listen to changes
+    // TODO: We probably need to listen to changes in notes. But maybe a noteChanged() signal is enought
+    //connect(note, SIGNAL(titleChanged()), this, SLOT(onTitleChanged()));
+}
+
+void NoteListModel::append(QList<NoteData*> notes)
+{
+    beginInsertRows(QModelIndex(), rowCount(), rowCount() + notes.length() - 1);
+    this->notes.append(notes);
+    endInsertRows();
+
+    // Listen to changes
+    // TODO: Listen to changes
+    //    for (all new notes) {
+    //        connect()
+    //    }
+}

@@ -32,7 +32,8 @@ SOURCES += main.cpp \
     tomboystorage.cpp \
     notelistmodel.cpp \
     notedata.cpp \
-    notecontentxmlhandler.cpp
+    notecontentxmlhandler.cpp \
+    tomboyxmlstreamreader.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -44,7 +45,8 @@ HEADERS += \
     tomboystorage.h \
     notelistmodel.h \
     notedata.h \
-    notecontentxmlhandler.h
+    notecontentxmlhandler.h \
+    tomboyxmlstreamreader.h
 
 OTHER_FILES += \
     qtc_packaging/debian_harmattan/rules \

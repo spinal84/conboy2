@@ -207,12 +207,12 @@ bool NoteContentXmlHandler::characters(const QString &ch)
     return true;
 }
 
-void NoteContentXmlHandler::setErrorString(QString errorStr)
+void NoteContentXmlHandler::setErrorString(QString errorString)
 {
-    errorStr = errorStr;
+    errorStr = errorString;
 }
 
 QString NoteContentXmlHandler::errorString() const
 {
-    return errorString();
+    return errorStr;
 }

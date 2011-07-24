@@ -33,7 +33,7 @@ public:
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
     void sort(int column, Qt::SortOrder order);
     void append(NoteData *note);
-
+    void append(QList<NoteData*> notes);
 
 signals:
 
