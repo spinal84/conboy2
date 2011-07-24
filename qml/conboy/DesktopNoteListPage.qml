@@ -7,14 +7,20 @@ Item {
     width: 800
     height: 480
 
-    NoteList {
-        anchors.left: parent.left
-        anchors.top: parent.top
-        anchors.right: parent.right
-        anchors.bottom: toolbar.top
-        onClicked: {
-            editor.showNote(uuid)
-            listView.decrementCurrentIndex()
+    ListView {
+        id: noteList
+        model: noteListModel
+        anchors.fill: parent
+
+        delegate: DesktopNoteListDelegate {
+            width: noteList.width
+            uuid: model.uuid
+            title: model.title
+            lastChangeDate: model.lastChangeDate
+            onClicked: {
+                editor.showNote(uuid)
+                listView.decrementCurrentIndex()
+            }
         }
     }
 
