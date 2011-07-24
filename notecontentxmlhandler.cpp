@@ -203,8 +203,19 @@ bool NoteContentXmlHandler::characters(const QString &ch)
 {
     // Use cursor to write all text.
     // TODO: Maybe we should use the text block concept of QTextEdit not only \n \n
-    cursor.insertText(ch);
-    return true;
+
+    if (listStack.empty()) {
+        cursor.insertText(ch);
+        return true;
+    }
+
+    // If inside a list, remove line-breaks
+    if (ch.endsWith("\n")) {
+        QString str = ch;
+        str.chop(1);
+        cursor.insertText(str);
+        return true;
+    }
 }
 
 void NoteContentXmlHandler::setErrorString(QString errorString)
