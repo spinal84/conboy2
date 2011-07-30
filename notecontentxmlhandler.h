@@ -26,6 +26,7 @@ private:
     bool listHasEnded;
     QStack<QTextList*> listStack;
     QTextBlockFormat defaultBlockFormat;
+    QTextCharFormat defaultCharFormat;
 
 };
 

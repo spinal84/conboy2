@@ -14,6 +14,7 @@ NoteContentXmlHandler::NoteContentXmlHandler(QMLTextEditor *textEditor)
     cursor.setPosition(0);
 
     defaultBlockFormat = cursor.blockFormat();
+    defaultCharFormat = cursor.charFormat();
 
     createNextListItem = false;
     listHasEnded = false;
@@ -161,7 +162,9 @@ bool NoteContentXmlHandler::endElement(const QString &namespaceURI, const QStrin
 
     if (qName == "size:small" || qName == "size:large" || qName == "size:huge") {
         QTextCharFormat format = cursor.charFormat();
-        format.setFontPointSize(20);
+        qDebug() << "FONT SIZE:" << defaultCharFormat.fontPointSize();
+        //format.setFontPointSize(defaultCharFormat.fontPointSize());
+        format.setFontPointSize(11);
         cursor.setCharFormat(format);
         return true;
     }
@@ -193,6 +196,8 @@ bool NoteContentXmlHandler::endElement(const QString &namespaceURI, const QStrin
 
         // TODO: There is an empty line after the list that shouldn't be there.
         // but using cursor.deletePreviousChar(); does not work.
+
+        // TODO: There is also an empty line before each list. Shouldn't be there.
     }
 
     //qDebug() << "WARN: Found unknown tag in <note-content>. Tag: " << qName;
@@ -214,6 +219,9 @@ bool NoteContentXmlHandler::characters(const QString &ch)
         QString str = ch;
         str.chop(1);
         cursor.insertText(str);
+        return true;
+    } else {
+        cursor.insertText(ch);
         return true;
     }
 }
