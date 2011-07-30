@@ -17,6 +17,7 @@ void TextEditor::init()
 {
     setVerticalScrollBarPolicy (Qt::ScrollBarAlwaysOff);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    ignoreNxtMouseMoves = false;
     connect(this, SIGNAL(textChanged()), this, SLOT(resizeHeight()));
 }
 
@@ -28,6 +29,23 @@ void TextEditor::resizeEvent(QResizeEvent *e)
     }
 
     resizeHeight();
+}
+
+void TextEditor::mouseReleaseEvent(QMouseEvent *e)
+{
+    ignoreNxtMouseMoves = false;
+    QTextEdit::mouseReleaseEvent(e);
+}
+
+void TextEditor::mouseMoveEvent(QMouseEvent *e)
+{
+    // If ignoreNxtMouseMoves is set, we ignore mouse move events until the next mouse release event.
+    if (ignoreNxtMouseMoves) {
+        e->accept();
+        return;
+    }
+
+    QTextEdit::mouseMoveEvent(e);
 }
 
 void TextEditor::resizeHeight()
@@ -43,4 +61,9 @@ void TextEditor::resizeHeight()
 void TextEditor::setQmlHeight(int height)
 {
     qmlHeight = height;
+}
+
+void TextEditor::ignoreNextMouseMoves()
+{
+    ignoreNxtMouseMoves = true;
 }

@@ -19,6 +19,7 @@ class QMLTextEditor : public QDeclarativeItem
     Q_PROPERTY(QColor color READ getColor WRITE setColor NOTIFY colorChanged)
     Q_PROPERTY(QColor selectedTextColor READ getSelectedTextColor WRITE setSelectedTextColor NOTIFY selectedTextColorChanged)
     Q_PROPERTY(QColor selectionColor READ getSelectionColor WRITE setSelectionColor NOTIFY selectionColorChanged)
+    Q_PROPERTY(bool interactive READ getInteractive WRITE setInteractive NOTIFY interactiveChanged)
 
 
 public:
@@ -44,6 +45,9 @@ public:
     QColor getSelectionColor();
     void setSelectionColor(QColor color);
 
+    bool getInteractive();
+    void setInteractive(bool interactive);
+
 
 signals:
     void minHeightChanged();
@@ -55,6 +59,7 @@ signals:
     void colorChanged();
     void selectedTextColorChanged();
     void selectionColorChanged();
+    void interactiveChanged();
 
 public slots:
     void toggleBold();
@@ -62,6 +67,8 @@ public slots:
     void decreaseIndent();
     void showTestNote();
     void showNote(NoteData *note);
+    void ignoreNextMouseMoves();
+
 
 private slots:
     void onWidthChanged();

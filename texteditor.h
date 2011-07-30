@@ -11,7 +11,10 @@ public:
     explicit TextEditor(QWidget *parent = 0);
     explicit TextEditor(QString text, QWidget *parent = 0);
     void resizeEvent(QResizeEvent *e);
+    void mouseReleaseEvent(QMouseEvent *e);
+    void mouseMoveEvent(QMouseEvent *e);
     void setQmlHeight(int height);
+    void ignoreNextMouseMoves();
 
 signals:
     void heightChanged(int height);
@@ -22,6 +25,7 @@ private slots:
 private:
     int qmlHeight;
     void init();
+    bool ignoreNxtMouseMoves;
 
 };
 

@@ -19,25 +19,6 @@ QMLTextEditor::QMLTextEditor(QDeclarativeItem *parent) :
 
     bold = false;
 
-    //////
-    //        font: root.platformStyle.textFont
-    //        color: root.platformStyle.textColor
-    //        selectByMouse: false
-    //        selectedTextColor: root.platformStyle.selectedTextColor
-    //        selectionColor: root.platformStyle.selectionColor
-    //        mouseSelectionMode: TextInput.SelectWords
-    //        wrapMode: TextEdit.Wrap
-    //        persistentSelection: false
-    ////
-
-    // color = QPalette::Text
-    // selectedTextColor = QPalette:HighlightedText
-    // selectionColor = QPalette:Highlight
-
-//    QPalette palette;
-//    palette.setColor(QPalette::Highlight, QColor("green"));
-//    textEdit->setPalette(palette);
-
     connect(this, SIGNAL(widthChanged()), this, SLOT(onWidthChanged()));
     connect(textEdit, SIGNAL(heightChanged(int)), this, SLOT(onTextEditHeightChanged(int)));
     connect(textEdit, SIGNAL(textChanged()), this, SIGNAL(textChanged()));
@@ -264,4 +245,32 @@ void QMLTextEditor::setSelectionColor(QColor color)
         emit selectionColorChanged();
     }
 }
+
+bool QMLTextEditor::getInteractive()
+{
+    Qt::TextInteractionFlags flags = textEdit->textInteractionFlags();
+    if (flags == Qt::NoTextInteraction) {
+        return false;
+    } else {
+        return true;
+    }
+}
+
+void QMLTextEditor::setInteractive(bool interactive)
+{
+    if (getInteractive() != interactive) {
+        if (interactive) {
+            textEdit->setTextInteractionFlags(Qt::TextEditorInteraction);
+        } else {
+            textEdit->setTextInteractionFlags(Qt::NoTextInteraction);
+        }
+        emit interactiveChanged();
+    }
+}
+
+void QMLTextEditor::ignoreNextMouseMoves()
+{
+    textEdit->ignoreNextMouseMoves();
+}
+
 
