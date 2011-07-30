@@ -4,8 +4,6 @@ import com.nokia.meego 1.0
 Page {
     id: root
 
-    signal showList
-
     function showNote(uuid) {
         editor.showNote(uuid)
     }
@@ -29,15 +27,16 @@ Page {
     }
 
     tools: ToolBarLayout {
+        ToolIcon {
+            iconId: "icon-m-toolbar-back"
+            onClicked: pageStack.pop()
+        }
+
         ToolButton {
             id: boldBut
             text: "Bold"
             checked: editor.bold
             onClicked: editor.toggleBold()
-        }
-        ToolIcon {
-            iconId: "icon-m-toolbar-view-menu"
-            onClicked: root.showList()
         }
     }
 }

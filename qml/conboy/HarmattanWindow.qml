@@ -2,7 +2,7 @@ import QtQuick 1.1
 import com.nokia.meego 1.0
 
 PageStackWindow {
-    initialPage: editPage
+    initialPage: listPage
 
     platformStyle: PageStackWindowStyle {
         cornersVisible: true
@@ -10,11 +10,11 @@ PageStackWindow {
 
     HarmattanNoteEditPage {
         id: editPage
-        onShowList: pageStack.push(listPage)
     }
 
     HarmattanNoteListPage {
         id: listPage
         editor: editPage
+        onShowEditor: pageStack.push(editPage)
     }
 }
