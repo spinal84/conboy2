@@ -4,6 +4,7 @@
 #include <QDeclarativeItem>
 #include <QGraphicsProxyWidget>
 #include <QTextEdit>
+#include <QColor>
 
 #include "texteditor.h"
 #include "notedata.h"
@@ -12,8 +13,13 @@ class QMLTextEditor : public QDeclarativeItem
 {
     Q_OBJECT
     Q_PROPERTY(int minHeight READ getMinHeight WRITE setMinHeight NOTIFY minHeightChanged)
-    Q_PROPERTY(qreal fontSize READ getFontSize WRITE setFontSize NOTIFY fontSizeChanged)
     Q_PROPERTY(bool bold READ getBold NOTIFY boldChanged)
+
+    Q_PROPERTY(QFont font READ getFont WRITE setFont NOTIFY fontChanged)
+    Q_PROPERTY(QColor color READ getColor WRITE setColor NOTIFY colorChanged)
+    Q_PROPERTY(QColor selectedTextColor READ getSelectedTextColor WRITE setSelectedTextColor NOTIFY selectedTextColorChanged)
+    Q_PROPERTY(QColor selectionColor READ getSelectionColor WRITE setSelectionColor NOTIFY selectionColorChanged)
+
 
 public:
     explicit QMLTextEditor(QDeclarativeItem *parent = 0);
@@ -21,13 +27,22 @@ public:
     int getMinHeight() const;
     void setMinHeight(int height);
 
-    qreal getFontSize() const;
-    void setFontSize(qreal size);
-
     bool getBold() const;
     //void setBold(bool isBold);
 
     QTextCursor textCursor();
+
+    QFont getFont();
+    void setFont(QFont font);
+
+    QColor getColor();
+    void setColor(QColor color);
+
+    QColor getSelectedTextColor();
+    void setSelectedTextColor(QColor color);
+
+    QColor getSelectionColor();
+    void setSelectionColor(QColor color);
 
 
 signals:
@@ -36,6 +51,10 @@ signals:
     void textChanged();
     void cursorPositionChanged(QRect rect);
     void boldChanged();
+    void fontChanged();
+    void colorChanged();
+    void selectedTextColorChanged();
+    void selectionColorChanged();
 
 public slots:
     void toggleBold();

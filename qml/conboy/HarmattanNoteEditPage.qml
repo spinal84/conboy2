@@ -20,6 +20,7 @@ Page {
             width:  flickable.width
             // We want the editor always at least as high as the flickable
             minHeight: flickable.height
+            platformStyle: TextAreaStyle {}
         }
     }
 

@@ -2,9 +2,13 @@ import QtQuick 1.0
 import Conboy 1.0
 
 FocusScope {
+    id: root
+
     property alias minHeight: editor.minHeight
     property alias bold: editor.bold
     property alias fontSize: editor.fontSize
+
+    property Item platformStyle
 
     function showNote(uuid)
     {
@@ -30,9 +34,17 @@ FocusScope {
 
     TextEditor {
         id: editor
-        fontSize: 20
         // Width is defined by the parent
         width: parent.width
+
+        font: root.platformStyle.textFont
+        color: root.platformStyle.textColor
+//        selectByMouse: false
+        selectedTextColor: root.platformStyle.selectedTextColor
+        selectionColor: root.platformStyle.selectionColor
+//        mouseSelectionMode: TextInput.SelectWords
+//        wrapMode: TextEdit.Wrap
+//        persistentSelection: false
 
         // Margins, when to start scrolling
         property int topMargin: 100

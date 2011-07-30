@@ -19,6 +19,25 @@ QMLTextEditor::QMLTextEditor(QDeclarativeItem *parent) :
 
     bold = false;
 
+    //////
+    //        font: root.platformStyle.textFont
+    //        color: root.platformStyle.textColor
+    //        selectByMouse: false
+    //        selectedTextColor: root.platformStyle.selectedTextColor
+    //        selectionColor: root.platformStyle.selectionColor
+    //        mouseSelectionMode: TextInput.SelectWords
+    //        wrapMode: TextEdit.Wrap
+    //        persistentSelection: false
+    ////
+
+    // color = QPalette::Text
+    // selectedTextColor = QPalette:HighlightedText
+    // selectionColor = QPalette:Highlight
+
+//    QPalette palette;
+//    palette.setColor(QPalette::Highlight, QColor("green"));
+//    textEdit->setPalette(palette);
+
     connect(this, SIGNAL(widthChanged()), this, SLOT(onWidthChanged()));
     connect(textEdit, SIGNAL(heightChanged(int)), this, SLOT(onTextEditHeightChanged(int)));
     connect(textEdit, SIGNAL(textChanged()), this, SIGNAL(textChanged()));
@@ -51,19 +70,6 @@ void QMLTextEditor::onCursorPositionChanged()
 {
     QRect rect = textEdit->cursorRect();
     emit cursorPositionChanged(rect);
-}
-
-qreal QMLTextEditor::getFontSize() const
-{
-    return fontSize;
-}
-
-void QMLTextEditor::setFontSize(qreal size)
-{
-    if (fontSize != size) {
-        fontSize = size;
-        textEdit->setFont(QFont("Arial", fontSize));
-    }
 }
 
 void QMLTextEditor::toggleBold()
@@ -197,3 +203,65 @@ void QMLTextEditor::showTestNote()
     note->setContent(content);
     showNote(note);
 }
+
+QFont QMLTextEditor::getFont()
+{
+    return textEdit->font();
+}
+
+void QMLTextEditor::setFont(QFont font)
+{
+    if (textEdit->font() != font) {
+        textEdit->setFont(font);
+        emit fontChanged();
+    }
+}
+
+// color = QPalette::Text
+// selectedTextColor = QPalette:HighlightedText
+// selectionColor = QPalette:Highlight
+QColor QMLTextEditor::getColor()
+{
+    return textEdit->palette().text().color();
+}
+
+void QMLTextEditor::setColor(QColor color)
+{
+    QPalette palette = textEdit->palette();
+    if (palette.text().color() != color) {
+        palette.setColor(QPalette::Text, color);
+        textEdit->setPalette(palette);
+        emit colorChanged();
+    }
+}
+
+QColor QMLTextEditor::getSelectedTextColor()
+{
+    return textEdit->palette().highlightedText().color();
+}
+
+void QMLTextEditor::setSelectedTextColor(QColor color)
+{
+    QPalette palette = textEdit->palette();
+    if (palette.highlightedText().color() != color) {
+        palette.setColor(QPalette::HighlightedText, color);
+        textEdit->setPalette(palette);
+        emit selectedTextColorChanged();
+    }
+}
+
+QColor QMLTextEditor::getSelectionColor()
+{
+    return textEdit->palette().highlight().color();
+}
+
+void QMLTextEditor::setSelectionColor(QColor color)
+{
+    QPalette palette = textEdit->palette();
+    if (palette.highlight().color() != color) {
+        palette.setColor(QPalette::Highlight, color);
+        textEdit->setPalette(palette);
+        emit selectionColorChanged();
+    }
+}
+
