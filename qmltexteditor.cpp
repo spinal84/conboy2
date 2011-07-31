@@ -12,7 +12,7 @@ QMLTextEditor::QMLTextEditor(QDeclarativeItem *parent) :
     QDeclarativeItem(parent)
 {
     setFlag(QGraphicsItem::ItemHasNoContents, false);
-    textEdit = new TextEditor("Hello, <i>this</i> <b>is a</b> test.");
+    textEdit = new TextEditor();
     proxy = new QGraphicsProxyWidget(this);
     proxy->setWidget(textEdit);
     proxy->setPos(0, 0);
@@ -243,28 +243,6 @@ void QMLTextEditor::setSelectionColor(QColor color)
         palette.setColor(QPalette::Highlight, color);
         textEdit->setPalette(palette);
         emit selectionColorChanged();
-    }
-}
-
-bool QMLTextEditor::getInteractive()
-{
-    Qt::TextInteractionFlags flags = textEdit->textInteractionFlags();
-    if (flags == Qt::NoTextInteraction) {
-        return false;
-    } else {
-        return true;
-    }
-}
-
-void QMLTextEditor::setInteractive(bool interactive)
-{
-    if (getInteractive() != interactive) {
-        if (interactive) {
-            textEdit->setTextInteractionFlags(Qt::TextEditorInteraction);
-        } else {
-            textEdit->setTextInteractionFlags(Qt::NoTextInteraction);
-        }
-        emit interactiveChanged();
     }
 }
 
