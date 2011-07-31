@@ -82,7 +82,6 @@ bool NoteContentXmlHandler::startElement(const QString &namepsaceURI, const QStr
         // The first list item is created implicitly, therefore we
         // do not create another one.
         createNextListItem = false;
-        listHasEnded = false;
 
         QTextList *list = cursor.currentList();
         QTextList *newList;
@@ -112,7 +111,7 @@ bool NoteContentXmlHandler::startElement(const QString &namepsaceURI, const QStr
                 cursor.insertBlock();
                 listStack.top()->add(cursor.block());
 
-                //listHasEnded = false;
+                listHasEnded = false;
                 return true;
             }
         }
@@ -217,6 +216,7 @@ bool NoteContentXmlHandler::characters(const QString &ch)
             QString str = ch;
             str.remove(0, 1);
             cursor.insertText(str);
+            listHasEnded = false;
             return true;
         }
     }
@@ -239,7 +239,7 @@ bool NoteContentXmlHandler::characters(const QString &ch)
         return true;
     }
 
-    qDebug() << "ERROR: Unhandlet situation.";
+    qDebug() << "ERROR: Unhandlet situation. String was:" << ch;
     return false;
 }
 
