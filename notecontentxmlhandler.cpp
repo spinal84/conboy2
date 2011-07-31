@@ -82,6 +82,7 @@ bool NoteContentXmlHandler::startElement(const QString &namepsaceURI, const QStr
         // The first list item is created implicitly, therefore we
         // do not create another one.
         createNextListItem = false;
+        listHasEnded = false;
 
         QTextList *list = cursor.currentList();
         QTextList *newList;
@@ -111,7 +112,7 @@ bool NoteContentXmlHandler::startElement(const QString &namepsaceURI, const QStr
                 cursor.insertBlock();
                 listStack.top()->add(cursor.block());
 
-                listHasEnded = false;
+                //listHasEnded = false;
                 return true;
             }
         }
@@ -172,8 +173,10 @@ bool NoteContentXmlHandler::endElement(const QString &namespaceURI, const QStrin
     }
 
     if (qName == "list") {
+
+        listHasEnded = true;
+
         if (listStack.count() > 1) {
-            listHasEnded = true;
             return true;
         }
 
@@ -208,24 +211,36 @@ bool NoteContentXmlHandler::endElement(const QString &namespaceURI, const QStrin
 
 bool NoteContentXmlHandler::characters(const QString &ch)
 {
-    // Use cursor to write all text.
-    // TODO: Maybe we should use the text block concept of QTextEdit not only \n \n
+    // The outer-most <list> item ends with a "\n". Remove it.
+    if (listHasEnded && listStack.isEmpty()) {
+        if (ch.startsWith("\n")) {
+            QString str = ch;
+            str.remove(0, 1);
+            cursor.insertText(str);
+            return true;
+        }
+    }
 
-    if (listStack.empty()) {
+    // Normal text, not inside a list
+    if (!listHasEnded && listStack.isEmpty()) {
         cursor.insertText(ch);
         return true;
     }
 
-    // If inside a list, remove line-breaks
-    if (ch.endsWith("\n")) {
-        QString str = ch;
-        str.chop(1);
-        cursor.insertText(str);
-        return true;
-    } else {
-        cursor.insertText(ch);
+    // If inside a list, remove all line-breaks
+    if (!listStack.isEmpty()) {
+        if (ch.endsWith("\n")) {
+            QString str = ch;
+            str.chop(1);
+            cursor.insertText(str);
+        } else {
+            cursor.insertText(ch);
+        }
         return true;
     }
+
+    qDebug() << "ERROR: Unhandlet situation.";
+    return false;
 }
 
 void NoteContentXmlHandler::setErrorString(QString errorString)
