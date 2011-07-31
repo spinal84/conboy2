@@ -84,17 +84,19 @@ bool NoteContentXmlHandler::startElement(const QString &namepsaceURI, const QStr
         createNextListItem = false;
 
         QTextList *list = cursor.currentList();
+        QTextList *newList;
         QTextListFormat format;
         if (list) {
             format = list->format();
             format.setIndent(format.indent() + 2);
             format.setStyle(QTextListFormat::ListDisc);
+            newList = cursor.insertList(format);
         } else {
             format.setIndent(2);
             format.setStyle(QTextListFormat::ListDisc);
+            newList = cursor.createList(format);
         }
 
-        QTextList *newList = cursor.insertList(format);
         listStack.push(newList);
     }
 
