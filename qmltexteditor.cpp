@@ -136,6 +136,25 @@ void QMLTextEditor::formatTitle()
 
 void QMLTextEditor::showNote(NoteData *note)
 {
+
+//    QTextCursor cursor = textEdit->textCursor();
+//    QTextBlockFormat defaultBlockFormat = cursor.blockFormat();
+//    cursor.insertText("Hallo, das ist ein Test. Jetzt kommt eine Liste:\n");
+
+//    QTextListFormat format;
+//    format.setIndent(2);
+//    format.setStyle(QTextListFormat::ListDisc);
+//    cursor.createList(format);
+//    cursor.insertText("Erstes Item");
+
+
+//    cursor.insertBlock();
+//    cursor.currentList()->remove(cursor.block());
+//    cursor.setBlockFormat(defaultBlockFormat);
+
+//    cursor.insertText("Wieder normal");
+
+//    return;
     QXmlSimpleReader xmlReader;
     QXmlInputSource source;
     source.setData(note->getContent());
@@ -162,7 +181,7 @@ void QMLTextEditor::showTestNote()
             "This is some text. Next is a line break.\n"
             "Yea. Next empty line.\n\n"
             "Ok. Now some formatting: <bold>bold</bold> <italic>italic</italic> <highlight>hightlight</highlight> <size:large>large</size:large> <size:small>small</size:small> <size:huge>huge</size:huge> <bold><italic>bolditalic</italic></bold> <bold><highlight>highlightbold</highlight></bold> <italic><highlight>italichighlight</highlight></italic> <bold><italic><highlight>bolditalichighlight</highlight></italic></bold>\n\n"
-            "And now some bullets\n"
+            "<monospace>And</monospace> <underline>now</underline> <strikethrough>some</strikethrough> bullets\n"
             "<list><list-item dir=\"ltr\">One\n"
             "</list-item><list-item dir=\"ltr\">Start <bold>Two</bold> End\n"
             "</list-item><list-item dir=\"ltr\">Start <bold><italic>TwoAndAHalf</italic></bold> End\n"

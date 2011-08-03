@@ -57,6 +57,27 @@ bool NoteContentXmlHandler::startElement(const QString &namepsaceURI, const QStr
         return true;
     }
 
+    if (qName == "strikethrough") {
+        QTextCharFormat format = cursor.charFormat();
+        format.setFontStrikeOut(true);
+        cursor.setCharFormat(format);
+        return true;
+    }
+
+    if (qName == "underline") {
+        QTextCharFormat format = cursor.charFormat();
+        format.setFontUnderline(true);
+        cursor.setCharFormat(format);
+        return true;
+    }
+
+    if (qName == "monospace") {
+        QTextCharFormat format = cursor.charFormat();
+        format.setFontFamily("DejaVu Sans Mono");
+        cursor.setCharFormat(format);
+        return true;
+    }
+
     if (qName == "size:small") {
         QTextCharFormat format = cursor.charFormat();
         format.setFontPointSize(16);
@@ -82,19 +103,22 @@ bool NoteContentXmlHandler::startElement(const QString &namepsaceURI, const QStr
         // The first list item is created implicitly, therefore we
         // do not create another one.
         createNextListItem = false;
+        listHasEnded = false;
 
         QTextList *list = cursor.currentList();
+        QTextList *newList;
         QTextListFormat format;
         if (list) {
             format = list->format();
             format.setIndent(format.indent() + 2);
             format.setStyle(QTextListFormat::ListDisc);
+            newList = cursor.insertList(format);
         } else {
             format.setIndent(2);
             format.setStyle(QTextListFormat::ListDisc);
+            newList = cursor.createList(format);
         }
 
-        QTextList *newList = cursor.insertList(format);
         listStack.push(newList);
     }
 
@@ -109,7 +133,7 @@ bool NoteContentXmlHandler::startElement(const QString &namepsaceURI, const QStr
                 cursor.insertBlock();
                 listStack.top()->add(cursor.block());
 
-                listHasEnded = false;
+                //listHasEnded = false;
                 return true;
             }
         }
@@ -139,6 +163,9 @@ bool NoteContentXmlHandler::startElement(const QString &namepsaceURI, const QStr
 
 bool NoteContentXmlHandler::endElement(const QString &namespaceURI, const QString &localName, const QString &qName)
 {
+    Q_UNUSED(namespaceURI)
+    Q_UNUSED(localName)
+
     if (qName == "bold") {
         QTextCharFormat format = cursor.charFormat();
         format.setFontWeight(QFont::Normal);;
@@ -160,6 +187,27 @@ bool NoteContentXmlHandler::endElement(const QString &namespaceURI, const QStrin
         return true;
     }
 
+    if (qName == "strikethrough") {
+        QTextCharFormat format = cursor.charFormat();
+        format.setFontStrikeOut(false);
+        cursor.setCharFormat(format);
+        return true;
+    }
+
+    if (qName == "underline") {
+        QTextCharFormat format = cursor.charFormat();
+        format.setFontUnderline(false);
+        cursor.setCharFormat(format);
+        return true;
+    }
+
+    if (qName == "monospace") {
+        QTextCharFormat format = cursor.charFormat();
+        format.setFontFamily(defaultCharFormat.fontFamily());
+        cursor.setCharFormat(format);
+        return true;
+    }
+
     if (qName == "size:small" || qName == "size:large" || qName == "size:huge") {
         QTextCharFormat format = cursor.charFormat();
         qDebug() << "FONT SIZE:" << defaultCharFormat.fontPointSize();
@@ -170,8 +218,10 @@ bool NoteContentXmlHandler::endElement(const QString &namespaceURI, const QStrin
     }
 
     if (qName == "list") {
+
+        listHasEnded = true;
+
         if (listStack.count() > 1) {
-            listHasEnded = true;
             return true;
         }
 
@@ -206,24 +256,36 @@ bool NoteContentXmlHandler::endElement(const QString &namespaceURI, const QStrin
 
 bool NoteContentXmlHandler::characters(const QString &ch)
 {
-    // Use cursor to write all text.
-    // TODO: Maybe we should use the text block concept of QTextEdit not only \n \n
+    // The outer-most <list> item ends with a "\n". Remove it.
+    if (listHasEnded && listStack.isEmpty()) {
+        if (ch.startsWith("\n")) {
+            QString str = ch;
+            str.remove(0, 1);
+            cursor.insertText(str);
+            return true;
+        }
+    }
 
-    if (listStack.empty()) {
+    // Normal text, not inside a list
+    if (!listHasEnded && listStack.isEmpty()) {
         cursor.insertText(ch);
         return true;
     }
 
-    // If inside a list, remove line-breaks
-    if (ch.endsWith("\n")) {
-        QString str = ch;
-        str.chop(1);
-        cursor.insertText(str);
-        return true;
-    } else {
-        cursor.insertText(ch);
+    // If inside a list, remove all line-breaks
+    if (!listStack.isEmpty()) {
+        if (ch.endsWith("\n")) {
+            QString str = ch;
+            str.chop(1);
+            cursor.insertText(str);
+        } else {
+            cursor.insertText(ch);
+        }
         return true;
     }
+
+    qDebug() << "ERROR: Unhandled situation. String is:" << ch;
+    return false;
 }
 
 void NoteContentXmlHandler::setErrorString(QString errorString)
