@@ -262,6 +262,7 @@ bool NoteContentXmlHandler::characters(const QString &ch)
             QString str = ch;
             str.remove(0, 1);
             cursor.insertText(str);
+            listHasEnded = false;
             return true;
         }
     }
@@ -284,7 +285,7 @@ bool NoteContentXmlHandler::characters(const QString &ch)
         return true;
     }
 
-    qDebug() << "ERROR: Unhandled situation. String is:" << ch;
+    qDebug() << "ERROR: Unhandlet situation. String was:" << ch;
     return false;
 }
 
