@@ -25,6 +25,7 @@ private:
     bool createNextListItem;
     bool listHasEnded;
     bool isInternalLink;
+    bool isUrlLink;
     QStack<QTextList*> listStack;
     QTextBlockFormat defaultBlockFormat;
     QTextCharFormat defaultCharFormat;

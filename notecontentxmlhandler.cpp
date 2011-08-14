@@ -19,6 +19,7 @@ NoteContentXmlHandler::NoteContentXmlHandler(QMLTextEditor *textEditor)
     createNextListItem = false;
     listHasEnded = false;
     isInternalLink = false;
+    isUrlLink = false;
 }
 
 bool NoteContentXmlHandler::fatalError(const QXmlParseException& exception)
@@ -104,6 +105,17 @@ bool NoteContentXmlHandler::startElement(const QString &namepsaceURI, const QStr
         QTextCharFormat format = cursor.charFormat();
         format.setAnchor(true);
         isInternalLink = true;
+        format.setForeground(QBrush(QColor("blue")));
+        format.setUnderlineStyle(QTextCharFormat::SingleUnderline);
+        cursor.setCharFormat(format);
+        return true;
+    }
+
+    if (qName == "link:url") {
+        // TODO: Put format of internal and external links in common place
+        QTextCharFormat format = cursor.charFormat();
+        format.setAnchor(true);
+        isUrlLink = true;
         format.setForeground(QBrush(QColor("blue")));
         format.setUnderlineStyle(QTextCharFormat::SingleUnderline);
         cursor.setCharFormat(format);
@@ -237,6 +249,15 @@ bool NoteContentXmlHandler::endElement(const QString &namespaceURI, const QStrin
         return true;
     }
 
+    if (qName == "link:url") {
+        QTextCharFormat format = cursor.charFormat();
+        format.setAnchor(false);
+        format.setForeground(QBrush(QColor("black")));
+        format.setUnderlineStyle(QTextCharFormat::NoUnderline);
+        cursor.setCharFormat(format);
+        return true;
+    }
+
     if (qName == "list") {
 
         listHasEnded = true;
@@ -272,11 +293,16 @@ bool NoteContentXmlHandler::endElement(const QString &namespaceURI, const QStrin
 bool NoteContentXmlHandler::characters(const QString &ch)
 {
     // If we have a link we need to set the string as href and as text.
-    if (isInternalLink) {
+    if (isInternalLink || isUrlLink) {
         QTextCharFormat format = cursor.charFormat();
-        format.setAnchorHref("internal://" + ch);
+        // TODO: Maybe not use the text as href because it can change through editing
+        // Instead just use "internal" and "external" as hrefs and on click read out the
+        // actual text.
+        QString href = isInternalLink ? ("internal://" + ch) : ch;
+        format.setAnchorHref(href);
         cursor.setCharFormat(format);
         isInternalLink = false;
+        isUrlLink = false;
     }
 
     // The outer-most <list> item ends with a "\n". Remove it.
