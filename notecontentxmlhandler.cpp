@@ -18,6 +18,7 @@ NoteContentXmlHandler::NoteContentXmlHandler(QMLTextEditor *textEditor)
 
     createNextListItem = false;
     listHasEnded = false;
+    isInternalLink = false;
 }
 
 bool NoteContentXmlHandler::fatalError(const QXmlParseException& exception)
@@ -95,6 +96,16 @@ bool NoteContentXmlHandler::startElement(const QString &namepsaceURI, const QStr
     if (qName == "size:huge") {
         QTextCharFormat format = cursor.charFormat();
         format.setFontPointSize(28);
+        cursor.setCharFormat(format);
+        return true;
+    }
+
+    if (qName == "link:internal") {
+        QTextCharFormat format = cursor.charFormat();
+        format.setAnchor(true);
+        isInternalLink = true;
+        format.setForeground(QBrush(QColor("blue")));
+        format.setUnderlineStyle(QTextCharFormat::SingleUnderline);
         cursor.setCharFormat(format);
         return true;
     }
@@ -217,6 +228,15 @@ bool NoteContentXmlHandler::endElement(const QString &namespaceURI, const QStrin
         return true;
     }
 
+    if (qName == "link:internal") {
+        QTextCharFormat format = cursor.charFormat();
+        format.setAnchor(false);
+        format.setForeground(QBrush(QColor("black")));
+        format.setUnderlineStyle(QTextCharFormat::NoUnderline);
+        cursor.setCharFormat(format);
+        return true;
+    }
+
     if (qName == "list") {
 
         listHasEnded = true;
@@ -243,11 +263,6 @@ bool NoteContentXmlHandler::endElement(const QString &namespaceURI, const QStrin
 
         // Throw away the last list element
         listStack.pop();
-
-        // TODO: There is an empty line after the list that shouldn't be there.
-        // but using cursor.deletePreviousChar(); does not work.
-
-        // TODO: There is also an empty line before each list. Shouldn't be there.
     }
 
     //qDebug() << "WARN: Found unknown tag in <note-content>. Tag: " << qName;
@@ -256,6 +271,14 @@ bool NoteContentXmlHandler::endElement(const QString &namespaceURI, const QStrin
 
 bool NoteContentXmlHandler::characters(const QString &ch)
 {
+    // If we have a link we need to set the string as href and as text.
+    if (isInternalLink) {
+        QTextCharFormat format = cursor.charFormat();
+        format.setAnchorHref("internal://" + ch);
+        cursor.setCharFormat(format);
+        isInternalLink = false;
+    }
+
     // The outer-most <list> item ends with a "\n". Remove it.
     if (listHasEnded && listStack.isEmpty()) {
         if (ch.startsWith("\n")) {

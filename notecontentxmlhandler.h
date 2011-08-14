@@ -24,6 +24,7 @@ private:
     QTextCursor cursor;
     bool createNextListItem;
     bool listHasEnded;
+    bool isInternalLink;
     QStack<QTextList*> listStack;
     QTextBlockFormat defaultBlockFormat;
     QTextCharFormat defaultCharFormat;

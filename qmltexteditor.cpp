@@ -170,6 +170,8 @@ void QMLTextEditor::showNote(NoteData *note)
 
     formatTitle();
     textCursor().endEditBlock();
+
+    qDebug() << textEdit->toHtml();
 }
 
 void QMLTextEditor::showTestNote()
@@ -179,6 +181,7 @@ void QMLTextEditor::showTestNote()
      */
     QString content = "<note-content version=\"0.1\">The Title\n\n"
             "This is some text. Next is a line break.\n"
+            "Und ein Link zu <link:internal>Qt parameter</link:internal> und weiter.\n"
             "Yea. Next empty line.\n\n"
             "Ok. Now some formatting: <bold>bold</bold> <italic>italic</italic> <highlight>hightlight</highlight> <size:large>large</size:large> <size:small>small</size:small> <size:huge>huge</size:huge> <bold><italic>bolditalic</italic></bold> <bold><highlight>highlightbold</highlight></bold> <italic><highlight>italichighlight</highlight></italic> <bold><italic><highlight>bolditalichighlight</highlight></italic></bold>\n\n"
             "<monospace>And</monospace> <underline>now</underline> <strikethrough>some</strikethrough> bullets\n"
