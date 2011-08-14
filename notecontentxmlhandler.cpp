@@ -295,9 +295,6 @@ bool NoteContentXmlHandler::characters(const QString &ch)
     // If we have a link we need to set the string as href and as text.
     if (isInternalLink || isUrlLink) {
         QTextCharFormat format = cursor.charFormat();
-        // TODO: Maybe not use the text as href because it can change through editing
-        // Instead just use "internal" and "external" as hrefs and on click read out the
-        // actual text.
         QString href = isInternalLink ? ("internal://" + ch) : ch;
         format.setAnchorHref(href);
         cursor.setCharFormat(format);

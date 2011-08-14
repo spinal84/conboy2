@@ -31,8 +31,22 @@ void TextEditor::resizeEvent(QResizeEvent *e)
     resizeHeight();
 }
 
+void TextEditor::mousePressEvent(QMouseEvent *e)
+{
+    mousePressPos = e->pos();
+}
+
 void TextEditor::mouseReleaseEvent(QMouseEvent *e)
 {
+    // If the user didn't move the mouse more then 30px, check if we have a link.
+    if ((abs(e->x() - mousePressPos.x()) < 30) && abs(e->y() - mousePressPos.y() < 30)) {
+        QString anchor = anchorAt(mousePressPos);
+        if (anchor.length() > 0) {
+            qDebug() << "DEBUG: Link clicked: " << anchor;
+            emit linkClicked(anchor);
+        }
+    }
+
     ignoreNxtMouseMoves = false;
     QTextEdit::mouseReleaseEvent(e);
 }
