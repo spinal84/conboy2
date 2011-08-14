@@ -34,6 +34,7 @@ void TextEditor::resizeEvent(QResizeEvent *e)
 void TextEditor::mousePressEvent(QMouseEvent *e)
 {
     mousePressPos = e->pos();
+    QTextEdit::mousePressEvent(e);
 }
 
 void TextEditor::mouseReleaseEvent(QMouseEvent *e)
