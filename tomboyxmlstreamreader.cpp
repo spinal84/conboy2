@@ -12,25 +12,25 @@ TomboyXmlStreamReader::TomboyXmlStreamReader(QIODevice *device)
 QString TomboyXmlStreamReader::innerXml()
 {
     QString ret;
-    QXmlStreamWriter sw(&ret);
-    sw.setAutoFormatting(false);
+    QXmlStreamWriter writer(&ret);
+    writer.setAutoFormatting(false);
 
-    readInnerXml(sw);
+    readInnerXml(writer);
 
     return ret;
 }
 
-void TomboyXmlStreamReader::readInnerXml(QXmlStreamWriter &sw)
+void TomboyXmlStreamReader::readInnerXml(QXmlStreamWriter &writer)
 {
     if(tokenType() == QXmlStreamReader::StartElement)
     {
     // copy the start tag
-        sw.writeStartElement(qualifiedName().toString());
+        writer.writeStartElement(qualifiedName().toString());
 
         // copy all the attributes
         foreach(QXmlStreamAttribute a, attributes())
         {
-            sw.writeAttribute(a.qualifiedName().toString(), a.value().toString());
+            writer.writeAttribute(a.qualifiedName().toString(), a.value().toString());
         }
 
         // Copy children recursively (maybe make this a behavior flag?)
@@ -41,12 +41,12 @@ void TomboyXmlStreamReader::readInnerXml(QXmlStreamWriter &sw)
               t != QXmlStreamReader::Invalid)
         {
             if(t == QXmlStreamReader::Characters)
-                sw.writeCharacters(text().toString());
+                writer.writeCharacters(text().toString());
             else
-                readInnerXml(sw);
+                readInnerXml(writer);
         }
 
         // Close the element
-        sw.writeEndElement();
+        writer.writeEndElement();
     }
 }
