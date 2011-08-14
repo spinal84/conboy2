@@ -25,12 +25,12 @@ void TomboyXmlStreamReader::readInnerXml(QXmlStreamWriter &sw)
     if(tokenType() == QXmlStreamReader::StartElement)
     {
     // copy the start tag
-        sw.writeStartElement(name().toString());
+        sw.writeStartElement(qualifiedName().toString());
 
         // copy all the attributes
         foreach(QXmlStreamAttribute a, attributes())
         {
-            sw.writeAttribute(a.name().toString(), a.value().toString());
+            sw.writeAttribute(a.qualifiedName().toString(), a.value().toString());
         }
 
         // Copy children recursively (maybe make this a behavior flag?)
