@@ -26,6 +26,10 @@ public slots:
     NoteData* findNote(QString uuid);
     void loadAll();
 
+signals:
+    void noteAdded(NoteData *note);
+    void noteRemoved(NoteData *note);
+
 private:
     QHash<QUuid, NoteData*> notes;
 };

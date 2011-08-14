@@ -9,21 +9,25 @@ NoteListModel::NoteListModel(NoteStore *store, QObject *parent) :
     roles[TitleRole] = "title";
     roles[LastChangeDateRole] = "lastChangeDate";
     setRoleNames(roles);
+
+    notes = store->getNotes();
+
+    connect(store, SIGNAL(noteAdded(NoteData*)), this, SLOT(addNote(NoteData*)));
 }
 
 int NoteListModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
-    return store->count();
+    return notes.count();
 }
 
 QVariant NoteListModel::data(const QModelIndex &index, int role) const
 {
-    if (index.row() < 0 || index.row() > store->count()) {
+    if (index.row() < 0 || index.row() > notes.count()) {
         return QVariant();
     }
 
-    NoteData *note = store->get(index.row());
+    NoteData *note = notes[index.row()];
 
     switch (role) {
     case UuidRole: return note->getUuid().toString();
@@ -39,7 +43,7 @@ bool compareTitle(const NoteData *n1, const NoteData *n2)
         return false;
     }
 
-    return n1->getTitle() < n2->getTitle();
+    return n1->getTitle().toLower() < n2->getTitle().toLower();
 }
 
 bool compareLastChangeDate(const NoteData *n1, const NoteData *n2)
@@ -48,19 +52,28 @@ bool compareLastChangeDate(const NoteData *n1, const NoteData *n2)
         return false;
     }
 
-    return n1->getLastChangeDate() < n2->getLastChangeDate();
+    return n1->getLastChangeDate() > n2->getLastChangeDate();
 }
 
-// column=0 -> sort by title. column=1 -> sort by last change date
-void NoteListModel::sort(int column, Qt::SortOrder order)
+// TODO: Maybe add "Qt::SortOrder order" as parameter
+void NoteListModel::sortByDate()
 {
-    Q_UNUSED(order);
-    QList<NoteData*> notes = store->getNotes();
     emit layoutAboutToBeChanged();
-    if (column == 0) {
-        qStableSort(notes.begin(), notes.end(), compareTitle);
-    } else if (column == 1) {
-        qStableSort(notes.begin(), notes.end(), compareLastChangeDate);
-    }
+    qStableSort(notes.begin(), notes.end(), compareLastChangeDate);
+    emit layoutChanged();
+}
+
+// TODO: Maybe add "Qt::SortOrder order" as parameter
+void NoteListModel::sortByTitle()
+{
+    emit layoutAboutToBeChanged();
+    qStableSort(notes.begin(), notes.end(), compareTitle);
+    emit layoutChanged();
+}
+
+void NoteListModel::addNote(NoteData *note)
+{
+    emit layoutAboutToBeChanged();
+    notes.append(note);
     emit layoutChanged();
 }

@@ -20,6 +20,7 @@ void NoteStore::loadAll()
     for (int i = 0; i < allUuids.count(); i++) {
         NoteData *note = storage.load(allUuids[i]);
         notes.insert(allUuids[i], note);
+        emit noteAdded(note);
     }
 
     qDebug() << "Parsing " << allUuids.length() << " notes took " << startTime.elapsed() << " ms.";
@@ -28,6 +29,7 @@ void NoteStore::loadAll()
 void NoteStore::addNote(QUuid uuid, NoteData* note)
 {
     notes.insert(uuid, note);
+    emit noteAdded(note);
 }
 
 NoteData* NoteStore::findNote(QUuid uuid)

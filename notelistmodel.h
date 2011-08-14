@@ -32,14 +32,19 @@ public:
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
-    void sort(int column, Qt::SortOrder order);
 
 signals:
 
 public slots:
+    void sortByDate();
+    void sortByTitle();
+
+private slots:
+    void addNote(NoteData *note);
 
 private:
     NoteStore *store;
+    QList<NoteData*> notes;
 
 };
 

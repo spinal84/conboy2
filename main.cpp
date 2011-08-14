@@ -23,11 +23,12 @@ int main(int argc, char *argv[])
     noteStore.loadAll();
 
     // Model to visualize notes
-    NoteListModel noteList(&noteStore);
+    NoteListModel noteListModel(&noteStore);
+    noteListModel.sortByDate();
 
 
     QmlApplicationViewer viewer;
-    viewer.rootContext()->setContextProperty("noteListModel", &noteList);
+    viewer.rootContext()->setContextProperty("noteListModel", &noteListModel);
     viewer.rootContext()->setContextProperty("noteStore", &noteStore);
 
     viewer.setOrientation(QmlApplicationViewer::ScreenOrientationAuto);
