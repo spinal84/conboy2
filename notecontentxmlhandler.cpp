@@ -16,6 +16,10 @@ NoteContentXmlHandler::NoteContentXmlHandler(QMLTextEditor *textEditor)
     defaultBlockFormat = cursor.blockFormat();
     defaultCharFormat = cursor.charFormat();
 
+    //defaultCharFormat.setFontPointSize(textEditor->getFont().pointSize());
+    defaultCharFormat.setFont(textEditor->getFont());
+    cursor.setCharFormat(defaultCharFormat);
+
     createNextListItem = false;
     listHasEnded = false;
     isInternalLink = false;
@@ -233,9 +237,7 @@ bool NoteContentXmlHandler::endElement(const QString &namespaceURI, const QStrin
 
     if (qName == "size:small" || qName == "size:large" || qName == "size:huge") {
         QTextCharFormat format = cursor.charFormat();
-        qDebug() << "FONT SIZE:" << defaultCharFormat.fontPointSize();
-        //format.setFontPointSize(defaultCharFormat.fontPointSize());
-        format.setFontPointSize(11);
+        format.setFontPointSize(defaultCharFormat.fontPointSize());
         cursor.setCharFormat(format);
         return true;
     }
@@ -243,7 +245,7 @@ bool NoteContentXmlHandler::endElement(const QString &namespaceURI, const QStrin
     if (qName == "link:internal") {
         QTextCharFormat format = cursor.charFormat();
         format.setAnchor(false);
-        format.setForeground(QBrush(QColor("black")));
+        format.setForeground(defaultCharFormat.foreground());
         format.setUnderlineStyle(QTextCharFormat::NoUnderline);
         cursor.setCharFormat(format);
         return true;
@@ -252,7 +254,7 @@ bool NoteContentXmlHandler::endElement(const QString &namespaceURI, const QStrin
     if (qName == "link:url") {
         QTextCharFormat format = cursor.charFormat();
         format.setAnchor(false);
-        format.setForeground(QBrush(QColor("black")));
+        format.setForeground(defaultCharFormat.foreground());
         format.setUnderlineStyle(QTextCharFormat::NoUnderline);
         cursor.setCharFormat(format);
         return true;

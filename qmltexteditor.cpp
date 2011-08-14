@@ -171,7 +171,7 @@ void QMLTextEditor::showNote(NoteData *note)
     formatTitle();
     textCursor().endEditBlock();
 
-    qDebug() << textEdit->toHtml();
+    //qDebug() << textEdit->toHtml();
 }
 
 void QMLTextEditor::showTestNote()
