@@ -6,6 +6,9 @@
 
 #include "notedata.h"
 
+class NoteData;
+
+
 /***
   NoteStore knows about all notes, no matter where
   they are coming from.
@@ -26,6 +29,7 @@ public slots:
     NoteData* findNote(QUuid uuid);
     NoteData* findNote(QString uuid);
     void loadAll();
+    void save(NoteData *note);
 
 signals:
     void noteAdded(NoteData *note);

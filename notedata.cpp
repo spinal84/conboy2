@@ -70,3 +70,15 @@ void NoteData::setCreateDate(QDateTime time)
 {
     createDate = time;
 }
+
+void NoteData::setStore(NoteStore *store)
+{
+    this->store = store;
+}
+
+void NoteData::save()
+{
+    store->save(this);
+}
+
+

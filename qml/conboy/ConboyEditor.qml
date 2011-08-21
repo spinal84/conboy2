@@ -1,6 +1,6 @@
 import QtQuick 1.0
 import Conboy 1.0
-import com.nokia.meego 1.0
+//import com.nokia.meego 1.0
 import "TextAreaHelper.js" as TextAreaHelper
 
 FocusScope {
@@ -11,20 +11,22 @@ FocusScope {
 
     property Item platformStyle
 
-    function showNote(uuid)
-    {
+    function showNote(uuid) {
         console.log("Open note with uuid: " + uuid)
         var note = noteStore.findNote(uuid)
         editor.showNote(note)
         editor.forceActiveFocus()
     }
 
-    function newNote()
-    {
+    function newNote() {
         console.log("New note")
         var note = noteStore.newNote()
         editor.showNote(note)
         editor.forceActiveFocus()
+    }
+
+    function getXml() {
+        editor.getXml()
     }
 
     function toggleBold() {

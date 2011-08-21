@@ -18,12 +18,29 @@ QMLTextEditor::QMLTextEditor(QDeclarativeItem *parent) :
     proxy->setPos(0, 0);
 
     bold = false;
+    currentNote = 0;
+    saveTimer.setSingleShot(true);
 
     connect(this, SIGNAL(widthChanged()), this, SLOT(onWidthChanged()));
     connect(textEdit, SIGNAL(heightChanged(int)), this, SLOT(onTextEditHeightChanged(int)));
-    connect(textEdit, SIGNAL(textChanged()), this, SIGNAL(textChanged()));
+    connect(textEdit, SIGNAL(textChanged()), this, SLOT(onTextChanged()));
     connect(textEdit, SIGNAL(cursorPositionChanged()), this, SLOT(onCursorPositionChanged()));
     connect(textEdit, SIGNAL(currentCharFormatChanged(QTextCharFormat)), this, SLOT(onCurrentCharFormatChanged(QTextCharFormat)));
+    connect(&saveTimer, SIGNAL(timeout()), this, SLOT(onSaveTimerFired()));
+}
+
+void QMLTextEditor::onTextChanged()
+{
+    qDebug() << "text changed";
+    saveTimer.start(5000);
+    emit textChanged();
+}
+
+void QMLTextEditor::onSaveTimerFired()
+{
+    // TODO: Save note
+    qDebug() << "SAVE THE NOTE !!!!!!";
+    currentNote->save();
 }
 
 void QMLTextEditor::onTextEditHeightChanged(int height)
@@ -155,6 +172,7 @@ void QMLTextEditor::showNote(NoteData *note)
 //    cursor.insertText("Wieder normal");
 
 //    return;
+
     QXmlSimpleReader xmlReader;
     QXmlInputSource source;
     source.setData(note->getContent());
@@ -170,6 +188,8 @@ void QMLTextEditor::showNote(NoteData *note)
 
     formatTitle();
     textCursor().endEditBlock();
+
+    currentNote = note;
 
     //qDebug() << textEdit->toHtml();
 }
@@ -273,5 +293,49 @@ void QMLTextEditor::ignoreNextMouseMoves()
 {
     textEdit->ignoreNextMouseMoves();
 }
+
+QString QMLTextEditor::getXml()
+{
+    QTextCursor cursor = textCursor();
+    cursor.movePosition(QTextCursor::Start);
+
+    QTextDocument *doc = cursor.document();
+
+    // Iterate over all blocks
+    for (int i = 0; i < doc->blockCount(); i++) {
+
+        QTextBlock block = doc->findBlockByNumber(i);
+
+        // Is the block part of a list?
+        if (block.textList()) {
+            // TODO: Special list handling
+            // Currently lists are ignored
+            continue;
+        }
+
+        // Iterate over all fragments of this block
+        QTextBlock::Iterator iter = block.begin();
+        while(!iter.atEnd()) {
+            QTextFragment fragment = iter.fragment();
+            if (fragment.isValid()) {
+                qDebug() << "[" << fragment.text() << "]";
+                QTextCharFormat format = fragment.charFormat();
+
+                // TODO: Get all formattings of the fragment and create xml tags
+                // Put all fragments after each other
+                // After a block, add a newline
+                if (format.fontWeight() == QFont::Bold) {
+                    qDebug() << "BOLD";
+                }
+            }
+            iter++;
+        }
+    }
+
+    // TODO: Return the xml formatted string
+    return "";
+}
+
+
 
 

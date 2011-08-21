@@ -19,7 +19,7 @@ int main(int argc, char *argv[])
 
     // Holds all notes
     NoteStore noteStore;
-    // TODO: Call this from QML, not from here
+    // TODO: Call this from QML, not from here to make sure the UI starts before the parsing begins
     noteStore.loadAll();
 
     // Model to visualize notes

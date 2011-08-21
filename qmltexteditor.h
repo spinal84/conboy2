@@ -5,9 +5,11 @@
 #include <QGraphicsProxyWidget>
 #include <QTextEdit>
 #include <QColor>
+#include <QTimer>
 
 #include "texteditor.h"
 #include "notedata.h"
+#include "notestore.h"
 
 class QMLTextEditor : public QDeclarativeItem
 {
@@ -44,6 +46,8 @@ public:
     QColor getSelectionColor();
     void setSelectionColor(QColor color);
 
+
+
 signals:
     void minHeightChanged();
     void fontSizeChanged();
@@ -62,6 +66,7 @@ public slots:
     void showTestNote();
     void showNote(NoteData *note);
     void ignoreNextMouseMoves();
+    QString getXml();
 
 
 private slots:
@@ -69,6 +74,9 @@ private slots:
     void onTextEditHeightChanged(int height);
     void onCursorPositionChanged();
     void onCurrentCharFormatChanged(QTextCharFormat format);
+    void onTextChanged();
+    void onSaveTimerFired();
+
 
 private:
     QGraphicsProxyWidget *proxy;
@@ -78,6 +86,8 @@ private:
     qreal fontSize;
     bool bold;
     void formatTitle();
+    NoteData *currentNote;
+    QTimer saveTimer;
 
 
 };

@@ -5,6 +5,10 @@
 #include <QDateTime>
 #include <QUuid>
 
+#include "notestore.h"
+
+class NoteStore;
+
 /*
   This class contains all data that makes up a note.
   Not all data is important to us. E.g. we won't use window
@@ -45,6 +49,9 @@ public:
     QDateTime getCreateDate() const;
     void setCreateDate(QDateTime time);
 
+    void setStore(NoteStore* store);
+    void save();
+
     // TODO: Add rest of the getters and setters
 
 signals:
@@ -69,6 +76,7 @@ private:
     int y;
     bool openOnStartup;
     QList<QString> tags;
+    NoteStore* store;
 
 };
 

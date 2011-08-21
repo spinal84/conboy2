@@ -68,6 +68,11 @@ Item {
                 text: "New"
                 onClicked: editor.newNote()
             }
+
+            Button {
+                text: "Xml"
+                onClicked: editor.getXml()
+            }
         }
     }
 }

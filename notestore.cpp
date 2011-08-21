@@ -19,15 +19,22 @@ void NoteStore::loadAll()
 
     for (int i = 0; i < allUuids.count(); i++) {
         NoteData *note = storage.load(allUuids[i]);
-        notes.insert(allUuids[i], note);
+        addNote(allUuids[i], note);
         emit noteAdded(note);
     }
 
     qDebug() << "Parsing " << allUuids.length() << " notes took " << startTime.elapsed() << " ms.";
 }
 
+void NoteStore::save(NoteData *note)
+{
+    TomboyStorage storage;
+    storage.save(note);
+}
+
 void NoteStore::addNote(QUuid uuid, NoteData* note)
 {
+    note->setStore(this);
     notes.insert(uuid, note);
     emit noteAdded(note);
 }
