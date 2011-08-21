@@ -45,6 +45,7 @@ private slots:
 private:
     NoteStore *store;
     QList<NoteData*> notes;
+    QString sortOrder;
 
 };
 

@@ -22,6 +22,7 @@ public:
     QList<NoteData*> getNotes();
 
 public slots:
+    NoteData* newNote();
     NoteData* findNote(QUuid uuid);
     NoteData* findNote(QString uuid);
     void loadAll();

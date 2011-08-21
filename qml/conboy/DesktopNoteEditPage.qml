@@ -63,6 +63,11 @@ Item {
                 text: "List"
                 onClicked: listView.incrementCurrentIndex()
             }
+
+            Button {
+                text: "New"
+                onClicked: editor.newNote()
+            }
         }
     }
 }

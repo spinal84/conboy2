@@ -16,6 +16,15 @@ FocusScope {
         console.log("Open note with uuid: " + uuid)
         var note = noteStore.findNote(uuid)
         editor.showNote(note)
+        editor.forceActiveFocus()
+    }
+
+    function newNote()
+    {
+        console.log("New note")
+        var note = noteStore.newNote()
+        editor.showNote(note)
+        editor.forceActiveFocus()
     }
 
     function toggleBold() {

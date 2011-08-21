@@ -32,6 +32,25 @@ void NoteStore::addNote(QUuid uuid, NoteData* note)
     emit noteAdded(note);
 }
 
+NoteData* NoteStore::newNote()
+{
+    qDebug() << "Creating new note";
+    NoteData *note = new NoteData();
+    QString num;
+
+    num.setNum(count()+1);
+    note->setTitle("New note " + num);
+
+    QString content = "<note-content version=\"0.1\">" + note->getTitle() + "\n\n"
+            + "Insert content here.\n"
+            + "</note-content>";
+
+    note->setContent(content);
+
+    addNote(note->getUuid(), note);
+    return note;
+}
+
 NoteData* NoteStore::findNote(QUuid uuid)
 {
     return notes.value(uuid);

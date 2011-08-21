@@ -16,5 +16,9 @@ PageStackWindow {
         id: listPage
         editor: editPage
         onShowEditor: pageStack.push(editPage)
+        onNewNote: {
+            editPage.newNote()
+            pageStack.push(editPage)
+        }
     }
 }

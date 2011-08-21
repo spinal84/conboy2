@@ -11,6 +11,7 @@ NoteListModel::NoteListModel(NoteStore *store, QObject *parent) :
     setRoleNames(roles);
 
     notes = store->getNotes();
+    sortOrder = "date";
 
     connect(store, SIGNAL(noteAdded(NoteData*)), this, SLOT(addNote(NoteData*)));
 }
@@ -61,6 +62,7 @@ void NoteListModel::sortByDate()
     emit layoutAboutToBeChanged();
     qStableSort(notes.begin(), notes.end(), compareLastChangeDate);
     emit layoutChanged();
+    sortOrder = "date";
 }
 
 // TODO: Maybe add "Qt::SortOrder order" as parameter
@@ -69,11 +71,19 @@ void NoteListModel::sortByTitle()
     emit layoutAboutToBeChanged();
     qStableSort(notes.begin(), notes.end(), compareTitle);
     emit layoutChanged();
+    sortOrder = "title";
 }
 
+// TODO: On startup addNote() is called often. With each call the list gets sorted.
+// Optimize that.
 void NoteListModel::addNote(NoteData *note)
 {
     emit layoutAboutToBeChanged();
     notes.append(note);
+    if (sortOrder == "title") {
+        sortByTitle();
+    } else {
+        sortByDate();
+    }
     emit layoutChanged();
 }

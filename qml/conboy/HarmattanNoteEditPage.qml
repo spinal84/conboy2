@@ -8,6 +8,10 @@ Page {
         editor.showNote(uuid)
     }
 
+    function newNote() {
+        editor.newNote()
+    }
+
     Flickable {
         id: flickable
         contentHeight: editor.height

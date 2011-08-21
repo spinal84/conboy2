@@ -3,12 +3,13 @@ import com.nokia.meego 1.0
 
 Page {
     signal showEditor
+    signal newNote
     property QtObject editor
 
     tools: ToolBarLayout {
         ToolIcon {
             iconId: "icon-m-toolbar-add"
-            onClicked: console.log("TODO: Open new note")
+            onClicked: newNote()
         }
     }
 
