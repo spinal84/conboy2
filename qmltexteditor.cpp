@@ -29,10 +29,11 @@ QMLTextEditor::QMLTextEditor(QDeclarativeItem *parent) :
     connect(&saveTimer, SIGNAL(timeout()), this, SLOT(onSaveTimerFired()));
 }
 
+// TODO: Don't use the textChanged() signal. Use modified on QTextDocument
 void QMLTextEditor::onTextChanged()
 {
     qDebug() << "text changed";
-    saveTimer.start(5000);
+    saveTimer.start(4000);
     emit textChanged();
 }
 
@@ -84,14 +85,6 @@ bool QMLTextEditor::getBold() const
     return bold;
 }
 
-//void QMLTextEditor::setBold(bool isBold)
-//{
-//    if (bold != isBold) {
-//        bold = isBold;
-//        emit boldChanged();
-//    }
-//}
-
 void QMLTextEditor::onCurrentCharFormatChanged(QTextCharFormat format)
 {
     bold = (format.fontWeight() == QFont::Bold);
@@ -120,7 +113,7 @@ void QMLTextEditor::increaseIndent()
 }
 
 // TODO: List item needs to get attached to parent list
-// if current list has a parent list
+// if current list has a parent list. See how it's done in the parser
 void QMLTextEditor::decreaseIndent()
 {
     QTextCursor cursor = textEdit->textCursor();
@@ -153,26 +146,6 @@ void QMLTextEditor::formatTitle()
 
 void QMLTextEditor::showNote(NoteData *note)
 {
-
-//    QTextCursor cursor = textEdit->textCursor();
-//    QTextBlockFormat defaultBlockFormat = cursor.blockFormat();
-//    cursor.insertText("Hallo, das ist ein Test. Jetzt kommt eine Liste:\n");
-
-//    QTextListFormat format;
-//    format.setIndent(2);
-//    format.setStyle(QTextListFormat::ListDisc);
-//    cursor.createList(format);
-//    cursor.insertText("Erstes Item");
-
-
-//    cursor.insertBlock();
-//    cursor.currentList()->remove(cursor.block());
-//    cursor.setBlockFormat(defaultBlockFormat);
-
-//    cursor.insertText("Wieder normal");
-
-//    return;
-
     QXmlSimpleReader xmlReader;
     QXmlInputSource source;
     source.setData(note->getContent());
@@ -190,8 +163,6 @@ void QMLTextEditor::showNote(NoteData *note)
     textCursor().endEditBlock();
 
     currentNote = note;
-
-    //qDebug() << textEdit->toHtml();
 }
 
 void QMLTextEditor::showTestNote()
@@ -224,6 +195,7 @@ void QMLTextEditor::showTestNote()
 
     // Create dummy note and show it
     NoteData *note = new NoteData();
+    note->setTitle("The Title");
     note->setContent(content);
     showNote(note);
 }
@@ -241,9 +213,6 @@ void QMLTextEditor::setFont(QFont font)
     }
 }
 
-// color = QPalette::Text
-// selectedTextColor = QPalette:HighlightedText
-// selectionColor = QPalette:Highlight
 QColor QMLTextEditor::getColor()
 {
     return textEdit->palette().text().color();

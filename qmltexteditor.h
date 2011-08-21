@@ -30,7 +30,6 @@ public:
     void setMinHeight(int height);
 
     bool getBold() const;
-    //void setBold(bool isBold);
 
     QTextCursor textCursor();
 
@@ -45,8 +44,6 @@ public:
 
     QColor getSelectionColor();
     void setSelectionColor(QColor color);
-
-
 
 signals:
     void minHeightChanged();
@@ -68,7 +65,6 @@ public slots:
     void ignoreNextMouseMoves();
     QString getXml();
 
-
 private slots:
     void onWidthChanged();
     void onTextEditHeightChanged(int height);
@@ -76,7 +72,6 @@ private slots:
     void onCurrentCharFormatChanged(QTextCharFormat format);
     void onTextChanged();
     void onSaveTimerFired();
-
 
 private:
     QGraphicsProxyWidget *proxy;
@@ -88,7 +83,6 @@ private:
     void formatTitle();
     NoteData *currentNote;
     QTimer saveTimer;
-
 
 };
 

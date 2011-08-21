@@ -8,7 +8,12 @@ NoteData::NoteData(QObject *parent) :
     createDate = currentTime;
     lastChangeDate = currentTime;
     lastMetadataChangeDate = currentTime;
-    title = "New Note";
+    cursorPosition = 0;
+    width = 200;
+    heigth = 300;
+    x = 50;
+    y = 50;
+    openOnStartup = false;
 }
 
 QUuid NoteData::getUuid() const

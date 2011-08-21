@@ -108,26 +108,6 @@ bool TomboyStorage::save(NoteData *note)
     writer.setAutoFormatting(true);
     writer.writeStartDocument();
 
-    /*
-<note version="0.3" xmlns:link="http://beatniksoftware.com/tomboy/link" xmlns:size="http://beatniksoftware.com/tomboy/size" xmlns="http://beatniksoftware.com/tomboy">
-  <title>Kino</title>
-  <text xml:space="preserve"><note-content version="0.1">Kino
-
-Sa 23.00 Internat5 Schauburg
-</note-content></text>
-  <last-change-date>2011-04-16T19:21:05.6790870+02:00</last-change-date>
-  <last-metadata-change-date>2011-04-16T19:21:05.6790870+02:00</last-metadata-change-date>
-  <create-date>2011-04-16T19:18:50.7360790+02:00</create-date>
-  <cursor-position>0</cursor-position>
-  <width>450</width>
-  <height>360</height>
-  <x>0</x>
-  <y>0</y>
-  <open-on-startup>False</open-on-startup>
-</note>
-
-*/
-
     // Note
     writer.writeStartElement("note");
     writer.writeAttribute("version", "0.3");

@@ -70,8 +70,6 @@ public:
     void setStore(NoteStore* store);
     void save();
 
-    // TODO: Add rest of the getters and setters
-
 signals:
     void uuidChanged();
     void titleChanged();
