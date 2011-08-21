@@ -49,6 +49,24 @@ public:
     QDateTime getCreateDate() const;
     void setCreateDate(QDateTime time);
 
+    int getCursorPosition() const;
+    void setCursorPosition(int pos);
+
+    int getWidth() const;
+    void setWidth(int width);
+
+    int getHeight() const;
+    void setHeight(int heigth);
+
+    int getX() const;
+    void setX(int x);
+
+    int getY() const;
+    void setY(int y);
+
+    bool getOpenOnStartup() const;
+    void setOpenOnStartup(bool open);
+
     void setStore(NoteStore* store);
     void save();
 

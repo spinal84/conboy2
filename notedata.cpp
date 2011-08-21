@@ -71,6 +71,66 @@ void NoteData::setCreateDate(QDateTime time)
     createDate = time;
 }
 
+int NoteData::getCursorPosition() const
+{
+    return cursorPosition;
+}
+
+void NoteData::setCursorPosition(int pos)
+{
+    cursorPosition = pos;
+}
+
+int NoteData::getWidth() const
+{
+    return width;
+}
+
+void NoteData::setWidth(int width)
+{
+    this->width = width;
+}
+
+int NoteData::getHeight() const
+{
+    return heigth;
+}
+
+void NoteData::setHeight(int heigth)
+{
+    this->heigth = heigth;
+}
+
+int NoteData::getX() const
+{
+    return x;
+}
+
+void NoteData::setX(int x)
+{
+    this->x = x;
+}
+
+int NoteData::getY() const
+{
+    return y;
+}
+
+void NoteData::setY(int y)
+{
+    this->y = y;
+}
+
+bool NoteData::getOpenOnStartup() const
+{
+    return openOnStartup;
+}
+
+void NoteData::setOpenOnStartup(bool open)
+{
+    openOnStartup = open;
+}
+
 void NoteData::setStore(NoteStore *store)
 {
     this->store = store;

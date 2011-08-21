@@ -151,10 +151,16 @@ Sa 23.00 Internat5 Schauburg
     writer.writeEndElement();
 
     // Meta-Data
-    // TODO: Add time formatting
     writer.setAutoFormatting(true);
-    writer.writeTextElement("last-change-date", note->getLastChangeDate().toString());
-    writer.writeTextElement("last-metadata-change-date", note->getLastMetadataChangeDate().toString());
+    writer.writeTextElement("last-change-date", note->getLastChangeDate().toString(Qt::ISODate));
+    writer.writeTextElement("last-metadata-change-date", note->getLastMetadataChangeDate().toString(Qt::ISODate));
+    writer.writeTextElement("create-date", note->getCreateDate().toString(Qt::ISODate));
+    writer.writeTextElement("cursor-position", QString::number(note->getCursorPosition()));
+    writer.writeTextElement("width", QString::number(note->getWidth()));
+    writer.writeTextElement("height", QString::number(note->getHeight()));
+    writer.writeTextElement("x", QString::number(note->getX()));
+    writer.writeTextElement("y", QString::number(note->getY()));
+    writer.writeTextElement("open-on-startup", note->getOpenOnStartup() ? "True" : "False");
 
     writer.writeEndDocument();
 
