@@ -1,6 +1,7 @@
 #include <QTextList>
 #include <QTextListFormat>
 #include <QtXml/QXmlSimpleReader>
+#include <QXmlStreamWriter>
 #include <QDebug>
 
 #include <QTextListFormat>
@@ -33,7 +34,7 @@ QMLTextEditor::QMLTextEditor(QDeclarativeItem *parent) :
 void QMLTextEditor::onTextChanged()
 {
     qDebug() << "text changed";
-    saveTimer.start(4000);
+    saveTimer.start(1000);
     emit textChanged();
 }
 
@@ -264,8 +265,14 @@ void QMLTextEditor::ignoreNextMouseMoves()
     textEdit->ignoreNextMouseMoves();
 }
 
+// TODO: This should go into a dedicated class
 QString QMLTextEditor::getXml()
 {
+    QString result;
+    QXmlStreamWriter writer(&result);
+    writer.writeStartElement("note-content");
+    writer.writeAttribute("version", "0.1");
+
     QTextCursor cursor = textCursor();
     cursor.movePosition(QTextCursor::Start);
 
@@ -276,34 +283,92 @@ QString QMLTextEditor::getXml()
 
         QTextBlock block = doc->findBlockByNumber(i);
 
+        // For each block, insert a newline
+        if (i > 0) {
+            writer.writeCharacters("\n");
+        }
+
         // Is the block part of a list?
         if (block.textList()) {
-            // TODO: Special list handling
-            // Currently lists are ignored
+            QTextList *list = block.textList();
+
+            if (list->itemNumber(block) == 0) {
+                qDebug() << "First item in list";
+                writer.writeStartElement("list");
+            }
+
+            writer.writeStartElement("list-item");
+            writer.writeCharacters("TODO: handleBlockContent() (aka fragments)");
+            // TODO:
+            // writeBlockContent(block=block, inList=true);
+            // inList=true: Add newline after list-item content
+            writer.writeEndElement();
+
+            if (list->itemNumber(block) +1 == list->count()) {
+                qDebug() << "Last item in list";
+                writer.writeEndElement();
+            }
+
+            //qDebug() << "      Item: " << list->itemNumber(block);
+            //qDebug() << "List count: " << list->count();
+            //list->parent()
+
             continue;
         }
 
+
+
+        // TODO: Needs it own function
         // Iterate over all fragments of this block
-        QTextBlock::Iterator iter = block.begin();
-        while(!iter.atEnd()) {
-            QTextFragment fragment = iter.fragment();
+        QTextBlock::Iterator fragmentIter = block.begin();
+        while(!fragmentIter.atEnd()) {
+
+            QTextFragment fragment = fragmentIter.fragment();
             if (fragment.isValid()) {
-                qDebug() << "[" << fragment.text() << "]";
+
+                //qDebug() << "[" << fragment.text() << "]";
                 QTextCharFormat format = fragment.charFormat();
 
                 // TODO: Get all formattings of the fragment and create xml tags
                 // Put all fragments after each other
                 // After a block, add a newline
+                int openTags = 0;
+
                 if (format.fontWeight() == QFont::Bold) {
-                    qDebug() << "BOLD";
+                    writer.writeStartElement("bold");
+                    openTags++;
                 }
+                if (format.fontItalic()) {
+                    writer.writeStartElement("italic");
+                    openTags++;
+                }
+                // TODO: We need a mapping between tags and formats
+                // This mapping should be used in notecontentxmlhandler.cpp
+                // and here.
+                // TODO: Is there something like formatA.contains(formatB)? Maybe == ?
+                if (format.fontFamily() == "DejaVu Sans Mono") {
+                    writer.writeStartElement("monospace");
+                    openTags++;
+                }
+
+                writer.writeCharacters(fragment.text());
+
+                for (int i = 0; i < openTags; i++) {
+                    writer.writeEndElement();
+                }
+
             }
-            iter++;
+
+            fragmentIter++;
         }
     }
 
+    // </note-content>
+    writer.writeEndElement();
+
     // TODO: Return the xml formatted string
-    return "<note-content version=\"0.1\">The Title\n\nSome content with <bold>bold</bold> text.</note-content>";
+    //return "<note-content version=\"0.1\">The Title\n\nSome content with <bold>bold</bold> text.</note-content>";
+    return result;
 }
 
 
