@@ -124,8 +124,26 @@ bool TomboyStorage::save(NoteData *note)
 
     // Content
     writer.setAutoFormatting(false);
-    // TODO: Insert content -- Looks like there is no .writeRaw()
-    writer.writeCharacters("content content <b>content</b> content conteten\ncontent contetnet");
+
+    // Write content
+    // TODO: Is there a more efficient way? Now we're reparsing the xml-string just
+    // to write it out. Maybe store in parsed form?
+    qDebug() << "###########################";
+    qDebug() << note->getContent();
+    qDebug() << "###########################";
+
+    QXmlStreamReader reader(note->getContent());
+    while (reader.name() != "note-content") {
+        reader.readNext();
+    }
+
+    while (! (reader.isEndElement() && reader.name() == "note-content")) {
+        writer.writeCurrentToken(reader);
+        reader.readNext();
+    }
+    // Write closing tag (</note-content>)
+    writer.writeCurrentToken(reader);
+    reader.clear();
 
     // Close Text
     writer.writeEndElement();

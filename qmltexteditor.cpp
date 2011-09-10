@@ -41,6 +41,7 @@ void QMLTextEditor::onSaveTimerFired()
 {
     // TODO: Save note
     qDebug() << "SAVE THE NOTE !!!!!!";
+    currentNote->setContent(getXml());
     currentNote->save();
 }
 
@@ -302,7 +303,7 @@ QString QMLTextEditor::getXml()
     }
 
     // TODO: Return the xml formatted string
-    return "";
+    return "<note-content version=\"0.1\">The Title\n\nSome content with <bold>bold</bold> text.</note-content>";
 }
 
 
