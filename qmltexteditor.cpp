@@ -196,8 +196,6 @@ void QMLTextEditor::showTestNote()
             "Now we continue normally...\n"
             "A list with only one item on level 1\n"
             "<list><list-item dir=\"ltr\">One</list-item></list>\n"
-            "A list with only one item on level 2\n"
-            "<list><list-item><list><list-item dir=\"ltr\">Two</list-item></list></list-item></list>\n"
             "End"
             "</note-content>";
 

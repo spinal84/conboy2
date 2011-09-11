@@ -106,6 +106,7 @@ bool TomboyStorage::save(NoteData *note)
     QXmlStreamWriter writer(&file);
 
     writer.setAutoFormatting(true);
+    writer.setAutoFormattingIndent(2);
     writer.writeStartDocument();
 
     // Note
@@ -133,6 +134,10 @@ bool TomboyStorage::save(NoteData *note)
     qDebug() << "###########################";
 
     QXmlStreamReader reader(note->getContent());
+    // Add namespaces, otherwise we get parse errors
+    reader.addExtraNamespaceDeclaration(QXmlStreamNamespaceDeclaration("link", "http://beatniksoftware.com/tomboy/link"));
+    reader.addExtraNamespaceDeclaration(QXmlStreamNamespaceDeclaration("size", "http://beatniksoftware.com/tomboy/size"));
+
     while (reader.name() != "note-content") {
         reader.readNext();
     }

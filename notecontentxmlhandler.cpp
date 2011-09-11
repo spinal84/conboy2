@@ -137,11 +137,11 @@ bool NoteContentXmlHandler::startElement(const QString &namepsaceURI, const QStr
         QTextListFormat format;
         if (list) {
             format = list->format();
-            format.setIndent(format.indent() + 2);
+            format.setIndent(format.indent() + 1);
             format.setStyle(QTextListFormat::ListDisc);
             newList = cursor.insertList(format);
         } else {
-            format.setIndent(2);
+            format.setIndent(1);
             format.setStyle(QTextListFormat::ListDisc);
             newList = cursor.createList(format);
         }
