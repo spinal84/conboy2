@@ -29,22 +29,38 @@ QMLTextEditor::QMLTextEditor(QDeclarativeItem *parent) :
     connect(textEdit, SIGNAL(cursorPositionChanged()), this, SLOT(onCursorPositionChanged()));
     connect(textEdit, SIGNAL(currentCharFormatChanged(QTextCharFormat)), this, SLOT(onCurrentCharFormatChanged(QTextCharFormat)));
     connect(&saveTimer, SIGNAL(timeout()), this, SLOT(onSaveTimerFired()));
+    textEdit->document()->setModified(false);
+    connect(textEdit->document(), SIGNAL(modificationChanged(bool)), this, SLOT(onModificationChanged(bool)));
 }
 
-// TODO: Don't use the textChanged() signal. Use modified on QTextDocument
+// TODO: ModificationChanged() is not called repeatedly. Therefore this method is only called
+// if modification really changed from false to true (or the other way around).
+// That means that while typing we save every 4 seconds. Using something like onContentChanged,
+// we would postpone saving until the user is not typing for 4 secons. I'd prefere that.
+void QMLTextEditor::onModificationChanged(bool changed)
+{
+    qDebug() << "Mod changed to:" << changed;
+    if (changed) {
+        saveTimer.start(4000);
+    } else {
+        saveTimer.stop();
+    }
+}
+
 void QMLTextEditor::onTextChanged()
 {
-    qDebug() << "text changed";
-    saveTimer.start(1000);
     emit textChanged();
 }
 
 void QMLTextEditor::onSaveTimerFired()
 {
-    // TODO: Save note
-    qDebug() << "SAVE THE NOTE !!!!!!";
-    currentNote->setContent(getXml());
-    currentNote->save();
+    qDebug() << "SAVE TIMER FIRED";
+    if (textEdit->document()->isModified()) {
+        qDebug() << "SAVE NOTE !!!!!!";
+        currentNote->setContent(getXml());
+        currentNote->save();
+        textEdit->document()->setModified(false);
+    }
 }
 
 void QMLTextEditor::onTextEditHeightChanged(int height)
@@ -164,6 +180,7 @@ void QMLTextEditor::showNote(NoteData *note)
 
     formatTitle();
     textCursor().endEditBlock();
+    textEdit->document()->setModified(false);
 
     currentNote = note;
 }

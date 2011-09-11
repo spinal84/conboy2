@@ -17,6 +17,8 @@ void TextEditor::init()
 {
     setVerticalScrollBarPolicy (Qt::ScrollBarAlwaysOff);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    setCursorWidth(2);
+    document()->setDocumentMargin(20);
     ignoreNxtMouseMoves = false;
     connect(this, SIGNAL(textChanged()), this, SLOT(resizeHeight()));
 }

@@ -71,6 +71,8 @@ private slots:
     void onCursorPositionChanged();
     void onCurrentCharFormatChanged(QTextCharFormat format);
     void onTextChanged();
+    //void onContentChanged();
+    void onModificationChanged(bool changed);
     void onSaveTimerFired();
 
 private:
