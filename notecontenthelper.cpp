@@ -2,6 +2,7 @@
 #include <QTextListFormat>
 #include <QXmlStreamWriter>
 #include <QDebug>
+#include <QStack>
 
 #include "notecontenthelper.h"
 
@@ -53,7 +54,31 @@ void NoteContentHelper::handleBlock(QTextBlock *block, QXmlStreamWriter *writer)
 
         fragmentIter++;
     }
+}
 
+void NoteContentHelper::handleList(QTextList *list, QXmlStreamWriter *writer)
+{
+    qDebug() << "handleList(): " << list;
+    writer->writeStartElement("list");
+    for (int i = 0; i < list->count(); i++) {
+        QTextBlock item = list->item(i);
+        QTextList *childList = item.textList();
+        if (childList) {
+            qDebug() << "Found child list";
+            handleList(childList, writer);
+        } else {
+            handleListItem(&item, writer);
+        }
+    }
+    writer->writeEndElement();
+}
+
+void NoteContentHelper::handleListItem(QTextBlock *listItem, QXmlStreamWriter *writer)
+{
+    writer->writeStartElement("list-item");
+    writer->writeCharacters(listItem->text());
+    writer->writeCharacters("\n");
+    writer->writeEndElement();
 }
 
 QString NoteContentHelper::qTextDocumentToXmlString(QTextDocument *doc)
@@ -64,32 +89,96 @@ QString NoteContentHelper::qTextDocumentToXmlString(QTextDocument *doc)
     writer.writeAttribute("version", "0.1");
 
     // Iterate over all blocks
-    for (int i = 0; i < doc->blockCount(); i++) {
+    bool listEnded = false;
+    QTextList *listRoot = 0;
 
-        QTextBlock block = doc->findBlockByNumber(i);
+    QTextFrame *frame = doc->rootFrame();
+    QTextFrame::Iterator it;
+    for (it = frame->begin(); !it.atEnd(); it++) {
+
+        QTextBlock block = it.currentBlock();
 
         QTextList *list = block.textList();
+
+        // If the last block was a list ending, we need to close some tags
+        if (listEnded) {
+            writer.writeEndElement(); // </list>
+            writer.writeEndElement(); // </list-item>
+            listEnded = false;
+        }
+
         if (list) {
+            if (!listRoot) {
+                listRoot = list;
+            }
 
-            if (list->itemNumber(block) == 0) {
-                qDebug() << "First item in list";
+            int index = list->itemNumber(block);
+
+            // If first and last
+            if (index == 0 && list->count() == 1) {
+                // First <list> element must be on new line
+                if (list == listRoot) {
+                    writer.writeCharacters("\n");
+                }
                 writer.writeStartElement("list");
+                listEnded = true;
+
+                writer.writeStartElement("list-item");
+                QTextBlock item = list->item(list->itemNumber(block));
+                handleBlock(&item, &writer);
+
+                if (list == listRoot) {
+                    listRoot = 0;
+                } else {
+                    writer.writeCharacters("\n");
+                }
             }
 
-            writer.writeStartElement("list-item");
-            QTextBlock item = list->item(list->itemNumber(block));
-            handleBlock(&item, &writer);
-            writer.writeCharacters("\n");
-            writer.writeEndElement();
+            // If first item
+            else if (index == 0) {
+                // First <list> element must be on new line
+                if (list == listRoot) {
+                    writer.writeCharacters("\n");
+                }
+                writer.writeStartElement("list");
 
-            if (list->itemNumber(block) +1 == list->count()) {
-                qDebug() << "Last item in list";
-                writer.writeEndElement();
+                writer.writeStartElement("list-item");
+                QTextBlock item = list->item(list->itemNumber(block));
+                handleBlock(&item, &writer);
+                writer.writeCharacters("\n");
             }
+
+            // If in middle
+            else if (index > 0 && index + 1 < list->count()) {
+                writer.writeEndElement(); // </list-item>
+
+                writer.writeStartElement("list-item");
+                QTextBlock item = list->item(list->itemNumber(block));
+                handleBlock(&item, &writer);
+                writer.writeCharacters("\n");
+            }
+
+            // If last item
+            else if (index + 1 == list->count()) {
+                listEnded = true;
+                writer.writeEndElement(); // </list-item>
+
+                writer.writeStartElement("list-item");
+                QTextBlock item = list->item(list->itemNumber(block));
+                handleBlock(&item, &writer);
+
+                if (list == listRoot) {
+                    listRoot = 0;
+                } else {
+                    writer.writeCharacters("\n");
+                }
+            }
+
+
 
         } else {
             // For each block, insert a newline
-            if (i > 0) {
+            if (it.currentBlock().blockNumber() > 0) {
                 writer.writeCharacters("\n");
             }
             handleBlock(&block, &writer);
@@ -99,5 +188,10 @@ QString NoteContentHelper::qTextDocumentToXmlString(QTextDocument *doc)
     // </note-content>
     writer.writeEndElement();
 
-    return result;
+    qDebug() << "*************************************";
+    qDebug() << result;
+    qDebug() << "*************************************";
+
+    return "<note-content></note-content>";
+    //return result;
 }
