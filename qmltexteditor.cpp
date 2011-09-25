@@ -151,17 +151,18 @@ QTextCursor QMLTextEditor::textCursor()
 void QMLTextEditor::increaseIndent()
 {
     QTextCursor cursor = textEdit->textCursor();
+    QTextBlockFormat format;
 
-    QTextListFormat listFormat;
-    QTextList *list = cursor.currentList();
-
-    if (list) {
-        listFormat = list->format();
-        listFormat.setIndent(listFormat.indent() + 1);
+    if (cursor.blockFormat().indent() >= 1) {
+        format = cursor.blockFormat();
+        format.setIndent(format.indent() + 1);
+        cursor.setBlockFormat(format);
+    } else {
+        format.setIndent(1);
+        cursor.setBlockFormat(format);
+        cursor.movePosition(QTextCursor::StartOfBlock);
+        cursor.insertText("* ");
     }
-
-    listFormat.setStyle(QTextListFormat::ListDisc);
-    cursor.createList(listFormat);
 }
 
 // TODO: List item needs to get attached to parent list
@@ -169,16 +170,17 @@ void QMLTextEditor::increaseIndent()
 void QMLTextEditor::decreaseIndent()
 {
     QTextCursor cursor = textEdit->textCursor();
-    QTextListFormat listFormat;
-    QTextList *list = cursor.currentList();
-    QTextBlock block = cursor.block();
+    QTextBlockFormat format = cursor.blockFormat();
 
-    if (list) {
-        listFormat = list->format();
-        listFormat.setIndent(listFormat.indent() - 1);
-        listFormat.setStyle(QTextListFormat::ListDisc);
-        list->setFormat(listFormat);
-        list->remove(block);
+    if (format.indent() == 1) {
+        cursor.movePosition(QTextCursor::StartOfBlock);
+        cursor.deleteChar();
+        cursor.deleteChar();
+    }
+
+    if (format.indent() > 0) {
+        format.setIndent(format.indent() - 1);
+        cursor.setBlockFormat(format);
     }
 }
 
