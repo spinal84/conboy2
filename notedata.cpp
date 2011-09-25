@@ -33,7 +33,10 @@ QString NoteData::getTitle() const
 
 void NoteData::setTitle(QString title)
 {
-    this->title = title;
+    if (title != this->title) {
+        this->title = title;
+        emit titleChanged();
+    }
 }
 
 QString NoteData::getContent() const
@@ -53,7 +56,10 @@ QDateTime NoteData::getLastChangeDate() const
 
 void NoteData::setLastChangeDate(QDateTime time)
 {
-    lastChangeDate = time;
+    if (time != lastChangeDate) {
+        lastChangeDate = time;
+        emit lastChangeDateChanged();
+    }
 }
 
 QDateTime NoteData::getLastMetadataChangeDate() const

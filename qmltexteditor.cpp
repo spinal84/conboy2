@@ -21,6 +21,7 @@ QMLTextEditor::QMLTextEditor(QDeclarativeItem *parent) :
 
     bold = false;
     currentNote = 0;
+    lastBlockNumber = -1;
     saveTimer.setSingleShot(true);
 
     connect(this, SIGNAL(widthChanged()), this, SLOT(onWidthChanged()));
@@ -49,14 +50,30 @@ void QMLTextEditor::onModificationChanged(bool changed)
 
 void QMLTextEditor::onTextChanged()
 {
+    QTextCursor c = textEdit->textCursor();
+    if (c.block().blockNumber() == 0) {
+        QTextCharFormat titleFormat;
+        titleFormat.setFontPointSize(28);
+        titleFormat.setFontUnderline(true);
+        titleFormat.setForeground(QBrush(QColor("blue")));
+        textEdit->setCurrentCharFormat(titleFormat);
+    }
+
     emit textChanged();
 }
+
+
 
 void QMLTextEditor::onSaveTimerFired()
 {
     qDebug() << "SAVE TIMER FIRED";
     if (textEdit->document()->isModified()) {
         qDebug() << "SAVE NOTE !!!!!!";
+        QTextCursor cursor = textEdit->textCursor();
+        cursor.movePosition(QTextCursor::Start);
+        cursor.movePosition(QTextCursor::EndOfLine, QTextCursor::KeepAnchor);
+        QString title = cursor.selectedText();
+        currentNote->setTitle(title);
         currentNote->setContent(getXml());
         currentNote->save();
         textEdit->document()->setModified(false);
@@ -86,6 +103,13 @@ void QMLTextEditor::setMinHeight(int height)
 
 void QMLTextEditor::onCursorPositionChanged()
 {
+    QTextCursor cursor = textEdit->textCursor();
+    int blockNumber = cursor.block().blockNumber();
+    if (lastBlockNumber == 0 && blockNumber != 0) {
+        // TODO: Check if title is unique. If not show warning.
+    }
+    lastBlockNumber = blockNumber;
+
     QRect rect = textEdit->cursorRect();
     emit cursorPositionChanged(rect);
 }

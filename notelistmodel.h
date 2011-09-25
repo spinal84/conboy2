@@ -41,6 +41,7 @@ public slots:
 
 private slots:
     void addNote(NoteData *note);
+    void onNoteChanged();
 
 private:
     NoteStore *store;

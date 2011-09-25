@@ -85,6 +85,7 @@ private:
     void formatTitle();
     NoteData *currentNote;
     QTimer saveTimer;
+    int lastBlockNumber;
 
 };
 

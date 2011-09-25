@@ -80,10 +80,23 @@ void NoteListModel::addNote(NoteData *note)
 {
     emit layoutAboutToBeChanged();
     notes.append(note);
+
+    // Update list if note changed
+    connect(note, SIGNAL(titleChanged()), this, SLOT(onNoteChanged()));
+    connect(note, SIGNAL(lastChangeDateChanged()), this, SLOT(onNoteChanged()));
+
     if (sortOrder == "title") {
         sortByTitle();
     } else {
         sortByDate();
     }
     emit layoutChanged();
+}
+
+void NoteListModel::onNoteChanged()
+{
+    // If a Note has changed, find out which and update that one
+    NoteData *note = (NoteData*)sender();
+    int i = notes.indexOf(note);
+    dataChanged(index(i), index(i));
 }
