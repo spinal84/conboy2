@@ -83,6 +83,12 @@ void QMLTextEditor::onSaveTimerFired()
     }
 }
 
+void QMLTextEditor::save()
+{
+    saveTimer.stop();
+    onSaveTimerFired();
+}
+
 void QMLTextEditor::onTextEditHeightChanged(int height)
 {
     setHeight(height);

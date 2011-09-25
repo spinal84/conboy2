@@ -84,3 +84,14 @@ void TextEditor::ignoreNextMouseMoves()
 {
     ignoreNxtMouseMoves = true;
 }
+
+void TextEditor::inputMethodEvent(QInputMethodEvent *e)
+{
+    qDebug() << "";
+    qDebug() << "Preedit: " << e->preeditString();
+    qDebug() << "";
+
+
+
+    QTextEdit::inputMethodEvent(e);
+}

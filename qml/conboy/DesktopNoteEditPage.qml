@@ -61,12 +61,18 @@ Item {
 
             Button {
                 text: "List"
-                onClicked: listView.incrementCurrentIndex()
+                onClicked: {
+                    editor.save()
+                    listView.incrementCurrentIndex()
+                }
             }
 
             Button {
                 text: "New"
-                onClicked: editor.newNote()
+                onClicked: {
+                    editor.save()
+                    editor.newNote()
+                }
             }
 
             Button {

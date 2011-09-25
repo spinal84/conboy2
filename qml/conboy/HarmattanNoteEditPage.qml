@@ -33,7 +33,10 @@ Page {
     tools: ToolBarLayout {
         ToolIcon {
             iconId: "icon-m-toolbar-back"
-            onClicked: pageStack.pop()
+            onClicked: {
+                editor.save()
+                pageStack.pop()
+            }
         }
 
         ToolButton {

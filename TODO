@@ -3,6 +3,7 @@
 * Preedit (word suggestions) should be displayed in the target format
 * Make sure note titles are unique
 * (Done) After save emit "noteChanged" signal. With that signal update the list of all notes. Date and Title. Implement onNoteTitleChanged().
-* Fix dates and times of notes
-* Save if switched to list view
+* (Done) Fix dates and times of notes
+* (Done) Save if switched to list view
+* Try using QGraphicsTextItem instead of QTextEdit. Maybe the performance is better because we don't need the proxy item.
 

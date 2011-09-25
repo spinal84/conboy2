@@ -64,6 +64,7 @@ public slots:
     void showNote(NoteData *note);
     void ignoreNextMouseMoves();
     QString getXml();
+    void save();
 
 private slots:
     void onWidthChanged();

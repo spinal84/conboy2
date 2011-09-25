@@ -16,6 +16,7 @@ public:
     void mouseMoveEvent(QMouseEvent *e);
     void setQmlHeight(int height);
     void ignoreNextMouseMoves();
+    void inputMethodEvent(QInputMethodEvent *e);
 
 signals:
     void heightChanged(int height);

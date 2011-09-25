@@ -41,6 +41,10 @@ FocusScope {
         editor.decreaseIndent()
     }
 
+    function save() {
+        editor.save()
+    }
+
     // Height is defined by the editor (content)
     height: editor.height
 
