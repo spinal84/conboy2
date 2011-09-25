@@ -1,6 +1,6 @@
 import QtQuick 1.0
 import Conboy 1.0
-import com.nokia.meego 1.0
+//import com.nokia.meego 1.0
 import "TextAreaHelper.js" as TextAreaHelper
 
 FocusScope {

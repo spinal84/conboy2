@@ -13,6 +13,13 @@ NoteListModel::NoteListModel(NoteStore *store, QObject *parent) :
     notes = store->getNotes();
     sortOrder = "date";
 
+    // Connect handlers to all notes that are already in the store
+    for (int i = 0; i < store->count(); i++) {
+        connect(notes[i], SIGNAL(titleChanged()), this, SLOT(onNoteChanged()));
+        connect(notes[i], SIGNAL(lastChangeDateChanged()), this, SLOT(onNoteChanged()));
+    }
+
+    // All notes that are added afterwards will trigger the addNote slot
     connect(store, SIGNAL(noteAdded(NoteData*)), this, SLOT(addNote(NoteData*)));
 }
 
@@ -82,6 +89,7 @@ void NoteListModel::addNote(NoteData *note)
     notes.append(note);
 
     // Update list if note changed
+    qDebug() << "Connect signal to note: " << note->getTitle();
     connect(note, SIGNAL(titleChanged()), this, SLOT(onNoteChanged()));
     connect(note, SIGNAL(lastChangeDateChanged()), this, SLOT(onNoteChanged()));
 
@@ -95,6 +103,7 @@ void NoteListModel::addNote(NoteData *note)
 
 void NoteListModel::onNoteChanged()
 {
+    qDebug() << "INFO: Note changed";
     // If a Note has changed, find out which and update that one
     NoteData *note = (NoteData*)sender();
     int i = notes.indexOf(note);

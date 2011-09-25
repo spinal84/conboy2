@@ -1,0 +1,8 @@
+* (Done) If first line of note was changed, update title before saving
+* (Done) While typing the first line should always be large and blue
+* Preedit (word suggestions) should be displayed in the target format
+* Make sure note titles are unique
+* (Done) After save emit "noteChanged" signal. With that signal update the list of all notes. Date and Title. Implement onNoteTitleChanged().
+* Fix dates and times of notes
+* Save if switched to list view
+
