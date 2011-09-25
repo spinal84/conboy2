@@ -108,4 +108,9 @@ void NoteListModel::onNoteChanged()
     NoteData *note = (NoteData*)sender();
     int i = notes.indexOf(note);
     dataChanged(index(i), index(i));
+    if (sortOrder == "title") {
+        sortByTitle();
+    } else {
+        sortByDate();
+    }
 }

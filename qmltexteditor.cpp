@@ -73,8 +73,11 @@ void QMLTextEditor::onSaveTimerFired()
         cursor.movePosition(QTextCursor::Start);
         cursor.movePosition(QTextCursor::EndOfLine, QTextCursor::KeepAnchor);
         QString title = cursor.selectedText();
+        QDateTime now = QDateTime::currentDateTime();
         currentNote->setTitle(title);
         currentNote->setContent(getXml());
+        currentNote->setLastChangeDate(now);
+        currentNote->setLastMetadataChangeDate(now);
         currentNote->save();
         textEdit->document()->setModified(false);
     }
