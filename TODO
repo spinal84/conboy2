@@ -6,4 +6,10 @@
 * (Done) Fix dates and times of notes
 * (Done) Save if switched to list view
 * Try using QGraphicsTextItem instead of QTextEdit. Maybe the performance is better because we don't need the proxy item.
+* Problem with list handling if lists have gaps. E.g. jumping from level 4 to level 2.
+* Indenting lists is still a mayor problem. Main problem: Can't start lists on level other then 1. Using only indenting to identify list depth does not work, because of missing list decorations (but could be done manually).
+* Use Booster to decrease startup time
+* Parse notes after launching UI to decrease startup time
+* Use single instance mode
+* Unknown tags need to be added to the QTextDocument. Otherwise we can't write them back later and might loose information that is important for some Tomboy plug-in. Try to Use custom properties in QTextFormat.
 
