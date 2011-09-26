@@ -142,6 +142,7 @@ bool NoteContentXmlHandler::startElement(const QString &namepsaceURI, const QStr
         }
         QTextBlockFormat f;
         f.setIndent(listDepth);
+        f.setTextIndent(-15);
         cursor.setBlockFormat(f);
     }
 
@@ -238,38 +239,40 @@ bool NoteContentXmlHandler::endElement(const QString &namespaceURI, const QStrin
 
 QString NoteContentXmlHandler::getBullet()
 {
-    return QString(" ") + bullets[listDepth - 1 % 3];
+    return bullets[listDepth - 1 % 3] + QString(" ");
 }
-
-
 
 bool NoteContentXmlHandler::characters(const QString &ch)
 {
+    // Copy string, so we can manipulate it
+    QString newCh = ch;
+
+    // Insert bullet if needed (with default formatting)
+    if (listDepth > 0 && cursor.positionInBlock() == 0) {
+        QTextCharFormat backupFormat = cursor.charFormat();
+        cursor.setCharFormat(defaultCharFormat);
+        cursor.insertText(getBullet());
+        cursor.setCharFormat(backupFormat);
+    }
+
+    // Remove line-break if needed
+    if (ignoreNextLineBreak && newCh.startsWith("\n")) {
+        newCh.remove(0, 1);
+        ignoreNextLineBreak = false;
+    }
+
     // If we have a link we need to set the string as href and as text.
     if (isInternalLink || isUrlLink) {
         QTextCharFormat format = cursor.charFormat();
-        QString href = isInternalLink ? ("internal://" + ch) : ch;
+        QString href = isInternalLink ? ("internal://" + newCh) : newCh;
         format.setAnchorHref(href);
-        cursor.setCharFormat(format);
+        //cursor.setCharFormat(format);
         isInternalLink = false;
         isUrlLink = false;
     }
 
     // Output all characters
-    if (ignoreNextLineBreak && ch.startsWith("\n")) {
-        QString newCh = ch;
-        newCh.remove(0, 1);
-        cursor.insertText(newCh);
-        ignoreNextLineBreak = false;
-    } else {
-        // Insert bullet if needed
-        if (listDepth > 0 && cursor.positionInBlock() == 0) {
-            cursor.insertText(getBullet());
-        }
-
-        // Output text
-        cursor.insertText(ch);
-    }
+    cursor.insertText(newCh);
 
     return true;
 }

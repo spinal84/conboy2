@@ -236,7 +236,7 @@ void QMLTextEditor::showTestNote()
             "</list-item><list-item dir=\"ltr\">Start <bold>Two</bold> End\n"
             "</list-item><list-item dir=\"ltr\">Start <bold><italic>TwoAndAHalf</italic></bold> End\n"
             "</list-item><list-item dir=\"ltr\">TwoAndSomeMore\n"
-            "<list><list-item dir=\"ltr\">Two One\n"
+            "<list><list-item dir=\"ltr\"><underline>Two One</underline>\n"
             "</list-item><list-item dir=\"ltr\">Two Two\n"
             "<list><list-item dir=\"ltr\">Two Two One\n"
             "</list-item></list></list-item><list-item dir=\"ltr\">Two Three\n"
@@ -247,7 +247,7 @@ void QMLTextEditor::showTestNote()
             "</list-item><list-item dir=\"ltr\">Four</list-item></list>\n"
             "Now we continue normally...\n"
             "A list with only one item on level 1\n"
-            "<list><list-item dir=\"ltr\">One</list-item></list>\n"
+            "<list><list-item dir=\"ltr\"><underline>One</underline></list-item></list>\n"
             "End"
             "</note-content>";
 
