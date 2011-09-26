@@ -20,10 +20,13 @@ NoteContentXmlHandler::NoteContentXmlHandler(QMLTextEditor *textEditor)
     defaultCharFormat.setFont(textEditor->getFont());
     cursor.setCharFormat(defaultCharFormat);
 
-    createNextListItem = false;
-    listHasEnded = false;
     isInternalLink = false;
     isUrlLink = false;
+    listDepth = 0;
+
+    bullets.append(QChar(0x2022));
+    bullets.append(QChar(0x25e6));
+    bullets.append(QChar(0x2219));
 }
 
 bool NoteContentXmlHandler::fatalError(const QXmlParseException& exception)
@@ -127,62 +130,19 @@ bool NoteContentXmlHandler::startElement(const QString &namepsaceURI, const QStr
     }
 
     if (qName == "list") {
-        // The first list item is created implicitly, therefore we
-        // do not create another one.
-        createNextListItem = false;
-        listHasEnded = false;
-
-        QTextList *list = cursor.currentList();
-        QTextList *newList;
-        QTextListFormat format;
-        if (list) {
-            format = list->format();
-            format.setIndent(format.indent() + 1);
-            format.setStyle(QTextListFormat::ListDisc);
-            newList = cursor.insertList(format);
-        } else {
-            format.setIndent(1);
-            format.setStyle(QTextListFormat::ListDisc);
-            newList = cursor.createList(format);
-        }
-
-        listStack.push(newList);
+        listDepth++;
+        return true;
     }
 
     if (qName == "list-item") {
-        QTextList *list = cursor.currentList();
-
-        if (listHasEnded) {
-            if (listStack.count() > 1) {
-                // Attach next list item to parent list
-                listStack.pop();
-
-                cursor.insertBlock();
-                listStack.top()->add(cursor.block());
-
-                //listHasEnded = false;
-                return true;
-            }
+        // TODO: Remove soon. Only for debugging
+        if (listDepth < 1) {
+            qDebug() << "listDepth < 1: That should not happen";
+            return false;
         }
-
-        if (list) {
-            // The first list item is created implicitly, therefore we
-            // do not create another one.
-            if (createNextListItem == true) {
-                cursor.insertBlock();
-            }
-
-            // After inserting the first item we have to create the following
-            // list item explicitly.
-            if (list->count() == 1) {
-                createNextListItem = true;
-            }
-
-            return true;
-        }
-
-        qDebug() << "ERROR: New <list-item> but not in <list>.";
-        return false;
+        QTextBlockFormat f;
+        f.setIndent(listDepth);
+        cursor.setBlockFormat(f);
     }
 
     return true;
@@ -261,36 +221,27 @@ bool NoteContentXmlHandler::endElement(const QString &namespaceURI, const QStrin
     }
 
     if (qName == "list") {
-
-        listHasEnded = true;
-
-        if (listStack.count() > 1) {
-            return true;
+        listDepth--;
+        // After a list completely ended, we switch back to default block format.
+        // We create a new block with this format and (to compensate) skip the next line-break
+        if (listDepth == 0) {
+            cursor.insertBlock();
+            cursor.setBlockFormat(defaultBlockFormat);
+            ignoreNextLineBreak = true;
         }
-
-        /* We're on the root list element */
-        // Extra check to be save
-        if (cursor.currentList() != listStack.top()) {
-            qDebug() << "ERROR: Something wrong";
-            return false;
-        }
-
-        // Add the next block
-        cursor.insertBlock();
-
-        // Remove this block from the list. It's now on the root level
-        cursor.currentList()->remove(cursor.block());
-
-        // Apply default format, otherwise it's still indented
-        cursor.setBlockFormat(defaultBlockFormat);
-
-        // Throw away the last list element
-        listStack.pop();
+        return true;
     }
 
     //qDebug() << "WARN: Found unknown tag in <note-content>. Tag: " << qName;
     return true;
 }
+
+QString NoteContentXmlHandler::getBullet()
+{
+    return QString(" ") + bullets[listDepth - 1 % 3];
+}
+
+
 
 bool NoteContentXmlHandler::characters(const QString &ch)
 {
@@ -304,37 +255,23 @@ bool NoteContentXmlHandler::characters(const QString &ch)
         isUrlLink = false;
     }
 
-    // The outer-most <list> item ends with a "\n". Remove it.
-    if (listHasEnded && listStack.isEmpty()) {
-        if (ch.startsWith("\n")) {
-            QString str = ch;
-            str.remove(0, 1);
-            cursor.insertText(str);
-            listHasEnded = false;
-            return true;
+    // Output all characters
+    if (ignoreNextLineBreak && ch.startsWith("\n")) {
+        QString newCh = ch;
+        newCh.remove(0, 1);
+        cursor.insertText(newCh);
+        ignoreNextLineBreak = false;
+    } else {
+        // Insert bullet if needed
+        if (listDepth > 0 && cursor.positionInBlock() == 0) {
+            cursor.insertText(getBullet());
         }
-    }
 
-    // Normal text, not inside a list
-    if (!listHasEnded && listStack.isEmpty()) {
+        // Output text
         cursor.insertText(ch);
-        return true;
     }
 
-    // If inside a list, remove all line-breaks
-    if (!listStack.isEmpty()) {
-        if (ch.endsWith("\n")) {
-            QString str = ch;
-            str.chop(1);
-            cursor.insertText(str);
-        } else {
-            cursor.insertText(ch);
-        }
-        return true;
-    }
-
-    qDebug() << "ERROR: Unhandlet situation. String was:" << ch;
-    return false;
+    return true;
 }
 
 void NoteContentXmlHandler::setErrorString(QString errorString)

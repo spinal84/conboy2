@@ -5,6 +5,7 @@
 #include <QTextBlock>
 #include <QTextList>
 #include <QStringList>
+#include <QXmlStreamWriter>
 
 class NoteContentHelper
 {
@@ -18,6 +19,7 @@ private:
     static void handleList(QTextList *list, QXmlStreamWriter *writer);
     static void handleListItem(QTextBlock *list, QXmlStreamWriter *writer);
     static QStringList getXmlTags(QTextCharFormat *format);
+    static void writeStartOfList(QXmlStreamWriter *writer, int depth);
 
 
 };

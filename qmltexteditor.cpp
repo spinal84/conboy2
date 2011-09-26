@@ -29,7 +29,7 @@ QMLTextEditor::QMLTextEditor(QDeclarativeItem *parent) :
     connect(textEdit, SIGNAL(textChanged()), this, SLOT(onTextChanged()));
     connect(textEdit, SIGNAL(cursorPositionChanged()), this, SLOT(onCursorPositionChanged()));
     connect(textEdit, SIGNAL(currentCharFormatChanged(QTextCharFormat)), this, SLOT(onCurrentCharFormatChanged(QTextCharFormat)));
-    connect(&saveTimer, SIGNAL(timeout()), this, SLOT(onSaveTimerFired()));
+    //connect(&saveTimer, SIGNAL(timeout()), this, SLOT(onSaveTimerFired()));
     textEdit->document()->setModified(false);
     connect(textEdit->document(), SIGNAL(modificationChanged(bool)), this, SLOT(onModificationChanged(bool)));
 }
@@ -328,7 +328,10 @@ QString QMLTextEditor::getXml()
     cursor.movePosition(QTextCursor::Start);
 
     QTextDocument *doc = cursor.document();
-    return NoteContentHelper::qTextDocumentToXmlString(doc);
+
+    QString tmp = NoteContentHelper::qTextDocumentToXmlString(doc);
+    qDebug() << tmp;
+    return tmp;
 }
 
 

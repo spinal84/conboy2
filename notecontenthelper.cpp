@@ -113,6 +113,16 @@ QStringList NoteContentHelper::getXmlTags(QTextCharFormat *format)
     return tags;
 }
 
+void NoteContentHelper::writeStartOfList(QXmlStreamWriter *writer, int depth)
+{
+    qDebug() << "START OF NEW LIST";
+    writer->writeStartElement("list");
+    for (int i = 1; i < depth; i++) {
+        writer->writeStartElement("list-item");
+        writer->writeStartElement("list");
+    }
+}
+
 QString NoteContentHelper::qTextDocumentToXmlString(QTextDocument *doc)
 {
     QString result;
@@ -121,92 +131,61 @@ QString NoteContentHelper::qTextDocumentToXmlString(QTextDocument *doc)
     writer.writeAttribute("version", "0.1");
 
     // Iterate over all blocks
-    bool listEnded = false;
-    QTextList *listRoot = 0;
-
     QTextFrame *frame = doc->rootFrame();
     QTextFrame::Iterator it;
+    int lastDepth = 0;
+    int tagsToClose = 0;
     for (it = frame->begin(); !it.atEnd(); it++) {
 
         QTextBlock block = it.currentBlock();
+        int depth = block.blockFormat().indent();
 
-        QTextList *list = block.textList();
+        if (depth > 0) {
 
-        // If the last block was a list ending, we need to close some tags
-        if (listEnded) {
-            writer.writeEndElement(); // </list>
-            writer.writeEndElement(); // </list-item>
-            listEnded = false;
-        }
+            qDebug() << "###";
+            qDebug() << "Depth: " << depth;
+            qDebug() << "###";
 
-        if (list) {
-            if (!listRoot) {
-                listRoot = list;
+            /*
+              TODO
+              - Check the difference between depth and lastDepth
+              - Special handle first list element and last list element
+              - List items should not be closed before a sub-list starts.
+             */
+
+            for (int i = 0; i < tagsToClose; i++) {
+                writer.writeEndElement();
             }
 
-            int index = list->itemNumber(block);
-            qDebug() << "/// INDEX: " << index;
+            // If start of new list
+            bool isFirstListItem = (block.previous().blockFormat().indent() == 0);
+            bool isLastListItem = (block.next().blockFormat().indent() == 0);
 
-            // If first and last
-            if (index == 0 && list->count() == 1) {
-                // First <list> element must be on new line
-                if (list == listRoot) {
-                    writer.writeCharacters("\n");
-                }
-                writer.writeStartElement("list");
-                listEnded = true;
-
-                writer.writeStartElement("list-item");
-                QTextBlock item = list->item(list->itemNumber(block));
-                handleBlock(&item, &writer);
-
-                if (list == listRoot) {
-                    listRoot = 0;
-                } else {
-                    writer.writeCharacters("\n");
-                }
-            }
-
-            // If first item
-            else if (index == 0) {
-                // First <list> element must be on new line
-                if (list == listRoot) {
-                    writer.writeCharacters("\n");
-                }
-                writer.writeStartElement("list");
-
-                writer.writeStartElement("list-item");
-                QTextBlock item = list->item(list->itemNumber(block));
-                handleBlock(&item, &writer);
+            if (isFirstListItem) {
                 writer.writeCharacters("\n");
             }
 
-            // If in middle
-            else if (index > 0 && index + 1 < list->count()) {
-                writer.writeEndElement(); // </list-item>
-
-                writer.writeStartElement("list-item");
-                QTextBlock item = list->item(list->itemNumber(block));
-                handleBlock(&item, &writer);
-                writer.writeCharacters("\n");
-            }
-
-            // If last item
-            else if (index + 1 == list->count()) {
-                listEnded = true;
-                writer.writeEndElement(); // </list-item>
-
-                writer.writeStartElement("list-item");
-                QTextBlock item = list->item(list->itemNumber(block));
-                handleBlock(&item, &writer);
-
-                if (list == listRoot) {
-                    listRoot = 0;
-                } else {
+            if (depth > lastDepth) {
+                int count = depth - lastDepth;
+                if (!isFirstListItem) {
                     writer.writeCharacters("\n");
                 }
+                writeStartOfList(&writer, count);
             }
 
+            writer.writeStartElement("list-item");
+            handleBlock(&block, &writer);
+
+            if (depth < lastDepth) {
+                tagsToClose = lastDepth - depth;
+            }
+
+            if (isLastListItem) {
+                for (int i = 0; i < depth; i++) {
+                    writer.writeEndElement(); // </list-item>
+                    writer.writeEndElement(); // </list>
+                }
+            }
 
 
         } else {
@@ -216,6 +195,8 @@ QString NoteContentHelper::qTextDocumentToXmlString(QTextDocument *doc)
             }
             handleBlock(&block, &writer);
         }
+
+        lastDepth = depth;
     }
 
     // </note-content>

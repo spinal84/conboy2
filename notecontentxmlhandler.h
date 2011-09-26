@@ -22,13 +22,14 @@ private:
     QString errorStr;
     QMLTextEditor *editor;
     QTextCursor cursor;
-    bool createNextListItem;
-    bool listHasEnded;
     bool isInternalLink;
     bool isUrlLink;
-    QStack<QTextList*> listStack;
     QTextBlockFormat defaultBlockFormat;
     QTextCharFormat defaultCharFormat;
+    int listDepth;
+    bool ignoreNextLineBreak;
+    QVector<QChar> bullets;
+    QString getBullet();
 
 };
 
