@@ -19,10 +19,7 @@ private:
     static QString bullet2;
     static QString bullet3;
     static void handleBlock(QTextBlock *block, bool inList, QXmlStreamWriter *writer);
-    static void handleList(QTextList *list, QXmlStreamWriter *writer);
-    static void handleListItem(QTextBlock *list, QXmlStreamWriter *writer);
     static QStringList getXmlTags(QTextCharFormat *format);
-    static void writeStartOfList(QXmlStreamWriter *writer, int depth);
     static void changeDepthOfList(QXmlStreamWriter *writer, int depthChange);
 
 };

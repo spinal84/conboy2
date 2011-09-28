@@ -125,16 +125,6 @@ QStringList NoteContentHelper::getXmlTags(QTextCharFormat *format)
     return tags;
 }
 
-void NoteContentHelper::writeStartOfList(QXmlStreamWriter *writer, int depth)
-{
-    qDebug() << "START OF NEW LIST";
-    writer->writeStartElement("list");
-    for (int i = 1; i < depth; i++) {
-        writer->writeStartElement("list-item");
-        writer->writeStartElement("list");
-    }
-}
-
 // Positive number: Increase depth
 // Negative number: Decrease depth
 void NoteContentHelper::changeDepthOfList(QXmlStreamWriter *writer, int depthChange)
@@ -186,6 +176,11 @@ QString NoteContentHelper::qTextDocumentToXmlString(QTextDocument *doc)
             if (isFirstListItem) {
                 writer.writeCharacters("\n");
                 writer.writeStartElement("list");
+                // If we start at depth > 1, we need more open tags
+                for (int i = 1; i < depth; i++) {
+                    writer.writeStartElement("list-item");
+                    writer.writeStartElement("list");
+                }
             }
 
             // Always add <list-item> and the content of the block
@@ -194,8 +189,10 @@ QString NoteContentHelper::qTextDocumentToXmlString(QTextDocument *doc)
 
             // If it's the last item inside the root-list. </list-item></list>
             if (isLastListItem) {
-                writer.writeEndElement();
-                writer.writeEndElement();
+                for (int i = 0; i < depth; i++) {
+                    writer.writeEndElement();
+                    writer.writeEndElement();
+                }
                 continue;
             }
 
@@ -223,10 +220,10 @@ QString NoteContentHelper::qTextDocumentToXmlString(QTextDocument *doc)
     // </note-content>
     writer.writeEndElement();
 
-//    qDebug() << "*************************************";
-//    qDebug() << result;
-//    qDebug() << "*************************************";
+    qDebug() << "*************************************";
+    qDebug() << result;
+    qDebug() << "*************************************";
 
-    //return "<note-content>Text <size:large>LARGE</size:large></note-content>";
-    return result;
+    return "<note-content>Text <size:large>LARGE</size:large></note-content>";
+    //return result;
 }
