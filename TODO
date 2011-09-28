@@ -1,13 +1,3 @@
-== Aktuelles Problem ==
-Tomboy XML lesen und schreiben neu implementieren. Und zwar so, dass eine Liste immer nur eine Ebene hat, aber mittels Formatierung einen Indent bekommt. D.h. QTextList wird gar nicht mehr verwendet.
-
-Statt dessen werden selbst am Anfang der List Bullet eingefügt und später beim Schreiben wieder weg genommen.
-
-1) (Done) Den Reader neu implementieren, damit wir eine ordentliche Grundlage haben. Nächmlich die Demo note. Wenn das tut, dann
-
-2) Den XML-Writer neu implementieren. (Teilweise schon angefangen, aber total chaotisch. Noch mal machen.
-
-
 == TODO ==
 * (Done) If first line of note was changed, update title before saving
 * (Done) While typing the first line should always be large and blue
@@ -17,10 +7,11 @@ Statt dessen werden selbst am Anfang der List Bullet eingefügt und später beim
 * (Done) Fix dates and times of notes
 * (Done) Save if switched to list view
 * Try using QGraphicsTextItem instead of QTextEdit. Maybe the performance is better because we don't need the proxy item.
-* Problem with list handling if lists have gaps. E.g. jumping from level 4 to level 2.
+* (Done) Problem with list handling if lists have gaps. E.g. jumping from level 4 to level 2.
 * Indenting lists is still a mayor problem. Main problem: Can't start lists on level other then 1. Using only indenting to identify list depth does not work, because of missing list decorations (but could be done manually).
 * Use Booster to decrease startup time
-* Parse notes after launching UI to decrease startup time
+* Parse notes *after* launching UI to decrease startup time
 * Use single instance mode
 * Unknown tags need to be added to the QTextDocument. Otherwise we can't write them back later and might loose information that is important for some Tomboy plug-in. Try to Use custom properties in QTextFormat.
+* Adjust text editor to work with new list handling.
 
