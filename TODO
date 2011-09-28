@@ -7,6 +7,7 @@
 * (Done) Problem with list handling if lists have gaps. E.g. jumping from level 4 to level 2.
 * (Done) Indenting lists is still a mayor problem. Main problem: Can't start lists on level other then 1. Using only indenting to identify list depth does not work, because of missing list decorations (but could be done manually).
 * (Done)Adjust text editor to work with new list handling.
+* (Done) If first list-item in editor is on level2, save fails
 
 * Try using QGraphicsTextItem instead of QTextEdit. Maybe the performance is better because we don't need the proxy item.
 * Make sure note titles are unique
@@ -15,6 +16,6 @@
 * Parse notes *after* launching UI to decrease startup time
 * Use single instance mode
 * Unknown tags need to be added to the QTextDocument. Otherwise we can't write them back later and might loose information that is important for some Tomboy plug-in. Try to Use custom properties in QTextFormat.
-* (Done) If first list-item in editor is on level2, save fails
 * Pressing 'Enter' in list needs to add bullet to next line
+* Pressing 'Enter' in note title takes the formatting to the next line. Result: Blue underlined text.
 

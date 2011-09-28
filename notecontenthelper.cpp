@@ -220,10 +220,10 @@ QString NoteContentHelper::qTextDocumentToXmlString(QTextDocument *doc)
     // </note-content>
     writer.writeEndElement();
 
-    qDebug() << "*************************************";
-    qDebug() << result;
-    qDebug() << "*************************************";
+//    qDebug() << "*************************************";
+//    qDebug() << result;
+//    qDebug() << "*************************************";
 
-    return "<note-content>Text <size:large>LARGE</size:large></note-content>";
-    //return result;
+//    return "<note-content>Text <size:large>LARGE</size:large></note-content>";
+    return result;
 }
