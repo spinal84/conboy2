@@ -24,6 +24,10 @@ QMLTextEditor::QMLTextEditor(QDeclarativeItem *parent) :
     lastBlockNumber = -1;
     saveTimer.setSingleShot(true);
 
+    bullets.append(QChar(0x2022) + QString(" "));
+    bullets.append(QChar(0x25e6) + QString(" "));
+    bullets.append(QChar(0x2219) + QString(" "));
+
     connect(this, SIGNAL(widthChanged()), this, SLOT(onWidthChanged()));
     connect(textEdit, SIGNAL(heightChanged(int)), this, SLOT(onTextEditHeightChanged(int)));
     connect(textEdit, SIGNAL(textChanged()), this, SLOT(onTextChanged()));
@@ -148,40 +152,54 @@ QTextCursor QMLTextEditor::textCursor()
     return textEdit->textCursor();
 }
 
-void QMLTextEditor::increaseIndent()
+void QMLTextEditor::removeBullet(QTextCursor *cursor)
 {
-    QTextCursor cursor = textEdit->textCursor();
-    QTextBlockFormat format;
-
-    if (cursor.blockFormat().indent() >= 1) {
-        format = cursor.blockFormat();
-        format.setIndent(format.indent() + 1);
-        cursor.setBlockFormat(format);
-    } else {
-        format.setIndent(1);
-        cursor.setBlockFormat(format);
-        cursor.movePosition(QTextCursor::StartOfBlock);
-        cursor.insertText("* ");
+    cursor->movePosition(QTextCursor::StartOfBlock);
+    cursor->movePosition(QTextCursor::Right, QTextCursor::KeepAnchor, 2);
+    QString s = cursor->selectedText();
+    qDebug() << "SELECTED TEXT: " << s;
+    if (s.startsWith(bullets[0]) || s.startsWith(bullets[1]) || s.startsWith(bullets[2])) {
+        cursor->removeSelectedText();
+        cursor->movePosition(QTextCursor::StartOfBlock);
     }
 }
 
-// TODO: List item needs to get attached to parent list
-// if current list has a parent list. See how it's done in the parser
+void QMLTextEditor::indentBlock(QTextCursor *cursor, int depth)
+{
+    QTextBlockFormat format;
+
+    // Remove bullet and set indent to 0
+    if (depth <= 0) {
+        removeBullet(cursor);
+        format = cursor->blockFormat();
+        format.setIndent(0);
+        cursor->setBlockFormat(format);
+
+    // Remove old bullet, add new bullet, set indent
+    } else {
+        removeBullet(cursor);
+
+        // Add new bullet
+        cursor->movePosition(QTextCursor::StartOfBlock);
+        cursor->insertText(bullets[(depth-1) % 3]);
+
+        // Set indent
+        format = cursor->blockFormat();
+        format.setIndent(depth);
+        cursor->setBlockFormat(format);
+    }
+}
+
+void QMLTextEditor::increaseIndent()
+{
+    QTextCursor cursor = textEdit->textCursor();
+    indentBlock(&cursor, cursor.blockFormat().indent() + 1);
+}
+
 void QMLTextEditor::decreaseIndent()
 {
     QTextCursor cursor = textEdit->textCursor();
-    QTextBlockFormat format = cursor.blockFormat();
-
-    if (format.indent() == 1) {
-        cursor.movePosition(QTextCursor::StartOfBlock);
-        cursor.deleteChar();
-        cursor.deleteChar();
-    }
-
-    if (format.indent() > 0) {
-        format.setIndent(format.indent() - 1);
-        cursor.setBlockFormat(format);
-    }
+    indentBlock(&cursor, cursor.blockFormat().indent() - 1);
 }
 
 void QMLTextEditor::formatTitle()

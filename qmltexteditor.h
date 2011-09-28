@@ -77,16 +77,19 @@ private slots:
     void onSaveTimerFired();
 
 private:
+    void formatTitle();
+    void removeBullet(QTextCursor *cursor);
+    void indentBlock(QTextCursor *cursor, int depth);
     QGraphicsProxyWidget *proxy;
     TextEditor *textEdit;
     int qmlWidth;
     int qmlHeight;
     qreal fontSize;
     bool bold;
-    void formatTitle();
     NoteData *currentNote;
     QTimer saveTimer;
     int lastBlockNumber;
+    QList<QString> bullets;
 
 };
 
