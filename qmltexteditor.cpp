@@ -248,7 +248,7 @@ void QMLTextEditor::showTestNote()
             "Now we continue normally...\n"
             "A list with only one item on level 1\n"
             "<list><list-item dir=\"ltr\"><underline>One</underline></list-item></list>\n"
-            "End"
+            "End\n"
             "</note-content>";
 
     // Create dummy note and show it

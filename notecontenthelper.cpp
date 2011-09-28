@@ -133,8 +133,6 @@ QString NoteContentHelper::qTextDocumentToXmlString(QTextDocument *doc)
     // Iterate over all blocks
     QTextFrame *frame = doc->rootFrame();
     QTextFrame::Iterator it;
-    int lastDepth = 0;
-    int tagsToClose = 0;
     for (it = frame->begin(); !it.atEnd(); it++) {
 
         QTextBlock block = it.currentBlock();
@@ -142,61 +140,51 @@ QString NoteContentHelper::qTextDocumentToXmlString(QTextDocument *doc)
 
         if (depth > 0) {
 
-            qDebug() << "###";
-            qDebug() << "Depth: " << depth;
-            qDebug() << "###";
-
-            /*
-              TODO
-              - Check the difference between depth and lastDepth
-              - Special handle first list element and last list element
-              - List items should not be closed before a sub-list starts.
-             */
-
-            for (int i = 0; i < tagsToClose; i++) {
-                writer.writeEndElement();
-            }
-
             // If start of new list
             bool isFirstListItem = (block.previous().blockFormat().indent() == 0);
             bool isLastListItem = (block.next().blockFormat().indent() == 0);
+            int nextDepth = block.next().blockFormat().indent();
 
+            // If it's the first item of a new root-list. Line-break and add <list>
             if (isFirstListItem) {
                 writer.writeCharacters("\n");
+                writer.writeStartElement("list");
             }
 
-            if (depth > lastDepth) {
-                int count = depth - lastDepth;
-                if (!isFirstListItem) {
-                    writer.writeCharacters("\n");
-                }
-                writeStartOfList(&writer, count);
-            }
-
+            // Always add <list-item> and the content of the block
             writer.writeStartElement("list-item");
             handleBlock(&block, &writer);
 
-            if (depth < lastDepth) {
-                tagsToClose = lastDepth - depth;
+            // If it's the last item inside the root-list. </list-item></list>
+            if (isLastListItem) {
+                writer.writeEndElement();
+                writer.writeEndElement();
+                continue;
             }
 
-            if (isLastListItem) {
-                for (int i = 0; i < depth; i++) {
-                    writer.writeEndElement(); // </list-item>
-                    writer.writeEndElement(); // </list>
-                }
+            // If we are in the middle of the list, add a new-line and check
+            // if the list just got deeper or shallower.
+            writer.writeCharacters("\n");
+
+            if (nextDepth > depth) {
+                writer.writeStartElement("list");
+            } else if (nextDepth < depth) {
+                writer.writeEndElement();
+                writer.writeEndElement();
+                writer.writeEndElement();
+            } else {
+                writer.writeEndElement();
             }
 
 
         } else {
-            // For each block, insert a newline
+            // If we're not inside a list: For each block, insert a newline
             if (it.currentBlock().blockNumber() > 0) {
                 writer.writeCharacters("\n");
             }
             handleBlock(&block, &writer);
         }
 
-        lastDepth = depth;
     }
 
     // </note-content>
