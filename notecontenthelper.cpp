@@ -6,12 +6,16 @@
 
 #include "notecontenthelper.h"
 
+QString NoteContentHelper::bullet1 = QChar(0x2022) + QString(" ");
+QString NoteContentHelper::bullet2 = QChar(0x25e6) + QString(" ");
+QString NoteContentHelper::bullet3 = QChar(0x2219) + QString(" ");
+
 NoteContentHelper::NoteContentHelper()
-{
+{    
 }
 
 // Iterate over all fragments of this block
-void NoteContentHelper::handleBlock(QTextBlock *block, QXmlStreamWriter *writer)
+void NoteContentHelper::handleBlock(QTextBlock *block, bool inList, QXmlStreamWriter *writer)
 {
     // The title is saved without formattings
     if (block->blockNumber() == 0) {
@@ -36,17 +40,25 @@ void NoteContentHelper::handleBlock(QTextBlock *block, QXmlStreamWriter *writer)
             // This mapping should be used in notecontentxmlhandler.cpp
             // and here.
             // TODO: Is there something like formatA.contains(formatB)? Maybe == ?
-//            if (format.fontFamily() == "DejaVu Sans Mono") {
-//                writer->writeStartElement("monospace");
-//                openTags++;
-//            }
+
+            // Add open tags
             QStringList tags = getXmlTags(&format);
             for (int i = 0; i < tags.length(); i++) {
                 writer->writeStartElement(tags[i]);
             }
 
-            writer->writeCharacters(fragment.text());
+            // If in list, remove bullets
+            QString text = fragment.text();
+            if (inList) {
+                if (text.startsWith(bullet1) || text.startsWith(bullet2) || text.startsWith(bullet3)) {
+                    text.remove(0, 2);
+                }
+            }
 
+            // Write text
+            writer->writeCharacters(text);
+
+            // Add close tags
             for (int i = 0; i < tags.length(); i++) {
                 writer->writeEndElement();
             }
@@ -123,6 +135,31 @@ void NoteContentHelper::writeStartOfList(QXmlStreamWriter *writer, int depth)
     }
 }
 
+// Positive number: Increase depth
+// Negative number: Decrease depth
+void NoteContentHelper::changeDepthOfList(QXmlStreamWriter *writer, int depthChange)
+{
+    // Increase indent/depth
+    if (depthChange > 0) {
+        writer->writeStartElement("list");
+        for (int i = 1; i < depthChange; i++) {
+            writer->writeStartElement("list-item");
+            writer->writeStartElement("list");
+        }
+        return;
+    }
+
+    // Decrease indent/depth
+    if (depthChange < 0) {
+        writer->writeEndElement();
+        for (int i = 0; i > depthChange; i--) {
+            writer->writeEndElement();
+            writer->writeEndElement();
+        }
+        return;
+    }
+}
+
 QString NoteContentHelper::qTextDocumentToXmlString(QTextDocument *doc)
 {
     QString result;
@@ -153,7 +190,7 @@ QString NoteContentHelper::qTextDocumentToXmlString(QTextDocument *doc)
 
             // Always add <list-item> and the content of the block
             writer.writeStartElement("list-item");
-            handleBlock(&block, &writer);
+            handleBlock(&block, true, &writer);
 
             // If it's the last item inside the root-list. </list-item></list>
             if (isLastListItem) {
@@ -166,14 +203,10 @@ QString NoteContentHelper::qTextDocumentToXmlString(QTextDocument *doc)
             // if the list just got deeper or shallower.
             writer.writeCharacters("\n");
 
-            if (nextDepth > depth) {
-                writer.writeStartElement("list");
-            } else if (nextDepth < depth) {
-                writer.writeEndElement();
-                writer.writeEndElement();
-                writer.writeEndElement();
+            if (nextDepth == depth) {
+                writer.writeEndElement(); // </list-item>
             } else {
-                writer.writeEndElement();
+                changeDepthOfList(&writer, nextDepth - depth);
             }
 
 
@@ -182,7 +215,7 @@ QString NoteContentHelper::qTextDocumentToXmlString(QTextDocument *doc)
             if (it.currentBlock().blockNumber() > 0) {
                 writer.writeCharacters("\n");
             }
-            handleBlock(&block, &writer);
+            handleBlock(&block, false, &writer);
         }
 
     }

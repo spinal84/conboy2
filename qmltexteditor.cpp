@@ -29,7 +29,7 @@ QMLTextEditor::QMLTextEditor(QDeclarativeItem *parent) :
     connect(textEdit, SIGNAL(textChanged()), this, SLOT(onTextChanged()));
     connect(textEdit, SIGNAL(cursorPositionChanged()), this, SLOT(onCursorPositionChanged()));
     connect(textEdit, SIGNAL(currentCharFormatChanged(QTextCharFormat)), this, SLOT(onCurrentCharFormatChanged(QTextCharFormat)));
-    //connect(&saveTimer, SIGNAL(timeout()), this, SLOT(onSaveTimerFired()));
+    connect(&saveTimer, SIGNAL(timeout()), this, SLOT(onSaveTimerFired()));
     textEdit->document()->setModified(false);
     connect(textEdit->document(), SIGNAL(modificationChanged(bool)), this, SLOT(onModificationChanged(bool)));
 }
@@ -249,6 +249,10 @@ void QMLTextEditor::showTestNote()
             "A list with only one item on level 1\n"
             "<list><list-item dir=\"ltr\"><underline>One</underline></list-item></list>\n"
             "End\n"
+            "<list><list-item>Level 1\n"
+            "<list><list-item><list><list-item>Level 3\n"
+            "</list-item></list></list-item></list></list-item><list-item>Level 1</list-item></list>\n"
+            "END\n"
             "</note-content>";
 
     // Create dummy note and show it
