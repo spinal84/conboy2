@@ -6,10 +6,26 @@ Page {
     signal newNote
     property QtObject editor
 
+    Menu {
+        id: menu
+        visualParent: pageStack
+        MenuLayout {
+            MenuItem {text: "Delete notes"; onClicked: { colorRect.color = "darkred" } }
+            MenuItem {text: "Settings"; onClicked: { colorRect.color = "darkgreen" }}
+            MenuItem {text: "Synchronization"; onClicked: { colorRect.color = "darkblue" }}
+            MenuItem {text: "Sort by title"}
+            MenuItem {text: "Sort by date"}
+        }
+    }
+
     tools: ToolBarLayout {
         ToolIcon {
             iconId: "icon-m-toolbar-add"
             onClicked: newNote()
+        }
+        ToolIcon {
+            iconId: "toolbar-view-menu"
+            onClicked: (menu.status == DialogStatus.Closed) ? menu.open() : menu.close()
         }
     }
 
