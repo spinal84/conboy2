@@ -12,9 +12,9 @@
 * Try using QGraphicsTextItem instead of QTextEdit. Maybe the performance is better because we don't need the proxy item.
 * Make sure note titles are unique
 * Preedit (word suggestions) should be displayed in the target format
-* Use Booster to decrease startup time
+* Use Booster to decrease startup time http://harmattan-dev.nokia.com/unstable/beta/api_refs/xml/daily-docs/applauncherd/qmlboost.html (>> See 2. Utilizing the booster cache)
 * Parse notes *after* launching UI to decrease startup time
-* Use single instance mode
+* (Done) Use single instance mode
 * Unknown tags need to be added to the QTextDocument. Otherwise we can't write them back later and might loose information that is important for some Tomboy plug-in. Try to Use custom properties in QTextFormat.
 * (Done) Pressing 'Enter' in list needs to add bullet to next line
 * (Done) Pressing 'Backspace' in list needs to decrease indent if cursor on bullet
@@ -23,4 +23,7 @@
 * Everything (esp. lists) need to work correctly if selections over multiple lines exist
 * Entering text in front of a bullet or directly behind it shoudn't be allowed. Instead, place cursor after bullet and insert there.
 * Pressing 'Delete' at the end of a list item needs to join it with the next line
+* Font on real device way to small / Font in Simulator way to large
+* Sometimes no input possible
+* No virtual keyboard on real device
 

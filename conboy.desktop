@@ -4,8 +4,8 @@ Version=1.0
 Type=Application
 Terminal=false
 Name=Conboy
-Exec=/opt/conboy/bin/conboy
-Icon=conboy
+Exec=invoker --single-instance --type=e /opt/conboy/bin/conboy
+Icon=/usr/share/icons/hicolor/80x80/apps/conboy.png
 X-Window-Icon=
 X-HildonDesk-ShowInToolbar=true
 X-Osso-Type=application/x-executable

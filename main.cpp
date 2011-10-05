@@ -9,7 +9,7 @@
 #include "notelistmodel.h"
 #include "tomboystorage.h"
 
-int main(int argc, char *argv[])
+Q_DECL_EXPORT int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
 

@@ -73,3 +73,11 @@ contains(MEEGO_EDITION,harmattan) {
     icon.path = /usr/share/icons/hicolor/80x80/apps
     INSTALLS += icon
 }
+
+contains(MEEGO_EDITION,harmattan) {
+    # For QML Booster
+    #CONFIG += declarative-boostable # does not work
+    QMAKE_CXXFLAGS += -fPIC -fvisibility=hidden -fvisibility-inlines-hidden
+    QMAKE_LFLAGS += -pie -rdynamic
+}
+
