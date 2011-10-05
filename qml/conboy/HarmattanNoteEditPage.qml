@@ -80,12 +80,12 @@ Page {
 
         ToolIcon {
             iconId: "icon-m-toolbar-previous"
-            onClicked: (menu.status == DialogStatus.Closed) ? menu.open() : menu.close()
+            onClicked: editor.decreaseIndent()
         }
 
         ToolIcon {
             iconId: "icon-m-toolbar-next"
-            onClicked: (menu.status == DialogStatus.Closed) ? menu.open() : menu.close()
+            onClicked: editor.increaseIndent()
         }
 
         ToolIcon {
@@ -97,14 +97,5 @@ Page {
             iconId: "toolbar-view-menu"
             onClicked: (menu.status == DialogStatus.Closed) ? menu.open() : menu.close()
         }
-
-        /*
-        ToolButton {
-            id: boldBut
-            text: "Bold"
-            checked: editor.bold
-            onClicked: editor.toggleBold()
-        }
-        */
     }
 }

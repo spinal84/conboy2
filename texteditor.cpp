@@ -65,6 +65,30 @@ void TextEditor::mouseMoveEvent(QMouseEvent *e)
     QTextEdit::mouseMoveEvent(e);
 }
 
+void TextEditor::keyPressEvent(QKeyEvent *e)
+{
+    // TODO: Change to select case
+    if (e->key() == Qt::Key_Enter || e->key() == Qt::Key_Return) {
+        emit enterPressed();
+        e->accept();
+        return;
+    }
+
+    if (e->key() == Qt::Key_Backspace) {
+        emit backspacePressed();
+        e->accept();
+        return;
+    }
+
+    if (e->key() == Qt::Key_Delete) {
+        emit deletePressed();
+        e->accept();
+        return;
+    }
+
+    QTextEdit::keyPressEvent(e);
+}
+
 void TextEditor::resizeHeight()
 {
     // Resize the widget to make it as big as its content. We want the

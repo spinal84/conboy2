@@ -36,6 +36,9 @@ QMLTextEditor::QMLTextEditor(QDeclarativeItem *parent) :
     connect(&saveTimer, SIGNAL(timeout()), this, SLOT(onSaveTimerFired()));
     textEdit->document()->setModified(false);
     connect(textEdit->document(), SIGNAL(modificationChanged(bool)), this, SLOT(onModificationChanged(bool)));
+    connect(textEdit, SIGNAL(enterPressed()), this, SLOT(onEnterPressed()));
+    connect(textEdit, SIGNAL(backspacePressed()), this, SLOT(onBackspacePressed()));
+    connect(textEdit, SIGNAL(deletePressed()), this, SLOT(onDeletePressed()));
 }
 
 // TODO: ModificationChanged() is not called repeatedly. Therefore this method is only called
@@ -67,6 +70,61 @@ void QMLTextEditor::onTextChanged()
 }
 
 
+void QMLTextEditor::onEnterPressed()
+{
+    QTextCursor cursor = textEdit->textCursor();
+    cursor.movePosition(QTextCursor::StartOfBlock);
+    cursor.movePosition(QTextCursor::Right, QTextCursor::KeepAnchor, 2);
+    QString selection = cursor.selectedText();
+
+    // Check if "*" or "-"
+    if (selection == "* " || selection == "- ") {
+        cursor.removeSelectedText();
+        increaseIndent();
+    }
+
+    // Check if bullet
+    cursor = textEdit->textCursor();
+    if (blockStartsWithBullet(cursor)) {
+
+        // If last list item is empty, close list
+        if (cursor.block().length() <= 3) {
+            indentBlock(&cursor, 0);
+        } else {
+            cursor.insertBlock();
+            indentBlock(&cursor, cursor.blockFormat().indent());
+        }
+        return;
+    }
+
+    // Normal text
+    textEdit->textCursor().insertBlock();
+}
+
+void QMLTextEditor::onBackspacePressed()
+{
+    // Decrease indent if near a bullet
+    QTextCursor cursor = textEdit->textCursor();
+    if (cursor.positionInBlock() <= 2 && blockStartsWithBullet(cursor)) {
+        decreaseIndent();
+        return;
+    }
+    cursor.deletePreviousChar();
+}
+
+void QMLTextEditor::onDeletePressed()
+{
+    // TODO: Once this code should run on devices with "Delete" key, finish this method.
+    //       If DEL is pressed on the end of a list-item, it needs to pull up the next line
+
+    // Decrease indent if near a bullet
+    QTextCursor cursor = textEdit->textCursor();
+    if (cursor.positionInBlock() <= 1 && blockStartsWithBullet(cursor)) {
+        decreaseIndent();
+        return;
+    }
+    cursor.deleteChar();
+}
 
 void QMLTextEditor::onSaveTimerFired()
 {
@@ -152,13 +210,22 @@ QTextCursor QMLTextEditor::textCursor()
     return textEdit->textCursor();
 }
 
+bool QMLTextEditor::blockStartsWithBullet(QTextCursor cursor)
+{
+    cursor.movePosition(QTextCursor::StartOfBlock);
+    cursor.movePosition(QTextCursor::Right, QTextCursor::KeepAnchor, 2);
+    QString s = cursor.selectedText();
+    if (s.startsWith(bullets[0]) || s.startsWith(bullets[1]) || s.startsWith(bullets[2])) {
+        return true;
+    }
+    return false;
+}
+
 void QMLTextEditor::removeBullet(QTextCursor *cursor)
 {
-    cursor->movePosition(QTextCursor::StartOfBlock);
-    cursor->movePosition(QTextCursor::Right, QTextCursor::KeepAnchor, 2);
-    QString s = cursor->selectedText();
-    qDebug() << "SELECTED TEXT: " << s;
-    if (s.startsWith(bullets[0]) || s.startsWith(bullets[1]) || s.startsWith(bullets[2])) {
+    if (blockStartsWithBullet(*cursor)) {
+        cursor->movePosition(QTextCursor::StartOfBlock);
+        cursor->movePosition(QTextCursor::Right, QTextCursor::KeepAnchor, 2);
         cursor->removeSelectedText();
         cursor->movePosition(QTextCursor::StartOfBlock);
     }
@@ -186,6 +253,7 @@ void QMLTextEditor::indentBlock(QTextCursor *cursor, int depth)
         // Set indent
         format = cursor->blockFormat();
         format.setIndent(depth);
+        format.setTextIndent(-15);
         cursor->setBlockFormat(format);
     }
 }
@@ -287,9 +355,12 @@ QFont QMLTextEditor::getFont()
 
 void QMLTextEditor::setFont(QFont font)
 {
-    if (textEdit->font() != font) {
-        textEdit->setFont(font);
-        emit fontChanged();
+    if (font.pointSize() > 0) {
+        if (textEdit->font() != font) {
+            qDebug() << "INFO: Setting editor font. Size: " << font.pointSize();
+            textEdit->setFont(font);
+            emit fontChanged();
+        }
     }
 }
 

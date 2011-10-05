@@ -16,6 +16,11 @@
 * Parse notes *after* launching UI to decrease startup time
 * Use single instance mode
 * Unknown tags need to be added to the QTextDocument. Otherwise we can't write them back later and might loose information that is important for some Tomboy plug-in. Try to Use custom properties in QTextFormat.
-* Pressing 'Enter' in list needs to add bullet to next line
+* (Done) Pressing 'Enter' in list needs to add bullet to next line
+* (Done) Pressing 'Backspace' in list needs to decrease indent if cursor on bullet
+* (Done) Pressing 'Delete' in list needs to decrease indent if cursor on bullet
 * Pressing 'Enter' in note title takes the formatting to the next line. Result: Blue underlined text.
+* Everything (esp. lists) need to work correctly if selections over multiple lines exist
+* Entering text in front of a bullet or directly behind it shoudn't be allowed. Instead, place cursor after bullet and insert there.
+* Pressing 'Delete' at the end of a list item needs to join it with the next line
 

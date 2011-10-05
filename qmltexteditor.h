@@ -75,11 +75,15 @@ private slots:
     //void onContentChanged();
     void onModificationChanged(bool changed);
     void onSaveTimerFired();
+    void onEnterPressed();
+    void onBackspacePressed();
+    void onDeletePressed();
 
 private:
     void formatTitle();
     void removeBullet(QTextCursor *cursor);
     void indentBlock(QTextCursor *cursor, int depth);
+    bool blockStartsWithBullet(QTextCursor cursor);
     QGraphicsProxyWidget *proxy;
     TextEditor *textEdit;
     int qmlWidth;

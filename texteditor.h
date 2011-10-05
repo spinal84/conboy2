@@ -14,6 +14,7 @@ public:
     void mousePressEvent(QMouseEvent *e);
     void mouseReleaseEvent(QMouseEvent *e);
     void mouseMoveEvent(QMouseEvent *e);
+    void keyPressEvent(QKeyEvent *e);
     void setQmlHeight(int height);
     void ignoreNextMouseMoves();
     void inputMethodEvent(QInputMethodEvent *e);
@@ -21,6 +22,9 @@ public:
 signals:
     void heightChanged(int height);
     void linkClicked(QString link);
+    void enterPressed();
+    void deletePressed();
+    void backspacePressed();
 
 private slots:
     void resizeHeight();
