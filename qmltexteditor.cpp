@@ -73,9 +73,26 @@ void QMLTextEditor::onTextChanged()
 void QMLTextEditor::onEnterPressed()
 {
     QTextCursor cursor = textEdit->textCursor();
+
+    if (cursor.blockNumber() == 0) {
+        // Set to default font formattting
+        // TODO: Collect default formattings in one place
+        QTextCharFormat format;
+        format.setFontPointSize(12);
+        format.setFontUnderline(false);
+        format.setForeground(QBrush(QColor("black")));
+        cursor.setCharFormat(format);
+        cursor.insertBlock();
+        cursor.select(QTextCursor::BlockUnderCursor);
+        cursor.setCharFormat(format);
+        return;
+    }
+
+    // Move cursor to start of block to check for bullets
     cursor.movePosition(QTextCursor::StartOfBlock);
     cursor.movePosition(QTextCursor::Right, QTextCursor::KeepAnchor, 2);
     QString selection = cursor.selectedText();
+
 
     // Check if "*" or "-"
     if (selection == "* " || selection == "- ") {
