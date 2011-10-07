@@ -93,7 +93,7 @@ private:
     NoteData *currentNote;
     QTimer saveTimer;
     int lastBlockNumber;
-    QList<QString> bullets;
+    //QList<QString> bullets;
 
 };
 

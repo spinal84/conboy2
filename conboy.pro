@@ -35,7 +35,8 @@ SOURCES += main.cpp \
     notecontentxmlhandler.cpp \
     tomboyxmlstreamreader.cpp \
     notestore.cpp \
-    notecontenthelper.cpp
+    notecontenthelper.cpp \
+    style.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -50,7 +51,8 @@ HEADERS += \
     notecontentxmlhandler.h \
     tomboyxmlstreamreader.h \
     notestore.h \
-    notecontenthelper.h
+    notecontenthelper.h \
+    style.h
 
 OTHER_FILES += \
     qtc_packaging/debian_harmattan/rules \
@@ -80,4 +82,6 @@ contains(MEEGO_EDITION,harmattan) {
     QMAKE_CXXFLAGS += -fPIC -fvisibility=hidden -fvisibility-inlines-hidden
     QMAKE_LFLAGS += -pie -rdynamic
 }
+
+
 

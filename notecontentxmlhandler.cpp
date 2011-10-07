@@ -2,6 +2,7 @@
 #include <QTextFormat>
 #include <QTextListFormat>
 
+#include "style.h"
 #include "notecontentxmlhandler.h"
 
 
@@ -18,6 +19,7 @@ NoteContentXmlHandler::NoteContentXmlHandler(QMLTextEditor *textEditor)
 
     //defaultCharFormat.setFontPointSize(textEditor->getFont().pointSize());
     defaultCharFormat.setFont(textEditor->getFont());
+    defaultFontPixelSize = defaultCharFormat.font().pixelSize();
     cursor.setCharFormat(defaultCharFormat);
 
     isInternalLink = false;
@@ -88,44 +90,32 @@ bool NoteContentXmlHandler::startElement(const QString &namepsaceURI, const QStr
     }
 
     if (qName == "size:small") {
-        QTextCharFormat format = cursor.charFormat();
-        format.setFontPointSize(16);
-        cursor.setCharFormat(format);
+        QTextCharFormat f = Style::getSmallTextFormat();
+        cursor.mergeCharFormat(f);
         return true;
     }
 
     if (qName == "size:large") {
-        QTextCharFormat format = cursor.charFormat();
-        format.setFontPointSize(24);
-        cursor.setCharFormat(format);
+        QTextCharFormat f = Style::getLargeTextFormat();
+        cursor.mergeCharFormat(f);
         return true;
     }
 
     if (qName == "size:huge") {
-        QTextCharFormat format = cursor.charFormat();
-        format.setFontPointSize(28);
-        cursor.setCharFormat(format);
+        QTextCharFormat f = Style::getHugeTextFormat();
+        cursor.mergeCharFormat(f);
         return true;
     }
 
     if (qName == "link:internal") {
-        QTextCharFormat format = cursor.charFormat();
-        format.setAnchor(true);
-        isInternalLink = true;
-        format.setForeground(QBrush(QColor("blue")));
-        format.setUnderlineStyle(QTextCharFormat::SingleUnderline);
-        cursor.setCharFormat(format);
+        isInternalLink = true;;
+        cursor.mergeCharFormat(Style::getLinkTextFormat());
         return true;
     }
 
     if (qName == "link:url") {
-        // TODO: Put format of internal and external links in common place
-        QTextCharFormat format = cursor.charFormat();
-        format.setAnchor(true);
         isUrlLink = true;
-        format.setForeground(QBrush(QColor("blue")));
-        format.setUnderlineStyle(QTextCharFormat::SingleUnderline);
-        cursor.setCharFormat(format);
+        cursor.mergeCharFormat(Style::getLinkTextFormat());
         return true;
     }
 

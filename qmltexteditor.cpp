@@ -9,6 +9,7 @@
 #include "qmltexteditor.h"
 #include "notecontentxmlhandler.h"
 #include "notecontenthelper.h"
+#include "style.h"
 
 QMLTextEditor::QMLTextEditor(QDeclarativeItem *parent) :
     QDeclarativeItem(parent)
@@ -24,9 +25,9 @@ QMLTextEditor::QMLTextEditor(QDeclarativeItem *parent) :
     lastBlockNumber = -1;
     saveTimer.setSingleShot(true);
 
-    bullets.append(QChar(0x2022) + QString(" "));
-    bullets.append(QChar(0x25e6) + QString(" "));
-    bullets.append(QChar(0x2219) + QString(" "));
+//    bullets.append(QChar(0x2022) + QString(" "));
+//    bullets.append(QChar(0x25e6) + QString(" "));
+//    bullets.append(QChar(0x2219) + QString(" "));
 
     connect(this, SIGNAL(widthChanged()), this, SLOT(onWidthChanged()));
     connect(textEdit, SIGNAL(heightChanged(int)), this, SLOT(onTextEditHeightChanged(int)));
@@ -58,12 +59,10 @@ void QMLTextEditor::onModificationChanged(bool changed)
 void QMLTextEditor::onTextChanged()
 {
     QTextCursor c = textEdit->textCursor();
+
+    // If first line, set title style
     if (c.block().blockNumber() == 0) {
-        QTextCharFormat titleFormat;
-        titleFormat.setFontPointSize(28);
-        titleFormat.setFontUnderline(true);
-        titleFormat.setForeground(QBrush(QColor("blue")));
-        textEdit->setCurrentCharFormat(titleFormat);
+        textEdit->setCurrentCharFormat(Style::getTitleCharFormat());
     }
 
     emit textChanged();
@@ -73,14 +72,12 @@ void QMLTextEditor::onTextChanged()
 void QMLTextEditor::onEnterPressed()
 {
     QTextCursor cursor = textEdit->textCursor();
+    qDebug() << "MARGIN " << cursor.blockFormat().leftMargin();
+    qDebug() << "INDENT " << cursor.blockFormat().textIndent();
 
     if (cursor.blockNumber() == 0) {
         // Set to default font formattting
-        // TODO: Collect default formattings in one place
-        QTextCharFormat format;
-        format.setFontPointSize(12);
-        format.setFontUnderline(false);
-        format.setForeground(QBrush(QColor("black")));
+        QTextCharFormat format = Style::getDefaultCharFormat();
         cursor.setCharFormat(format);
         cursor.insertBlock();
         cursor.select(QTextCursor::BlockUnderCursor);
@@ -231,11 +228,7 @@ bool QMLTextEditor::blockStartsWithBullet(QTextCursor cursor)
 {
     cursor.movePosition(QTextCursor::StartOfBlock);
     cursor.movePosition(QTextCursor::Right, QTextCursor::KeepAnchor, 2);
-    QString s = cursor.selectedText();
-    if (s.startsWith(bullets[0]) || s.startsWith(bullets[1]) || s.startsWith(bullets[2])) {
-        return true;
-    }
-    return false;
+    return Style::startsWithBullet(cursor.selectedText());
 }
 
 void QMLTextEditor::removeBullet(QTextCursor *cursor)
@@ -257,6 +250,7 @@ void QMLTextEditor::indentBlock(QTextCursor *cursor, int depth)
         removeBullet(cursor);
         format = cursor->blockFormat();
         format.setIndent(0);
+        format.setTextIndent(0);
         cursor->setBlockFormat(format);
 
     // Remove old bullet, add new bullet, set indent
@@ -265,7 +259,7 @@ void QMLTextEditor::indentBlock(QTextCursor *cursor, int depth)
 
         // Add new bullet
         cursor->movePosition(QTextCursor::StartOfBlock);
-        cursor->insertText(bullets[(depth-1) % 3]);
+        cursor->insertText(Style::getBullet(depth));
 
         // Set indent
         format = cursor->blockFormat();
@@ -293,12 +287,7 @@ void QMLTextEditor::formatTitle()
     QTextCursor cursor = textCursor();
     cursor.movePosition(QTextCursor::Start);
     cursor.movePosition(QTextCursor::EndOfLine, QTextCursor::KeepAnchor);
-
-    QTextCharFormat titleFormat;
-    titleFormat.setFontPointSize(28);
-    titleFormat.setFontUnderline(true);
-    titleFormat.setForeground(QBrush(QColor("blue")));
-    cursor.setCharFormat(titleFormat);
+    cursor.setCharFormat(Style::getTitleCharFormat());
 }
 
 void QMLTextEditor::showNote(NoteData *note)
@@ -372,9 +361,9 @@ QFont QMLTextEditor::getFont()
 
 void QMLTextEditor::setFont(QFont font)
 {
-    if (font.pointSize() > 0) {
+    if (font.pixelSize() > 0) {
         if (textEdit->font() != font) {
-            qDebug() << "INFO: Setting editor font. Size: " << font.pointSize();
+            qDebug() << "INFO: Setting editor font. Size: " << font.pixelSize();
             textEdit->setFont(font);
             emit fontChanged();
         }

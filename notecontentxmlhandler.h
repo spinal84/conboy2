@@ -26,6 +26,7 @@ private:
     bool isUrlLink;
     QTextBlockFormat defaultBlockFormat;
     QTextCharFormat defaultCharFormat;
+    int defaultFontPixelSize;
     int listDepth;
     bool ignoreNextLineBreak;
     QVector<QChar> bullets;

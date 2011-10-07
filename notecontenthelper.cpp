@@ -4,11 +4,9 @@
 #include <QDebug>
 #include <QStack>
 
+#include "style.h"
 #include "notecontenthelper.h"
 
-QString NoteContentHelper::bullet1 = QChar(0x2022) + QString(" ");
-QString NoteContentHelper::bullet2 = QChar(0x25e6) + QString(" ");
-QString NoteContentHelper::bullet3 = QChar(0x2219) + QString(" ");
 
 NoteContentHelper::NoteContentHelper()
 {    
@@ -42,7 +40,7 @@ void NoteContentHelper::handleBlock(QTextBlock *block, bool inList, QXmlStreamWr
             // TODO: Is there something like formatA.contains(formatB)? Maybe == ?
 
             // Add open tags
-            QStringList tags = getXmlTags(&format);
+            QStringList tags = Style::getXmlTags(&format);
             for (int i = 0; i < tags.length(); i++) {
                 writer->writeStartElement(tags[i]);
             }
@@ -50,7 +48,7 @@ void NoteContentHelper::handleBlock(QTextBlock *block, bool inList, QXmlStreamWr
             // If in list, remove bullets
             QString text = fragment.text();
             if (inList) {
-                if (text.startsWith(bullet1) || text.startsWith(bullet2) || text.startsWith(bullet3)) {
+                if (Style::startsWithBullet(text)) {
                     text.remove(0, 2);
                 }
             }
@@ -70,60 +68,60 @@ void NoteContentHelper::handleBlock(QTextBlock *block, bool inList, QXmlStreamWr
 }
 
 
-// TODO: Implements all used formats at a single place. It's not nice
-// to depend on things like fontsize == 16 to figure out a certain tag.
-// I hope there is something like format.contains(other_format).
-QStringList NoteContentHelper::getXmlTags(QTextCharFormat *format)
-{
-    QStringList tags;
+//// TODO: Implements all used formats at a single place. It's not nice
+//// to depend on things like fontsize == 16 to figure out a certain tag.
+//// I hope there is something like format.contains(other_format).
+//QStringList NoteContentHelper::getXmlTags(QTextCharFormat *format)
+//{
+//    QStringList tags;
 
-    if (format->fontWeight() == QFont::Bold) {
-        tags.append("bold");
-    }
+//    if (format->fontWeight() == QFont::Bold) {
+//        tags.append("bold");
+//    }
 
-    if (format->fontItalic()) {
-        tags.append("italic");
-    }
+//    if (format->fontItalic()) {
+//        tags.append("italic");
+//    }
 
-    if (format->background().color() == "yellow") {
-        tags.append("highlight");
-    }
+//    if (format->background().color() == "yellow") {
+//        tags.append("highlight");
+//    }
 
-    if (format->fontStrikeOut()) {
-        tags.append("strikethrough");
-    }
+//    if (format->fontStrikeOut()) {
+//        tags.append("strikethrough");
+//    }
 
-    if (format->fontStyleHint() == QFont::Monospace) {
-        tags.append("monospace");
-    }
+//    if (format->fontStyleHint() == QFont::Monospace) {
+//        tags.append("monospace");
+//    }
 
-    if (format->fontPointSize() == 16) {
-        tags.append("size:small");
-    }
+//    if (format->fontPointSize() == 16) {
+//        tags.append("size:small");
+//    }
 
-    if (format->fontPointSize() == 24) {
-        tags.append("size:large");
-    }
+//    if (format->fontPointSize() == 24) {
+//        tags.append("size:large");
+//    }
 
-    if (format->fontPointSize() == 28) {
-        tags.append("size:huge");
-    }
+//    if (format->fontPointSize() == 28) {
+//        tags.append("size:huge");
+//    }
 
-    // Simply underlined, internal link or url link
-    if (format->fontUnderline()) {
-        if (format->isAnchor()) {
-            if (format->anchorHref().startsWith("internal://")) {
-                tags.append("link:internal");
-            } else {
-                tags.append("link:url");
-            }
-        } else {
-            tags.append("underline");
-        }
-    }
+//    // Simply underlined, internal link or url link
+//    if (format->fontUnderline()) {
+//        if (format->isAnchor()) {
+//            if (format->anchorHref().startsWith("internal://")) {
+//                tags.append("link:internal");
+//            } else {
+//                tags.append("link:url");
+//            }
+//        } else {
+//            tags.append("underline");
+//        }
+//    }
 
-    return tags;
-}
+//    return tags;
+//}
 
 // Positive number: Increase depth
 // Negative number: Decrease depth

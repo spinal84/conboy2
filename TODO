@@ -13,6 +13,8 @@
 * (Done) Pressing 'Delete' in list needs to decrease indent if cursor on bullet
 * (Done) Use single instance mode
 * (Done) Pressing 'Enter' in note title takes the formatting to the next line. Result: Blue underlined text.
+* (Done) Move all formattings to a central place
+* (Done) Font on real device way to small / Font in Simulator way to large
 
 * Try using QGraphicsTextItem instead of QTextEdit. Maybe the performance is better because we don't need the proxy item.
 * Make sure note titles are unique
@@ -23,7 +25,5 @@
 * Everything (esp. lists) need to work correctly if selections over multiple lines exist
 * Entering text in front of a bullet or directly behind it shoudn't be allowed. Instead, place cursor after bullet and insert there.
 * Pressing 'Delete' at the end of a list item needs to join it with the next line
-* Font on real device way to small / Font in Simulator way to large
-* Sometimes no input possible
-* No virtual keyboard on real device
+* Sometimes no input possible. Then no virtual keyboard pops up on real device
 

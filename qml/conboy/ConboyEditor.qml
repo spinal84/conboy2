@@ -53,7 +53,8 @@ FocusScope {
         // Width is defined by the parent
         width: parent.width
 
-        font: root.platformStyle.textFont
+        font.family: "Nokia Pure Text" //root.platformStyle.textFont
+        font.pixelSize: 25
         color: root.platformStyle.textColor
         selectedTextColor: root.platformStyle.selectedTextColor
         selectionColor: root.platformStyle.selectionColor

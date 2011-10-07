@@ -28,13 +28,15 @@ Item {
 
         Text {
             text: title
-            font.pointSize: 18
+            //font.pointSize: 18
+            font.pixelSize: 30
             font.bold: true
         }
 
         Text {
             text: Qt.formatDateTime(lastChangeDate)
-            font.pointSize: 12
+            //font.pointSize: 12
+            font.pixelSize: 20
         }
     }
 
