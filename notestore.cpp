@@ -20,7 +20,6 @@ void NoteStore::loadAll()
     for (int i = 0; i < allUuids.count(); i++) {
         NoteData *note = storage.load(allUuids[i]);
         addNote(allUuids[i], note);
-        //emit noteAdded(note);
     }
 
     qDebug() << "Parsing " << allUuids.length() << " notes took " << startTime.elapsed() << " ms.";

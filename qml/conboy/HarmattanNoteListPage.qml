@@ -6,6 +6,18 @@ Page {
     signal newNote
     property QtObject editor
 
+    Timer {
+        id: loadTimer
+        repeat: false
+        interval: 50
+        onTriggered: noteStore.loadAll()
+    }
+
+    Component.onCompleted: {
+        // Load all notes (before that wait 50ms to make sure the UI is painted)
+        loadTimer.start()
+    }
+
     Menu {
         id: menu
         visualParent: pageStack
