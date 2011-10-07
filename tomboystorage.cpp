@@ -10,7 +10,7 @@
 TomboyStorage::TomboyStorage(QObject *parent) :
     QObject(parent)
 {
-    // TODO: Check if exists, etc.^
+    // TODO: Check if exists, etc.
     pathToXmlFiles = QDir::home();
     pathToXmlFiles.cd(".conboy");
 }
@@ -43,7 +43,7 @@ NoteData* TomboyStorage::load(QUuid uuid)
 
     // TODO: Maybe optimize by using a hash with select/case
     // TODO: Reuse the same TomboyXmlStreamReader for all notes
-    // TODO: Put the following code into TomboxXmlStreamReader class
+    // TODO: Put the following code into TomboyXmlStreamReader class
     while (!xml.atEnd()) {
         if (xml.readNext() == QXmlStreamReader::StartElement) {
 
@@ -173,6 +173,7 @@ bool TomboyStorage::save(NoteData *note)
 
 bool TomboyStorage::del(NoteData *note)
 {
+    // TODO: Implement
     return true;
 }
 

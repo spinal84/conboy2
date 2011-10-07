@@ -30,15 +30,6 @@ void NoteContentHelper::handleBlock(QTextBlock *block, bool inList, QXmlStreamWr
 
             QTextCharFormat format = fragment.charFormat();
 
-            // TODO: Get all formattings of the fragment and create xml tags
-            // Put all fragments after each other
-            // After a block, add a newline
-
-            // TODO: We need a mapping between tags and formats
-            // This mapping should be used in notecontentxmlhandler.cpp
-            // and here.
-            // TODO: Is there something like formatA.contains(formatB)? Maybe == ?
-
             // Add open tags
             QStringList tags = Style::getXmlTags(&format);
             for (int i = 0; i < tags.length(); i++) {
@@ -66,62 +57,6 @@ void NoteContentHelper::handleBlock(QTextBlock *block, bool inList, QXmlStreamWr
         fragmentIter++;
     }
 }
-
-
-//// TODO: Implements all used formats at a single place. It's not nice
-//// to depend on things like fontsize == 16 to figure out a certain tag.
-//// I hope there is something like format.contains(other_format).
-//QStringList NoteContentHelper::getXmlTags(QTextCharFormat *format)
-//{
-//    QStringList tags;
-
-//    if (format->fontWeight() == QFont::Bold) {
-//        tags.append("bold");
-//    }
-
-//    if (format->fontItalic()) {
-//        tags.append("italic");
-//    }
-
-//    if (format->background().color() == "yellow") {
-//        tags.append("highlight");
-//    }
-
-//    if (format->fontStrikeOut()) {
-//        tags.append("strikethrough");
-//    }
-
-//    if (format->fontStyleHint() == QFont::Monospace) {
-//        tags.append("monospace");
-//    }
-
-//    if (format->fontPointSize() == 16) {
-//        tags.append("size:small");
-//    }
-
-//    if (format->fontPointSize() == 24) {
-//        tags.append("size:large");
-//    }
-
-//    if (format->fontPointSize() == 28) {
-//        tags.append("size:huge");
-//    }
-
-//    // Simply underlined, internal link or url link
-//    if (format->fontUnderline()) {
-//        if (format->isAnchor()) {
-//            if (format->anchorHref().startsWith("internal://")) {
-//                tags.append("link:internal");
-//            } else {
-//                tags.append("link:url");
-//            }
-//        } else {
-//            tags.append("underline");
-//        }
-//    }
-
-//    return tags;
-//}
 
 // Positive number: Increase depth
 // Negative number: Decrease depth

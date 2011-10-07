@@ -25,10 +25,6 @@ QMLTextEditor::QMLTextEditor(QDeclarativeItem *parent) :
     lastBlockNumber = -1;
     saveTimer.setSingleShot(true);
 
-//    bullets.append(QChar(0x2022) + QString(" "));
-//    bullets.append(QChar(0x25e6) + QString(" "));
-//    bullets.append(QChar(0x2219) + QString(" "));
-
     connect(this, SIGNAL(widthChanged()), this, SLOT(onWidthChanged()));
     connect(textEdit, SIGNAL(heightChanged(int)), this, SLOT(onTextEditHeightChanged(int)));
     connect(textEdit, SIGNAL(textChanged()), this, SLOT(onTextChanged()));
@@ -420,7 +416,6 @@ void QMLTextEditor::ignoreNextMouseMoves()
     textEdit->ignoreNextMouseMoves();
 }
 
-// TODO: This should go into a dedicated class
 QString QMLTextEditor::getXml()
 {
     QTextCursor cursor = textCursor();
@@ -429,6 +424,7 @@ QString QMLTextEditor::getXml()
     QTextDocument *doc = cursor.document();
 
     QString tmp = NoteContentHelper::qTextDocumentToXmlString(doc);
+    // TODO: Remove. Only for debugging
     qDebug() << tmp;
     return tmp;
 }

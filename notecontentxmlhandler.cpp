@@ -125,11 +125,6 @@ bool NoteContentXmlHandler::startElement(const QString &namepsaceURI, const QStr
     }
 
     if (qName == "list-item") {
-        // TODO: Remove soon. Only for debugging
-        if (listDepth < 1) {
-            qDebug() << "listDepth < 1: That should not happen";
-            return false;
-        }
         QTextBlockFormat f;
         f.setIndent(listDepth);
         f.setTextIndent(-15);

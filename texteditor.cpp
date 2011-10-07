@@ -67,26 +67,16 @@ void TextEditor::mouseMoveEvent(QMouseEvent *e)
 
 void TextEditor::keyPressEvent(QKeyEvent *e)
 {
-    // TODO: Change to select case
-    if (e->key() == Qt::Key_Enter || e->key() == Qt::Key_Return) {
-        emit enterPressed();
-        e->accept();
-        return;
+    switch(e->key()) {
+        case Qt::Key_Enter:
+        case Qt::Key_Return:    emit enterPressed(); break;
+        case Qt::Key_Backspace: emit backspacePressed(); break;
+        case Qt::Key_Delete:    emit deletePressed(); break;
+        default:                QTextEdit::keyPressEvent(e); return;
     }
 
-    if (e->key() == Qt::Key_Backspace) {
-        emit backspacePressed();
-        e->accept();
-        return;
-    }
-
-    if (e->key() == Qt::Key_Delete) {
-        emit deletePressed();
-        e->accept();
-        return;
-    }
-
-    QTextEdit::keyPressEvent(e);
+    e->accept();
+    return;
 }
 
 void TextEditor::resizeHeight()
