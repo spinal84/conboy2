@@ -88,6 +88,7 @@ Page {
             uuid: model.uuid
             title: model.title
             lastChangeDate: model.lastChangeDate
+            favorite: model.favorite
             onClicked: {
                 editor.showNote(uuid)
                 showEditor()

@@ -8,6 +8,7 @@ NoteListModel::NoteListModel(NoteStore *store, QObject *parent) :
     roles[UuidRole] = "uuid";
     roles[TitleRole] = "title";
     roles[LastChangeDateRole] = "lastChangeDate";
+    roles[FavoriteRole] = "favorite";
     setRoleNames(roles);
 
     notes = store->getNotes();
@@ -17,6 +18,7 @@ NoteListModel::NoteListModel(NoteStore *store, QObject *parent) :
     for (int i = 0; i < store->count(); i++) {
         connect(notes[i], SIGNAL(titleChanged()), this, SLOT(onNoteChanged()));
         connect(notes[i], SIGNAL(lastChangeDateChanged()), this, SLOT(onNoteChanged()));
+        connect(notes[i], SIGNAL(favoriteChanged()), this, SLOT(onNoteChanged()));
     }
 
     // All notes that are added afterwards will trigger the addNote slot
@@ -41,6 +43,7 @@ QVariant NoteListModel::data(const QModelIndex &index, int role) const
     case UuidRole: return note->getUuid().toString();
     case TitleRole: return note->getTitle();
     case LastChangeDateRole: return note->getLastChangeDate();
+    case FavoriteRole: return note->getFavorite();
     default: return QVariant();
     }
 }
@@ -92,6 +95,7 @@ void NoteListModel::addNote(NoteData *note)
     qDebug() << "Connect signal to note: " << note->getTitle();
     connect(note, SIGNAL(titleChanged()), this, SLOT(onNoteChanged()));
     connect(note, SIGNAL(lastChangeDateChanged()), this, SLOT(onNoteChanged()));
+    connect(note, SIGNAL(favoriteChanged()), this, SLOT(onNoteChanged()));
 
     if (sortOrder == "title") {
         sortByTitle();

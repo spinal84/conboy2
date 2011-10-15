@@ -305,7 +305,17 @@ void QMLTextEditor::showNote(NoteData *note)
     textCursor().endEditBlock();
     textEdit->document()->setModified(false);
 
+    if (currentNote) {
+        disconnect(currentNote, SIGNAL(favoriteChanged()), this, SIGNAL(favoriteChanged()));
+    }
+
     currentNote = note;
+
+    connect(currentNote, SIGNAL(favoriteChanged()), this, SIGNAL(favoriteChanged()));
+
+    // Emit the signal, so that the editor UI can update it's display
+    // TODO: Maybe a more general noteChanged() makes sense
+    emit favoriteChanged();
 }
 
 void QMLTextEditor::showTestNote()
@@ -429,6 +439,19 @@ QString QMLTextEditor::getXml()
     return tmp;
 }
 
+bool QMLTextEditor::getFavorite()
+{
+    if (currentNote) {
+        return currentNote->getFavorite();
+    }
 
+    return false;
+}
 
+void QMLTextEditor::setFavorite(bool fav)
+{
+    if (currentNote) {
+        currentNote->setFavorite(fav);
+    }
+}
 

@@ -26,4 +26,10 @@
 * Entering text in front of a bullet or directly behind it shoudn't be allowed. Instead, place cursor after bullet and insert there.
 * Pressing 'Delete' at the end of a list item needs to join it with the next line
 * Sometimes no input possible. Then no virtual keyboard pops up on real device
+* Implement note deleting
+* Implement note sharing
+* Implement UI for changing text style
+* Implement Search in list view
+* Read and write favorites from/to local storage
+* Sort favorites first
 

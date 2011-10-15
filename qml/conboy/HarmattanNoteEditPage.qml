@@ -79,6 +79,12 @@ Page {
           */
 
         ToolIcon {
+            iconId: editor.favorite ? "icon-m-toolbar-favorite-mark" : "icon-m-toolbar-favorite-unmark"
+            onClicked: editor.favorite = !editor.favorite
+        }
+
+        /*
+        ToolIcon {
             iconId: "icon-m-toolbar-previous"
             onClicked: editor.decreaseIndent()
         }
@@ -93,6 +99,7 @@ Page {
             onClicked: (styleMenu.status == DialogStatus.Closed) ? styleMenu.open() : styleMenu.close()
         }
 
+        */
         ToolIcon {
             iconId: "toolbar-view-menu"
             onClicked: (menu.status == DialogStatus.Closed) ? menu.open() : menu.close()

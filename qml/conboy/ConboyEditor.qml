@@ -8,6 +8,7 @@ FocusScope {
 
     property alias minHeight: editor.minHeight
     property alias bold: editor.bold
+    property alias favorite: editor.favorite
 
     property Item platformStyle
 

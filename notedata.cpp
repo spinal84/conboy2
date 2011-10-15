@@ -14,6 +14,7 @@ NoteData::NoteData(QObject *parent) :
     x = 50;
     y = 50;
     openOnStartup = false;
+    favorite = false;
 }
 
 QUuid NoteData::getUuid() const
@@ -140,6 +141,19 @@ bool NoteData::getOpenOnStartup() const
 void NoteData::setOpenOnStartup(bool open)
 {
     openOnStartup = open;
+}
+
+bool NoteData::getFavorite() const
+{
+    return favorite;
+}
+
+void NoteData::setFavorite(bool fav)
+{
+    if (favorite != fav) {
+        favorite = fav;
+        emit favoriteChanged();
+    }
 }
 
 void NoteData::setStore(NoteStore *store)

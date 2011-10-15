@@ -25,7 +25,8 @@ public:
     enum NoteRoles {
         UuidRole = Qt::UserRole + 100,
         TitleRole,
-        LastChangeDateRole
+        LastChangeDateRole,
+        FavoriteRole
     };
 
     explicit NoteListModel(NoteStore *store, QObject *parent = 0);

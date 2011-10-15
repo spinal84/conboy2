@@ -9,6 +9,7 @@ Item {
     property string uuid: "123-456-789"
     property string title: "Unknown title"
     property date lastChangeDate: "2000-01-01"
+    property bool favorite: false
 
     width: 600
     height: 70
@@ -20,9 +21,17 @@ Item {
         source: "image://theme/meegotouch-list-background-pressed-center"
     }
 
+    Image {
+        id: star
+        source: "image://theme/icon-s-common-favorite-mark"
+        visible: favorite
+        anchors.right: parent.right
+        anchors.verticalCenter: parent.verticalCenter
+    }
+
     Column {
         anchors.left: parent.left
-        anchors.right: parent.right
+        anchors.right: star.left
         anchors.verticalCenter: parent.verticalCenter
         anchors.leftMargin: 10
 
