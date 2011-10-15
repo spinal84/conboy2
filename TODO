@@ -16,6 +16,7 @@
 * (Done) Move all formattings to a central place
 * (Done) Font on real device way to small / Font in Simulator way to large
 * (Done) Parse notes *after* launching UI to decrease startup time
+* (Done) Implement Search in list view
 
 * Try using QGraphicsTextItem instead of QTextEdit. Maybe the performance is better because we don't need the proxy item.
 * Make sure note titles are unique
@@ -29,7 +30,6 @@
 * Implement note deleting
 * Implement note sharing
 * Implement UI for changing text style
-* Implement Search in list view
 * Read and write favorites from/to local storage
 * Sort favorites first
 
