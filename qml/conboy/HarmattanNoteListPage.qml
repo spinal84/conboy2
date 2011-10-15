@@ -6,18 +6,6 @@ Page {
     signal newNote
     property QtObject editor
 
-    Timer {
-        id: loadTimer
-        repeat: false
-        interval: 50
-        onTriggered: noteStore.loadAll()
-    }
-
-    Component.onCompleted: {
-        // Load all notes (before that wait 50ms to make sure the UI is painted)
-        loadTimer.start()
-    }
-
     Menu {
         id: menu
         visualParent: pageStack
@@ -66,13 +54,21 @@ Page {
         placeholderText: "Search"
         anchors { top: header.bottom; left: parent.left; right: parent.right }
         anchors.margins: 16 // TODO: Use platform margins
+
         Image {
             anchors { top: parent.top; right: parent.right; margins: 5 }
             smooth: true
             fillMode: Image.PreserveAspectFit
-            source: "image://theme/icon-m-toolbar-search"
+            source: search.text ? "image://theme/icon-m-input-clear" : "image://theme/icon-m-common-search"
             height: parent.height - platformStyle.paddingMedium * 2
             width: parent.height - platformStyle.paddingMedium * 2
+
+            MouseArea {
+                anchors.fill: parent
+                anchors.margins: -10 // Make area bigger then image
+                enabled: search.text
+                onClicked: search.text = ""
+            }
          }
      }
 
