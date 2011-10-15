@@ -20,6 +20,7 @@ QString TomboyXmlStreamReader::innerXml()
     return ret;
 }
 
+// TODO: This is slow. Is there a simpler way to get the raw XML?
 void TomboyXmlStreamReader::readInnerXml(QXmlStreamWriter &writer)
 {
     if(tokenType() == QXmlStreamReader::StartElement)
