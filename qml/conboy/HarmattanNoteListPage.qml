@@ -54,6 +54,7 @@ Page {
         placeholderText: "Search"
         anchors { top: header.bottom; left: parent.left; right: parent.right }
         anchors.margins: 16 // TODO: Use platform margins
+        inputMethodHints: Qt.ImhNoPredictiveText | Qt.ImhPreferLowercase | Qt.ImhNoAutoUppercase
         onTextChanged: noteListModel.setFilterFixedString(text)
 
         Image {
