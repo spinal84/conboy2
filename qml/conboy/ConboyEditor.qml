@@ -7,8 +7,13 @@ FocusScope {
     id: root
 
     property alias minHeight: editor.minHeight
-    property alias bold: editor.bold
     property alias favorite: editor.favorite
+    property alias bold: editor.bold
+    property alias italic: editor.italic
+    property alias underline: editor.underline
+    property alias strikeout: editor.strikeout
+    property alias highlight: editor.highlight
+    property alias fixedWidth: editor.fixedWidth
 
     property Item platformStyle
 
@@ -32,6 +37,26 @@ FocusScope {
 
     function toggleBold() {
         editor.toggleBold()
+    }
+
+    function toggleItalic() {
+        editor.toggleItalic()
+    }
+
+    function toggleUnderline() {
+        editor.toggleUnderline()
+    }
+
+    function toggleStrikeout() {
+        editor.toggleStrikeout()
+    }
+
+    function toggleHighlight() {
+        editor.toggleHighlight()
+    }
+
+    function toggleFixedWidth() {
+        editor.toggleFixedWidth()
     }
 
     function increaseIndent() {

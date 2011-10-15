@@ -17,7 +17,11 @@
 * (Done) Font on real device way to small / Font in Simulator way to large
 * (Done) Parse notes *after* launching UI to decrease startup time
 * (Done) Implement Search in list view
+* (Done) Implement UI for changing text style
 
+
+* Implement changing the text sizes (small, large, huge)
+* Bullets should always be painted using the default font (e.g. not bold)
 * Try using QGraphicsTextItem instead of QTextEdit. Maybe the performance is better because we don't need the proxy item.
 * Make sure note titles are unique
 * Preedit (word suggestions) should be displayed in the target format
@@ -29,7 +33,11 @@
 * Sometimes no input possible. Then no virtual keyboard pops up on real device
 * Implement note deleting
 * Implement note sharing
-* Implement UI for changing text style
 * Read and write favorites from/to local storage
 * Sort favorites first
+* Reimplement sorting using the QFilterSortProxy
+* Stop cursor from blinking
+* User Harmattan list widget (allows jumping via first letter of entry)
+* Integrate into system backup
+* Add 'link' button to top bar
 

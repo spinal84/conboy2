@@ -10,6 +10,8 @@ public:
 
     static QTextCharFormat getDefaultCharFormat();
     static QTextCharFormat getTitleCharFormat();
+    static QTextCharFormat getFixedWidthFormat();
+    static QTextCharFormat getNormalFont();
     static QTextCharFormat getSmallTextFormat();
     static QTextCharFormat getLargeTextFormat();
     static QTextCharFormat getHugeTextFormat();

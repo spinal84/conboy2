@@ -16,7 +16,11 @@ class QMLTextEditor : public QDeclarativeItem
     Q_OBJECT
     Q_PROPERTY(int minHeight READ getMinHeight WRITE setMinHeight NOTIFY minHeightChanged)
     Q_PROPERTY(bool bold READ getBold NOTIFY boldChanged)
-
+    Q_PROPERTY(bool italic READ getItalic NOTIFY italicChanged)
+    Q_PROPERTY(bool underline READ getUnderline NOTIFY underlineChanged)
+    Q_PROPERTY(bool strikeout READ getStrikeout NOTIFY strikeoutChanged)
+    Q_PROPERTY(bool highlight READ getHighlight NOTIFY highlightChanged)
+    Q_PROPERTY(bool fixedWidth READ getFixedWidth NOTIFY fixedWidthChanged)
     Q_PROPERTY(QFont font READ getFont WRITE setFont NOTIFY fontChanged)
     Q_PROPERTY(QColor color READ getColor WRITE setColor NOTIFY colorChanged)
     Q_PROPERTY(QColor selectedTextColor READ getSelectedTextColor WRITE setSelectedTextColor NOTIFY selectedTextColorChanged)
@@ -31,6 +35,11 @@ public:
     void setMinHeight(int height);
 
     bool getBold() const;
+    bool getItalic() const;
+    bool getUnderline() const;
+    bool getStrikeout() const;
+    bool getHighlight() const;
+    bool getFixedWidth() const;
 
     QTextCursor textCursor();
 
@@ -56,6 +65,11 @@ signals:
     void textChanged();
     void cursorPositionChanged(QRect rect);
     void boldChanged();
+    void italicChanged();
+    void underlineChanged();
+    void strikeoutChanged();
+    void highlightChanged();
+    void fixedWidthChanged();
     void fontChanged();
     void colorChanged();
     void selectedTextColorChanged();
@@ -64,6 +78,11 @@ signals:
 
 public slots:
     void toggleBold();
+    void toggleItalic();
+    void toggleUnderline();
+    void toggleStrikeout();
+    void toggleHighlight();
+    void toggleFixedWidth();
     void increaseIndent();
     void decreaseIndent();
     void showTestNote();
@@ -96,10 +115,14 @@ private:
     int qmlHeight;
     qreal fontSize;
     bool bold;
+    bool italic;
+    bool underline;
+    bool strikeout;
+    bool highlight;
+    bool fixedWidth;
     NoteData *currentNote;
     QTimer saveTimer;
     int lastBlockNumber;
-    //QList<QString> bullets;
 
 };
 

@@ -84,7 +84,8 @@ bool NoteContentXmlHandler::startElement(const QString &namepsaceURI, const QStr
 
     if (qName == "monospace") {
         QTextCharFormat format = cursor.charFormat();
-        format.setFontFamily("DejaVu Sans Mono");
+        format.setFontStyleHint(QFont::Monospace);
+        //format.setFontFamily("DejaVu Sans Mono");
         cursor.setCharFormat(format);
         return true;
     }
@@ -155,7 +156,7 @@ bool NoteContentXmlHandler::endElement(const QString &namespaceURI, const QStrin
 
     if (qName == "highlight") {
         QTextCharFormat format = cursor.charFormat();
-        format.setBackground(QBrush(QColor("white")));
+        format.clearBackground();
         cursor.setCharFormat(format);
         return true;
     }

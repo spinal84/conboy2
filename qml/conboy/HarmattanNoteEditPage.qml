@@ -16,30 +16,141 @@ Page {
         id: menu
         visualParent: pageStack
         MenuLayout {
-            MenuItem {text: "Delete note"; onClicked: { colorRect.color = "darkred" } }
-            MenuItem {text: "Share note"; onClicked: { colorRect.color = "darkgreen" }}
+            MenuItem {
+                text: "Delete note"
+            }
+            MenuItem {
+                text: "Share note"
+            }
         }
     }
 
     Menu {
         id: styleMenu
         visualParent: pageStack
-        MenuLayout {
-            MenuItem {text: "<b>bold</b>"}
-            MenuItem {text: "<i>italic</i>"}
-            MenuItem {text: "<u>underline</u>"}
-            MenuItem {text: "highlight"}
-            MenuItem {text: "small"}
-            MenuItem {text: "normal"}
-            MenuItem {text: "large"}
-            MenuItem {text: "huhge"}
+
+        Column {
+            anchors.left: parent.left
+            anchors.right: parent.right
+
+            ButtonRow {
+                Button {
+                    text: "Small"
+                }
+                Button {
+                    text: "Normal"
+                }
+                Button {
+                    text: "Large"
+                }
+                Button {
+                    text: "Huge"
+                }
+            }
+
+            /* // Could be an option to reduce required space. But needs new icons.
+            ButtonRow {
+                exclusive: false
+                Button {
+                    iconSource: "image://theme/icon-m-toolbar-bold"
+                }
+                Button {
+                    iconSource: "image://theme/icon-m-toolbar-italic"
+                }
+                Button {
+                    iconSource: "image://theme/icon-m-toolbar-underline"
+                }
+                Button {
+                    iconSource: "image://theme/icon-m-toolbar-bold"
+                }
+                Button {
+                    iconSource: "image://theme/icon-m-toolbar-bold"
+                }
+                Button {
+                    iconSource: "image://theme/icon-m-toolbar-bold"
+                }
+            }
+            */
+
+            Button {
+                text: "<b>Bold</b>"
+                checked: editor.bold
+                anchors.left: parent.left
+                anchors.right: parent.right
+                onClicked: editor.toggleBold()
+            }
+            Button {
+                text: "<i>Italic</i>"
+                checked: editor.italic
+                anchors.left: parent.left
+                anchors.right: parent.right
+                onClicked: editor.toggleItalic()
+            }
+            Button {
+                text: "<u>Underline</u>"
+                checked: editor.underline
+                anchors.left: parent.left
+                anchors.right: parent.right
+                onClicked: editor.toggleUnderline()
+            }
+            Button {
+                text: "<s>Strikeout</s>"
+                checked: editor.strikeout
+                anchors.left: parent.left
+                anchors.right: parent.right
+                onClicked: editor.toggleStrikeout()
+            }
+            Button {
+                text: "<span style='background-color: yellow'>Highlight</span>"
+                checked: editor.highlight
+                anchors.left: parent.left
+                anchors.right: parent.right
+                onClicked: editor.toggleHighlight()
+            }
+            Button {
+                text: "<pre>Fixed width</pre>"
+                checked: editor.fixedWidth
+                anchors.left: parent.left
+                anchors.right: parent.right
+                onClicked: editor.toggleFixedWidth()
+            }
+        }
+    }
+
+    ToolBar {
+        id: topBar
+        anchors.top: parent.top
+        tools: ToolBarLayout {
+            ToolIcon {
+               iconId: "icon-m-toolbar-tab-previous"
+               onClicked: editor.decreaseIndent()
+           }
+           ToolIcon {
+               iconId: "icon-m-toolbar-tab-next"
+               onClicked: editor.increaseIndent()
+           }
+           // TODO: Add icon for 'link'
+           ToolIcon {
+               //iconId: "icon-m-toolbar-bold"
+           }
+           ToolIcon {
+               iconId: "icon-m-toolbar-rich-text"
+               onClicked: (styleMenu.status == DialogStatus.Closed) ? styleMenu.open() : styleMenu.close()
+           }
+           ToolIcon {
+               iconId: "icon-m-toolbar-select-text"
+           }
         }
     }
 
     Flickable {
         id: flickable
         contentHeight: editor.height
-        anchors.fill:  parent
+        clip: true
+        anchors.top: topBar.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
 
         ConboyEditor {
             id: editor

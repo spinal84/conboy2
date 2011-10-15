@@ -204,15 +204,117 @@ void QMLTextEditor::toggleBold()
     }
 }
 
+void QMLTextEditor::toggleItalic()
+{
+    textEdit->setFontItalic(!italic);
+}
+
+void QMLTextEditor::toggleUnderline()
+{
+    textEdit->setFontUnderline(!underline);
+}
+
+void QMLTextEditor::toggleStrikeout()
+{
+    QTextCharFormat f;
+    f.setFontStrikeOut(!strikeout);
+    textEdit->textCursor().mergeCharFormat(f);
+}
+
+void QMLTextEditor::toggleHighlight()
+{
+    QTextCursor cursor = textEdit->textCursor();
+    QTextCharFormat f = cursor.charFormat();
+    QColor yellow = QColor("yellow");
+    if (f.background().color() == yellow) {
+        f.clearBackground();
+    } else {
+        f.setBackground(QBrush(yellow));
+    }
+    cursor.setCharFormat(f);
+}
+
+void QMLTextEditor::toggleFixedWidth()
+{
+    QTextCursor cursor = textEdit->textCursor();
+    QTextCharFormat f = cursor.charFormat();
+    if (f.fontFamily() == "Monospace") {
+        f = Style::getNormalFont();
+    } else {
+        f = Style::getFixedWidthFormat();
+    }
+    cursor.mergeCharFormat(f);
+}
+
 bool QMLTextEditor::getBold() const
 {
     return bold;
 }
 
+bool QMLTextEditor::getItalic() const
+{
+    return italic;
+}
+
+bool QMLTextEditor::getUnderline() const
+{
+    return underline;
+}
+
+bool QMLTextEditor::getStrikeout() const
+{
+    return strikeout;
+}
+
+bool QMLTextEditor::getHighlight() const
+{
+    return highlight;
+}
+
+bool QMLTextEditor::getFixedWidth() const
+{
+    return fixedWidth;
+}
+
 void QMLTextEditor::onCurrentCharFormatChanged(QTextCharFormat format)
 {
-    bold = (format.fontWeight() == QFont::Bold);
-    emit boldChanged();
+    bool b = (format.fontWeight() == QFont::Bold);
+    bool i = format.fontItalic();
+    bool u = format.fontUnderline();
+    bool s = format.fontStrikeOut();
+    bool h = format.background() == QBrush(QColor("yellow"));
+    // TODO: Which font do we use? Adjust 'mono' or use styleHint
+    bool f = format.fontFamily().contains("mono", Qt::CaseInsensitive);
+
+    // TODO: Maybe put in setters
+    if (bold != b) {
+        bold = b;
+        emit boldChanged();
+    }
+
+    if (italic != i) {
+        italic = i;
+        emit italicChanged();
+    }
+    if (underline != u) {
+        underline = u;
+        emit underlineChanged();
+    }
+
+    if (strikeout != s) {
+        strikeout = s;
+        emit strikeoutChanged();
+    }
+
+    if (highlight != h) {
+        highlight = h;
+        emit highlightChanged();
+    }
+
+    if (fixedWidth != f) {
+        fixedWidth = f;
+        emit fixedWidthChanged();
+    }
 }
 
 QTextCursor QMLTextEditor::textCursor()

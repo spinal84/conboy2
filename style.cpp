@@ -36,6 +36,20 @@ QTextCharFormat Style::getTitleCharFormat()
     return f;
 }
 
+QTextCharFormat Style::getFixedWidthFormat()
+{
+    QTextCharFormat f;
+    f.setFontFamily("Monospace");
+    return f;
+}
+
+QTextCharFormat Style::getNormalFont()
+{
+    QTextCharFormat f;
+    f.setFontFamily("Nokia Pure Text");
+    return f;
+}
+
 QTextCharFormat Style::getSmallTextFormat()
 {
     QTextCharFormat f;
