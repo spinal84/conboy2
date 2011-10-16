@@ -19,7 +19,8 @@
 * (Done) Implement Search in list view
 * (Done) Implement UI for changing text style
 * (Done) Implement changing the text sizes (small, large, huge)
-
+* (Done) Sort favorites first
+* (Done) Reimplement sorting using the QFilterSortProxy
 
 * Bullets should always be painted using the default font (e.g. not bold)
 * Try using QGraphicsTextItem instead of QTextEdit. Maybe the performance is better because we don't need the proxy item.
@@ -34,10 +35,8 @@
 * Implement note deleting
 * Implement note sharing
 * Read and write favorites from/to local storage
-* Sort favorites first
-* Reimplement sorting using the QFilterSortProxy
 * Stop cursor from blinking
-* User Harmattan list widget (allows jumping via first letter of entry)
+* User Harmattan list widget (allows jumping via first letter of entry). No ready made QML component. Only MTF.
 * Integrate into system backup
 * Add 'link' button to top bar
 * Alow theme switching. Colors + inverted/normal

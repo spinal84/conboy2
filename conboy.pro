@@ -45,7 +45,8 @@ SOURCES += main.cpp \
     tomboyxmlstreamreader.cpp \
     notestore.cpp \
     notecontenthelper.cpp \
-    style.cpp
+    style.cpp \
+    notesortfilterproxymodel.cpp
 
 HEADERS += \
     qmltexteditor.h \
@@ -57,7 +58,8 @@ HEADERS += \
     tomboyxmlstreamreader.h \
     notestore.h \
     notecontenthelper.h \
-    style.h
+    style.h \
+    notesortfilterproxymodel.h
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -83,6 +85,8 @@ contains(MEEGO_EDITION,harmattan) {
     icon.path = /usr/share/icons/hicolor/80x80/apps
     INSTALLS += icon
 }
+
+
 
 
 

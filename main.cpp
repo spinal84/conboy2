@@ -3,13 +3,13 @@
 #include <QDeclarativeContext>
 #include <QTimer>
 #include <QScopedPointer>
-#include <QSortFilterProxyModel>
 
 #include "notestore.h"
 #include "qmlapplicationviewer.h"
 #include "qmltexteditor.h"
 #include "notelistmodel.h"
 #include "tomboystorage.h"
+#include "notesortfilterproxymodel.h"
 
 Q_DECL_EXPORT int main(int argc, char *argv[])
 {
@@ -27,15 +27,8 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     NoteListModel noteListModel(&noteStore);
 
     // Proxy model used for filtering
-    QSortFilterProxyModel filteredNoteListModel;
+    NoteSortFilterProxyModel filteredNoteListModel;
     filteredNoteListModel.setSourceModel(&noteListModel);
-    filteredNoteListModel.setFilterCaseSensitivity(Qt::CaseInsensitive);
-    filteredNoteListModel.setFilterRole(NoteListModel::TitleRole);
-
-    filteredNoteListModel.setSortCaseSensitivity(Qt::CaseInsensitive);
-    filteredNoteListModel.setSortRole(NoteListModel::LastChangeDateRole);
-    filteredNoteListModel.setDynamicSortFilter(true);
-    filteredNoteListModel.sort(0, Qt::DescendingOrder);
 
     // Expose objects to QML
     viewer->rootContext()->setContextProperty("noteListModel", &filteredNoteListModel);

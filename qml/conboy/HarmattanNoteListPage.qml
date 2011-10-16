@@ -10,11 +10,17 @@ Page {
         id: menu
         visualParent: pageStack
         MenuLayout {
-            MenuItem {text: "Delete notes"; onClicked: { colorRect.color = "darkred" } }
-            MenuItem {text: "Settings"; onClicked: { colorRect.color = "darkgreen" }}
-            MenuItem {text: "Synchronization"; onClicked: { colorRect.color = "darkblue" }}
-            MenuItem {text: "Sort by title"}
-            MenuItem {text: "Sort by date"}
+            MenuItem {text: "Delete notes"}
+            MenuItem {text: "Settings"}
+            MenuItem {text: "Synchronization"}
+            MenuItem {
+                text: "Sort by title"
+                onClicked: noteListModel.sortByTitle()
+            }
+            MenuItem {
+                text: "Sort by date"
+                onClicked: noteListModel.sortByDate()
+            }
         }
     }
 
