@@ -21,6 +21,7 @@ Page {
             }
             MenuItem {
                 text: "Share note"
+                onClicked: editor.share()
             }
         }
     }

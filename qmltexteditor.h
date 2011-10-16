@@ -90,6 +90,7 @@ public slots:
     void ignoreNextMouseMoves();
     QString getXml();
     void save();
+    void share();
 
 private slots:
     void onWidthChanged();

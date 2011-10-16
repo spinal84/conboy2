@@ -31,6 +31,9 @@ symbian:TARGET.CAPABILITY += NetworkServices
 ##       --type=d in conboy.desktop
 ## CONFIG += qdeclarative-boostable
 
+# Share UI setup
+CONFIG += shareuiinterface-maemo-meegotouch
+
 # The .cpp file which was generated for your project. Feel free to hack it.
 SOURCES += main.cpp \
     qmltexteditor.cpp \
@@ -80,6 +83,10 @@ contains(MEEGO_EDITION,harmattan) {
     icon.path = /usr/share/icons/hicolor/80x80/apps
     INSTALLS += icon
 }
+
+
+
+
 
 
 

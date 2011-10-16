@@ -3,8 +3,10 @@
 #include <QtXml/QXmlSimpleReader>
 #include <QXmlStreamWriter>
 #include <QDebug>
-
 #include <QTextListFormat>
+#include <QPrinter>
+
+//#include <maemo-meegotouch-interfaces/shareuiinterface.h>
 
 #include "qmltexteditor.h"
 #include "notecontentxmlhandler.h"
@@ -557,3 +559,32 @@ void QMLTextEditor::setFavorite(bool fav)
     }
 }
 
+void QMLTextEditor::share()
+{
+    /*
+     * TODO: We need to export the PDF (or HTML, or TXT), then tell Tracker to
+     * index it. Then share it. While exporting and indexing we should display
+     * spinner or something...
+     */
+    qDebug() << "TODO: Implement sharing";
+    /*
+    QPrinter printer;
+    printer.setOutputFormat(QPrinter::PdfFormat);
+    printer.setOutputFileName("/home/developer/MyDocs/bla.pdf");
+    textEdit->print(&printer);
+
+    QStringList items;
+    items.append("file:///home/developer/MyDocs/bla.pdf");
+
+    // Create a interface object
+    ShareUiInterface interface("com.nokia.ShareUi");
+
+    // Check if interface is valid
+    if (interface.isValid()) {
+        interface.share(items);
+    } else {
+        qDebug() << "ERROR: Invalid sharing interface";
+        return;
+    }
+    */
+}

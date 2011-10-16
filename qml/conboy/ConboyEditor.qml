@@ -71,6 +71,10 @@ FocusScope {
         editor.save()
     }
 
+    function share() {
+        editor.share()
+    }
+
     // Height is defined by the editor (content)
     height: editor.height
 
