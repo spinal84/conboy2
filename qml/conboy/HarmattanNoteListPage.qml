@@ -10,9 +10,9 @@ Page {
         id: menu
         visualParent: pageStack
         MenuLayout {
-            MenuItem {text: "Delete notes"}
-            MenuItem {text: "Settings"}
-            MenuItem {text: "Synchronization"}
+            MenuItem {text: "<s>Delete notes</s>"}
+            MenuItem {text: "<s>Settings</s>"}
+            MenuItem {text: "<s>Synchronization</s>"}
             MenuItem {
                 text: "Sort by title"
                 onClicked: noteListModel.sortByTitle()

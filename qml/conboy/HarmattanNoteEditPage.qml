@@ -17,10 +17,10 @@ Page {
         visualParent: pageStack
         MenuLayout {
             MenuItem {
-                text: "Delete note"
+                text: "<s>Delete note</s>"
             }
             MenuItem {
-                text: "Share note"
+                text: "<s>Share note</s>"
                 onClicked: editor.share()
             }
         }
