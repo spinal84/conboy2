@@ -25,13 +25,17 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 
     // Model to visualize notes
     NoteListModel noteListModel(&noteStore);
-    noteListModel.sortByDate();
 
     // Proxy model used for filtering
     QSortFilterProxyModel filteredNoteListModel;
     filteredNoteListModel.setSourceModel(&noteListModel);
     filteredNoteListModel.setFilterCaseSensitivity(Qt::CaseInsensitive);
     filteredNoteListModel.setFilterRole(NoteListModel::TitleRole);
+
+    filteredNoteListModel.setSortCaseSensitivity(Qt::CaseInsensitive);
+    filteredNoteListModel.setSortRole(NoteListModel::LastChangeDateRole);
+    filteredNoteListModel.setDynamicSortFilter(true);
+    filteredNoteListModel.sort(0, Qt::DescendingOrder);
 
     // Expose objects to QML
     viewer->rootContext()->setContextProperty("noteListModel", &filteredNoteListModel);

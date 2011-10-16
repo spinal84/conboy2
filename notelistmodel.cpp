@@ -12,7 +12,6 @@ NoteListModel::NoteListModel(NoteStore *store, QObject *parent) :
     setRoleNames(roles);
 
     notes = store->getNotes();
-    sortOrder = "date";
 
     // Connect handlers to all notes that are already in the store
     for (int i = 0; i < store->count(); i++) {
@@ -48,42 +47,6 @@ QVariant NoteListModel::data(const QModelIndex &index, int role) const
     }
 }
 
-bool compareTitle(const NoteData *n1, const NoteData *n2)
-{
-    if (n1 == 0 || n2 == 0) {
-        return false;
-    }
-
-    return n1->getTitle().toLower() < n2->getTitle().toLower();
-}
-
-bool compareLastChangeDate(const NoteData *n1, const NoteData *n2)
-{
-    if (n1 == 0 || n2 == 0) {
-        return false;
-    }
-
-    return n1->getLastChangeDate() > n2->getLastChangeDate();
-}
-
-// TODO: Maybe add "Qt::SortOrder order" as parameter
-void NoteListModel::sortByDate()
-{
-    emit layoutAboutToBeChanged();
-    qStableSort(notes.begin(), notes.end(), compareLastChangeDate);
-    emit layoutChanged();
-    sortOrder = "date";
-}
-
-// TODO: Maybe add "Qt::SortOrder order" as parameter
-void NoteListModel::sortByTitle()
-{
-    emit layoutAboutToBeChanged();
-    qStableSort(notes.begin(), notes.end(), compareTitle);
-    emit layoutChanged();
-    sortOrder = "title";
-}
-
 // TODO: On startup addNote() is called often. With each call the list gets sorted.
 // Optimize that.
 void NoteListModel::addNote(NoteData *note)
@@ -96,12 +59,6 @@ void NoteListModel::addNote(NoteData *note)
     connect(note, SIGNAL(titleChanged()), this, SLOT(onNoteChanged()));
     connect(note, SIGNAL(lastChangeDateChanged()), this, SLOT(onNoteChanged()));
     connect(note, SIGNAL(favoriteChanged()), this, SLOT(onNoteChanged()));
-
-    if (sortOrder == "title") {
-        sortByTitle();
-    } else {
-        sortByDate();
-    }
     emit layoutChanged();
 }
 
@@ -111,10 +68,5 @@ void NoteListModel::onNoteChanged()
     // If a Note has changed, find out which and update that one
     NoteData *note = (NoteData*)sender();
     int i = notes.indexOf(note);
-    dataChanged(index(i), index(i));
-    if (sortOrder == "title") {
-        sortByTitle();
-    } else {
-        sortByDate();
-    }
+    emit dataChanged(index(i), index(i));
 }
