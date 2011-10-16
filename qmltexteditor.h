@@ -21,6 +21,7 @@ class QMLTextEditor : public QDeclarativeItem
     Q_PROPERTY(bool strikeout READ getStrikeout NOTIFY strikeoutChanged)
     Q_PROPERTY(bool highlight READ getHighlight NOTIFY highlightChanged)
     Q_PROPERTY(bool fixedWidth READ getFixedWidth NOTIFY fixedWidthChanged)
+    Q_PROPERTY(int fontSize READ getFontSize NOTIFY fontSizeChanged)
     Q_PROPERTY(QFont font READ getFont WRITE setFont NOTIFY fontChanged)
     Q_PROPERTY(QColor color READ getColor WRITE setColor NOTIFY colorChanged)
     Q_PROPERTY(QColor selectedTextColor READ getSelectedTextColor WRITE setSelectedTextColor NOTIFY selectedTextColorChanged)
@@ -40,6 +41,7 @@ public:
     bool getStrikeout() const;
     bool getHighlight() const;
     bool getFixedWidth() const;
+    int getFontSize() const;
 
     QTextCursor textCursor();
 
@@ -61,7 +63,6 @@ public:
 
 signals:
     void minHeightChanged();
-    void fontSizeChanged();
     void textChanged();
     void cursorPositionChanged(QRect rect);
     void boldChanged();
@@ -70,6 +71,7 @@ signals:
     void strikeoutChanged();
     void highlightChanged();
     void fixedWidthChanged();
+    void fontSizeChanged();
     void fontChanged();
     void colorChanged();
     void selectedTextColorChanged();
@@ -83,6 +85,7 @@ public slots:
     void toggleStrikeout();
     void toggleHighlight();
     void toggleFixedWidth();
+    void setFontSize(int size);
     void increaseIndent();
     void decreaseIndent();
     void showTestNote();
@@ -114,13 +117,13 @@ private:
     TextEditor *textEdit;
     int qmlWidth;
     int qmlHeight;
-    qreal fontSize;
     bool bold;
     bool italic;
     bool underline;
     bool strikeout;
     bool highlight;
     bool fixedWidth;
+    int fontSize;
     NoteData *currentNote;
     QTimer saveTimer;
     int lastBlockNumber;

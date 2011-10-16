@@ -35,17 +35,39 @@ Page {
             anchors.right: parent.right
 
             ButtonRow {
+                id: fontSizeRow
+
                 Button {
+                    id: b0
                     text: "Small"
+                    onClicked: editor.setFontSize(0)
                 }
                 Button {
+                    id: b1
                     text: "Normal"
+                    onClicked: editor.setFontSize(1)
                 }
                 Button {
+                    id: b2
                     text: "Large"
+                    onClicked: editor.setFontSize(2)
                 }
                 Button {
+                    id: b3
                     text: "Huge"
+                    onClicked: editor.setFontSize(3)
+                }
+                Binding {
+                    property: "checkedButton"
+                    target: fontSizeRow
+                    value: {
+                        switch (editor.fontSize) {
+                               case 0: return b0
+                               case 1: return b1
+                               case 2: return b2
+                               case 3: return b3
+                        }
+                    }
                 }
             }
 

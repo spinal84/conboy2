@@ -248,6 +248,21 @@ void QMLTextEditor::toggleFixedWidth()
     cursor.mergeCharFormat(f);
 }
 
+void QMLTextEditor::setFontSize(int size)
+{
+    qDebug() << "Setting font size to: " << size;
+    QTextCharFormat f;
+    switch (size) {
+        case 0: f = Style::getSmallTextFormat(); break;
+        case 1: f = Style::getNormalTextFormat(); break;
+        case 2: f = Style::getLargeTextFormat(); break;
+        case 3: f = Style::getHugeTextFormat(); break;
+        default: f = Style::getNormalTextFormat(); break;
+    }
+
+    textEdit->textCursor().mergeCharFormat(f);
+}
+
 bool QMLTextEditor::getBold() const
 {
     return bold;
@@ -278,6 +293,11 @@ bool QMLTextEditor::getFixedWidth() const
     return fixedWidth;
 }
 
+int QMLTextEditor::getFontSize() const
+{
+    return fontSize;
+}
+
 void QMLTextEditor::onCurrentCharFormatChanged(QTextCharFormat format)
 {
     bool b = (format.fontWeight() == QFont::Bold);
@@ -287,6 +307,7 @@ void QMLTextEditor::onCurrentCharFormatChanged(QTextCharFormat format)
     bool h = format.background() == QBrush(QColor("yellow"));
     // TODO: Which font do we use? Adjust 'mono' or use styleHint
     bool f = format.fontFamily().contains("mono", Qt::CaseInsensitive);
+    int size = Style::getFontSize(&format);
 
     // TODO: Maybe put in setters
     if (bold != b) {
@@ -316,6 +337,11 @@ void QMLTextEditor::onCurrentCharFormatChanged(QTextCharFormat format)
     if (fixedWidth != f) {
         fixedWidth = f;
         emit fixedWidthChanged();
+    }
+
+    if (fontSize != size) {
+        fontSize = size;
+        emit fontSizeChanged();
     }
 }
 

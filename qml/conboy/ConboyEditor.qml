@@ -14,6 +14,7 @@ FocusScope {
     property alias strikeout: editor.strikeout
     property alias highlight: editor.highlight
     property alias fixedWidth: editor.fixedWidth
+    property alias fontSize: editor.fontSize
 
     property Item platformStyle
 
@@ -57,6 +58,10 @@ FocusScope {
 
     function toggleFixedWidth() {
         editor.toggleFixedWidth()
+    }
+
+    function setFontSize(size) {
+        editor.setFontSize(size)
     }
 
     function increaseIndent() {

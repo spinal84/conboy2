@@ -13,6 +13,7 @@ public:
     static QTextCharFormat getFixedWidthFormat();
     static QTextCharFormat getNormalFont();
     static QTextCharFormat getSmallTextFormat();
+    static QTextCharFormat getNormalTextFormat();
     static QTextCharFormat getLargeTextFormat();
     static QTextCharFormat getHugeTextFormat();
     static QTextCharFormat getLinkTextFormat();
@@ -20,6 +21,7 @@ public:
     static bool startsWithBullet(QString str);
     static QString getBullet(int depth);
     static QStringList getXmlTags(QTextCharFormat *format);
+    static int getFontSize(QTextCharFormat *format);
 
 private:
     const static QString bullet1;

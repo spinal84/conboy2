@@ -57,6 +57,13 @@ QTextCharFormat Style::getSmallTextFormat()
     return f;
 }
 
+QTextCharFormat Style::getNormalTextFormat()
+{
+    QTextCharFormat f;
+    f.setProperty(QTextCharFormat::FontPixelSize, defaultFontPixelSize);
+    return f;
+}
+
 QTextCharFormat Style::getLargeTextFormat()
 {
     QTextCharFormat f;
@@ -148,3 +155,16 @@ QStringList Style::getXmlTags(QTextCharFormat *format)
 
     return tags;
 }
+
+int Style::getFontSize(QTextCharFormat *format)
+{
+    int pixelSize = format->property(QTextCharFormat::FontPixelSize).toInt();
+    switch (pixelSize) {
+        case smallFontPixelSize: return 0;
+        case defaultFontPixelSize: return 1;
+        case largeFontPixelSize: return 2;
+        case hugeFontPixelSize: return 3;
+        default: return 1;
+    }
+}
+

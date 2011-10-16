@@ -18,9 +18,9 @@
 * (Done) Parse notes *after* launching UI to decrease startup time
 * (Done) Implement Search in list view
 * (Done) Implement UI for changing text style
+* (Done) Implement changing the text sizes (small, large, huge)
 
 
-* Implement changing the text sizes (small, large, huge)
 * Bullets should always be painted using the default font (e.g. not bold)
 * Try using QGraphicsTextItem instead of QTextEdit. Maybe the performance is better because we don't need the proxy item.
 * Make sure note titles are unique
@@ -40,4 +40,5 @@
 * User Harmattan list widget (allows jumping via first letter of entry)
 * Integrate into system backup
 * Add 'link' button to top bar
+* Alow theme switching. Colors + inverted/normal
 
