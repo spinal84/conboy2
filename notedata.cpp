@@ -3,7 +3,10 @@
 NoteData::NoteData(QObject *parent) :
     QObject(parent)
 {
-    uuid = QUuid::createUuid();
+    QString uuidStr = QUuid::createUuid().toString();
+    uuidStr.remove(0, 1);
+    uuidStr.chop(1);
+    uuid = uuidStr;
     QDateTime currentTime = QDateTime::currentDateTime();
     createDate = currentTime;
     lastChangeDate = currentTime;
@@ -17,12 +20,12 @@ NoteData::NoteData(QObject *parent) :
     favorite = false;
 }
 
-QUuid NoteData::getUuid() const
+QString NoteData::getUuid() const
 {
     return uuid;
 }
 
-void NoteData::setUuid(QUuid uuid)
+void NoteData::setUuid(QString uuid)
 {
     this->uuid = uuid;
 }

@@ -32,8 +32,8 @@ class NoteData : public QObject
 public:
     explicit NoteData(QObject *parent = 0);
 
-    QUuid getUuid() const;
-    void setUuid(QUuid uuid);
+    QString getUuid() const;
+    void setUuid(QString uuid);
 
     QString getTitle() const;
     void setTitle(QString title);
@@ -84,7 +84,7 @@ signals:
     void favoriteChanged();
 
 private:
-    QUuid uuid;
+    QString uuid;
     QString title;
     QString content;
     QDateTime lastChangeDate;

@@ -15,14 +15,9 @@ TomboyStorage::TomboyStorage(QObject *parent) :
     pathToXmlFiles.cd(".conboy");
 }
 
-NoteData* TomboyStorage::load(QUuid uuid)
+NoteData* TomboyStorage::load(QString uuid)
 {
-    // Remove curly brakets that souround the UUID (TODO: Maybe completely switch to strings for UUIDs)
-    QString uuidStr = uuid.toString();
-    uuidStr.remove(0, 1);
-    uuidStr.chop(1);
-
-    QString path = pathToXmlFiles.absoluteFilePath(uuidStr + ".note");
+    QString path = pathToXmlFiles.absoluteFilePath(uuid + ".note");
     QFile file(path);
 
     if (!file.exists()) {
@@ -35,9 +30,8 @@ NoteData* TomboyStorage::load(QUuid uuid)
         return 0;
     }
 
-
     NoteData *note = new NoteData();
-    note->setUuid(uuidStr);
+    note->setUuid(uuid);
 
     TomboyXmlStreamReader xml(&file);
 
@@ -87,12 +81,7 @@ bool TomboyStorage::save(NoteData *note)
 {
     qDebug() << "SAVING NOTE:" << note->getUuid();
 
-    // Remove curly brakets that souround the UUID (TODO: Maybe completely switch to strings for UUIDs)
-    QString uuidStr = note->getUuid().toString();
-    uuidStr.remove(0, 1);
-    uuidStr.chop(1);
-
-    QString path = pathToXmlFiles.absoluteFilePath(uuidStr + ".note");
+    QString path = pathToXmlFiles.absoluteFilePath(note->getUuid() + ".note");
     qDebug() << "SAVE TO: " << path;
 
     QFile file(path);
@@ -173,22 +162,34 @@ bool TomboyStorage::save(NoteData *note)
 
 bool TomboyStorage::del(NoteData *note)
 {
-    // TODO: Implement
-    return true;
+    QString path = pathToXmlFiles.absoluteFilePath(note->getUuid() + ".note");
+    QFile file(path);
+
+    if (!file.exists()) {
+        qDebug() << "ERROR: Cannot delete. File does not exist:" << file.fileName();
+        return false;
+    }
+
+    if (file.remove()) {
+        qDebug() << "INFO: Removed file: " << file.fileName();
+        return true;
+    }
+
+    qDebug() << "ERROR: Could note delete note.";
+    return false;
 }
 
-QList<QUuid> TomboyStorage::getAllUuids()
+QList<QString> TomboyStorage::getAllUuids()
 {
     QStringList filter;
     filter << "*.note";
     QStringList filenames = pathToXmlFiles.entryList(filter, QDir::Files);
 
-    QList<QUuid> uuids;
+    QList<QString> uuids;
     for (int i = 0; i < filenames.count(); i++) {
         QString filename = filenames[i];
         filename.chop(5); // Remove '.note'
-        QUuid uuid(filename);
-        uuids.append(uuid);
+        uuids.append(filename);
     }
 
     return uuids;

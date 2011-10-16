@@ -22,8 +22,8 @@ QMLTextEditor::QMLTextEditor(QDeclarativeItem *parent) :
     proxy->setWidget(textEdit);
     proxy->setPos(0, 0);
 
-    bold = false;
     currentNote = 0;
+    store = 0;
     lastBlockNumber = -1;
     saveTimer.setSingleShot(true);
 
@@ -38,6 +38,28 @@ QMLTextEditor::QMLTextEditor(QDeclarativeItem *parent) :
     connect(textEdit, SIGNAL(enterPressed()), this, SLOT(onEnterPressed()));
     connect(textEdit, SIGNAL(backspacePressed()), this, SLOT(onBackspacePressed()));
     connect(textEdit, SIGNAL(deletePressed()), this, SLOT(onDeletePressed()));
+}
+
+NoteStore* QMLTextEditor::getNoteStore()
+{
+    return store;
+}
+
+void QMLTextEditor::setNoteStore(NoteStore *noteStore)
+{
+    if (store == 0) {
+        store = noteStore;
+        connect(store, SIGNAL(noteRemoved(NoteData*)), this, SLOT(onNoteRemoved(NoteData*)));
+    }
+}
+
+void QMLTextEditor::onNoteRemoved(NoteData* note)
+{
+    if (currentNote == note) {
+        currentNote = 0;
+        textEdit->clear();
+        saveTimer.stop();
+    }
 }
 
 // TODO: ModificationChanged() is not called repeatedly. Therefore this method is only called
@@ -416,8 +438,11 @@ void QMLTextEditor::formatTitle()
     cursor.setCharFormat(Style::getTitleCharFormat());
 }
 
-void QMLTextEditor::showNote(NoteData *note)
+void QMLTextEditor::showNote(QString uuid)
 {
+    NoteData *note = store->findNote(uuid);
+    qDebug() << "INFO: Showing note: " << note->getTitle();
+
     QXmlSimpleReader xmlReader;
     QXmlInputSource source;
     source.setData(note->getContent());
@@ -484,10 +509,10 @@ void QMLTextEditor::showTestNote()
             "</note-content>";
 
     // Create dummy note and show it
-    NoteData *note = new NoteData();
-    note->setTitle("The Title");
-    note->setContent(content);
-    showNote(note);
+//    NoteData *note = new NoteData();
+//    note->setTitle("The Title");
+//    note->setContent(content);
+//    showNote(note);
 }
 
 QFont QMLTextEditor::getFont()
@@ -613,4 +638,11 @@ void QMLTextEditor::share()
         return;
     }
     */
+}
+
+void QMLTextEditor::deleteNote()
+{
+    if (currentNote) {
+        store->del(currentNote);
+    }
 }

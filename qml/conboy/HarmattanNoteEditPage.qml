@@ -17,7 +17,11 @@ Page {
         visualParent: pageStack
         MenuLayout {
             MenuItem {
-                text: "<s>Delete note</s>"
+                text: "Delete note"
+                onClicked: {
+                    pageStack.pop()
+                    editor.deleteNote()
+                }
             }
             MenuItem {
                 text: "<s>Share note</s>"

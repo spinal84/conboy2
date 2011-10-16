@@ -19,6 +19,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     // Export our text editor to QML
     qmlRegisterType<QMLTextEditor>("Conboy", 1, 0, "TextEditor");
     qmlRegisterType<NoteData>();
+    qmlRegisterType<NoteStore>();
 
     // Holds all notes
     NoteStore noteStore;

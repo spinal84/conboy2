@@ -20,16 +20,19 @@ FocusScope {
 
     function showNote(uuid) {
         console.log("Open note with uuid: " + uuid)
-        var note = noteStore.findNote(uuid)
-        editor.showNote(note)
+        editor.showNote(uuid)
         editor.forceActiveFocus()
     }
 
     function newNote() {
         console.log("New note")
-        var note = noteStore.newNote()
-        editor.showNote(note)
+        var uuid = noteStore.newNote()
+        editor.showNote(uuid)
         editor.forceActiveFocus()
+    }
+
+    function deleteNote() {
+        editor.deleteNote()
     }
 
     function getXml() {
@@ -87,7 +90,7 @@ FocusScope {
         id: editor
         // Width is defined by the parent
         width: parent.width
-
+        store: noteStore
         font.family: "Nokia Pure Text" //root.platformStyle.textFont
         font.pixelSize: 25
         color: root.platformStyle.textColor
@@ -98,7 +101,6 @@ FocusScope {
         property int margin: 50
 
         Component.onCompleted: {
-            editor.showTestNote()
             // Without this, we can't enter text
             editor.forceActiveFocus()
         }

@@ -14,6 +14,7 @@
 class QMLTextEditor : public QDeclarativeItem
 {
     Q_OBJECT
+    Q_PROPERTY(NoteStore* store READ getNoteStore WRITE setNoteStore NOTIFY noteStoreChanged)
     Q_PROPERTY(int minHeight READ getMinHeight WRITE setMinHeight NOTIFY minHeightChanged)
     Q_PROPERTY(bool bold READ getBold NOTIFY boldChanged)
     Q_PROPERTY(bool italic READ getItalic NOTIFY italicChanged)
@@ -31,6 +32,9 @@ class QMLTextEditor : public QDeclarativeItem
 
 public:
     explicit QMLTextEditor(QDeclarativeItem *parent = 0);
+
+    NoteStore* getNoteStore();
+    void setNoteStore(NoteStore *Store);
 
     int getMinHeight() const;
     void setMinHeight(int height);
@@ -62,6 +66,7 @@ public:
 
 
 signals:
+    void noteStoreChanged();
     void minHeightChanged();
     void textChanged();
     void cursorPositionChanged(QRect rect);
@@ -89,11 +94,12 @@ public slots:
     void increaseIndent();
     void decreaseIndent();
     void showTestNote();
-    void showNote(NoteData *note);
+    void showNote(QString uuid);
     void ignoreNextMouseMoves();
     QString getXml();
     void save();
     void share();
+    void deleteNote();
 
 private slots:
     void onWidthChanged();
@@ -107,6 +113,8 @@ private slots:
     void onEnterPressed();
     void onBackspacePressed();
     void onDeletePressed();
+    void onNoteRemoved(NoteData* note);
+
 
 private:
     void formatTitle();
@@ -115,6 +123,7 @@ private:
     bool blockStartsWithBullet(QTextCursor cursor);
     QGraphicsProxyWidget *proxy;
     TextEditor *textEdit;
+    NoteStore *store;
     int qmlWidth;
     int qmlHeight;
     bool bold;

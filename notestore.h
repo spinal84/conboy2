@@ -19,24 +19,24 @@ class NoteStore : public QObject
 
 public:
     NoteStore(QObject *parent = 0);
-    void addNote(QUuid uuid, NoteData* note);
+    void addNote(QString uuid, NoteData* note);
     int count();
     NoteData* get(int index);
     QList<NoteData*> getNotes();
 
 public slots:
-    NoteData* newNote();
-    NoteData* findNote(QUuid uuid);
+    QString newNote();
     NoteData* findNote(QString uuid);
     void loadAll();
     void save(NoteData *note);
+    void del(NoteData *note);
 
 signals:
     void noteAdded(NoteData *note);
     void noteRemoved(NoteData *note);
 
 private:
-    QHash<QUuid, NoteData*> notes;
+    QHash<QString, NoteData*> notes;
 };
 
 #endif // NOTESTORE_H

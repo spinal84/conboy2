@@ -20,10 +20,10 @@ class TomboyStorage : public QObject
 public:
     explicit TomboyStorage(QObject *parent = 0);
 
-    NoteData* load(QUuid uuid);
+    NoteData* load(QString uuid);
     bool save(NoteData *note);
     bool del(NoteData *note);
-    QList<QUuid> getAllUuids();
+    QList<QString> getAllUuids();
 
 signals:
 

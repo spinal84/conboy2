@@ -15,7 +15,7 @@ void NoteStore::loadAll()
     startTime.start();
 
     TomboyStorage storage;
-    QList<QUuid> allUuids = storage.getAllUuids();
+    QList<QString> allUuids = storage.getAllUuids();
 
     for (int i = 0; i < allUuids.count(); i++) {
         NoteData *note = storage.load(allUuids[i]);
@@ -31,14 +31,14 @@ void NoteStore::save(NoteData *note)
     storage.save(note);
 }
 
-void NoteStore::addNote(QUuid uuid, NoteData* note)
+void NoteStore::addNote(QString uuid, NoteData* note)
 {
     note->setStore(this);
     notes.insert(uuid, note);
     emit noteAdded(note);
 }
 
-NoteData* NoteStore::newNote()
+QString NoteStore::newNote()
 {
     qDebug() << "Creating new note";
     NoteData *note = new NoteData();
@@ -54,17 +54,12 @@ NoteData* NoteStore::newNote()
     note->setContent(content);
 
     addNote(note->getUuid(), note);
-    return note;
-}
-
-NoteData* NoteStore::findNote(QUuid uuid)
-{
-    return notes.value(uuid);
+    return note->getUuid();
 }
 
 NoteData* NoteStore::findNote(QString uuid)
 {
-    return notes.value(QUuid(uuid));
+    return notes.value(uuid);
 }
 
 int NoteStore::count()
@@ -82,3 +77,12 @@ QList<NoteData*> NoteStore::getNotes()
     return notes.values();
 }
 
+void NoteStore::del(NoteData *note)
+{
+    TomboyStorage storage;
+    if (storage.del(note)) {
+        emit noteRemoved(note);
+        qDebug() << "Delete NoteData object";
+        delete note;
+    }
+}

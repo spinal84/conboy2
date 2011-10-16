@@ -25,6 +25,7 @@ public:
 
 private slots:
     void addNote(NoteData *note);
+    void removeNote(NoteData *note);
     void onNoteChanged();
 
 private:

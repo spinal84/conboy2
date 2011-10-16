@@ -22,6 +22,7 @@ NoteListModel::NoteListModel(NoteStore *store, QObject *parent) :
 
     // All notes that are added afterwards will trigger the addNote slot
     connect(store, SIGNAL(noteAdded(NoteData*)), this, SLOT(addNote(NoteData*)));
+    connect(store, SIGNAL(noteRemoved(NoteData*)), this, SLOT(removeNote(NoteData*)));
 }
 
 int NoteListModel::rowCount(const QModelIndex &parent) const
@@ -39,7 +40,7 @@ QVariant NoteListModel::data(const QModelIndex &index, int role) const
     NoteData *note = notes[index.row()];
 
     switch (role) {
-    case UuidRole: return note->getUuid().toString();
+    case UuidRole: return note->getUuid();
     case TitleRole: return note->getTitle();
     case LastChangeDateRole: return note->getLastChangeDate();
     case FavoriteRole: return note->getFavorite();
@@ -51,7 +52,7 @@ QVariant NoteListModel::data(const QModelIndex &index, int role) const
 // Optimize that.
 void NoteListModel::addNote(NoteData *note)
 {
-    emit layoutAboutToBeChanged();
+    emit beginInsertRows(QModelIndex(), notes.length(), notes.length());
     notes.append(note);
 
     // Update list if note changed
@@ -59,7 +60,19 @@ void NoteListModel::addNote(NoteData *note)
     connect(note, SIGNAL(titleChanged()), this, SLOT(onNoteChanged()));
     connect(note, SIGNAL(lastChangeDateChanged()), this, SLOT(onNoteChanged()));
     connect(note, SIGNAL(favoriteChanged()), this, SLOT(onNoteChanged()));
-    emit layoutChanged();
+    emit endInsertRows();
+}
+
+void NoteListModel::removeNote(NoteData *note)
+{
+    int row = notes.indexOf(note);
+    emit beginRemoveRows(QModelIndex(), row, row);
+    notes.removeOne(note);
+    qDebug() << "Disconnect signal from note: " << note->getTitle();
+    disconnect(note, SIGNAL(titleChanged()), this, SLOT(onNoteChanged()));
+    disconnect(note, SIGNAL(lastChangeDateChanged()), this, SLOT(onNoteChanged()));
+    disconnect(note, SIGNAL(favoriteChanged()), this, SLOT(onNoteChanged()));
+    emit endRemoveRows();
 }
 
 void NoteListModel::onNoteChanged()
