@@ -25,23 +25,34 @@
 * (Done) Add context menu to notes list to delete note. Simply call notestore.del(NoteData *note);
 * (Done) Before deleting a note, ask for confirmation
 * (Done) Add context menu to notes list to add/remove from favs.
+* (Done) Implement simple about dialog
 
-
+== First public release ==
 * Bullets should always be painted using the default font (e.g. not bold)
+* Preedit (word suggestions) should be displayed in the target format
+* Everything (esp. lists) need to work correctly if selections over multiple lines exist
+* Pressing 'Delete' at the end of a list item needs to join it with the next line
+* Entering text in front of a bullet or directly behind it shoudn't be allowed. Instead, place cursor after bullet and insert there.
+* Read and write favorites from/to local storage
+
+
+== Later ==
 * Try using QGraphicsTextItem instead of QTextEdit. Maybe the performance is better because we don't need the proxy item.
 * Make sure note titles are unique
-* Preedit (word suggestions) should be displayed in the target format
 * Use Booster to decrease startup time http://harmattan-dev.nokia.com/unstable/beta/api_refs/xml/daily-docs/applauncherd/qmlboost.html (>> See 2. Utilizing the booster cache)
 * Unknown tags need to be added to the QTextDocument. Otherwise we can't write them back later and might loose information that is important for some Tomboy plug-in. Try to Use custom properties in QTextFormat.
-* Everything (esp. lists) need to work correctly if selections over multiple lines exist
-* Entering text in front of a bullet or directly behind it shoudn't be allowed. Instead, place cursor after bullet and insert there.
-* Pressing 'Delete' at the end of a list item needs to join it with the next line
 * Sometimes no input possible. Then no virtual keyboard pops up on real device
 * Implement note sharing. Started, but not trivial. Only files indexed by tracker can be shared.
-* Read and write favorites from/to local storage
 * Stop cursor from blinking
 * User Harmattan list widget (allows jumping via first letter of entry). No ready made QML component. Only MTF.
 * Integrate into system backup
 * Add 'link' button to top bar
 * Alow theme switching. Colors + inverted/normal
+* Add settings
+* Add automatic linking of notes while typing
+* Add automatic linkning to URLs, etc.
+* Add automatic linking of Contacts etc. (via Tracker, if possible)
+* Add folders/notebooks. Should integrate into the main note list
+* Implement sync against Ubuntu One and Snowy using OAuth, JSON, etc.
+
 

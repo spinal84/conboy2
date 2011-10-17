@@ -20,6 +20,10 @@ Page {
                 text: "Sort by date"
                 onClicked: noteListModel.sortByDate()
             }
+            MenuItem {
+                text: "About"
+                onClicked: aboutDialog.open()
+            }
         }
     }
 
@@ -129,6 +133,15 @@ Page {
         acceptButtonText: "Yes"
         rejectButtonText: "No"
         onAccepted: noteStore.del(noteList.currentItem.uuid)
+    }
+
+    QueryDialog {
+        id: aboutDialog
+        titleText: "Conboy"
+        message: "Conboy v0.8\n(c) 2011 Cornelius Hald\nhald@icandy.de"
+        acceptButtonText: "Website"
+        rejectButtonText: "Close"
+        onAccepted: Qt.openUrlExternally("http://zwong.de")
     }
 
     ScrollDecorator {
