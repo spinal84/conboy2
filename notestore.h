@@ -31,6 +31,7 @@ public slots:
     void save(NoteData *note);
     void del(NoteData *note);
     void del(QString uuid);
+    void toggleFavorite(QString uuid);
 
 signals:
     void noteAdded(NoteData *note);

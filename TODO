@@ -24,9 +24,9 @@
 * (Done) Implement note deleting
 * (Done) Add context menu to notes list to delete note. Simply call notestore.del(NoteData *note);
 * (Done) Before deleting a note, ask for confirmation
+* (Done) Add context menu to notes list to add/remove from favs.
 
 
-* Add context menu to notes list to add/remove from favs.
 * Bullets should always be painted using the default font (e.g. not bold)
 * Try using QGraphicsTextItem instead of QTextEdit. Maybe the performance is better because we don't need the proxy item.
 * Make sure note titles are unique

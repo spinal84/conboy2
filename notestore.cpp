@@ -94,3 +94,9 @@ void NoteStore::del(NoteData *note)
         delete note;
     }
 }
+
+void NoteStore::toggleFavorite(QString uuid)
+{
+    NoteData *note = findNote(uuid);
+    note->setFavorite(!note->getFavorite());
+}

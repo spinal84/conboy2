@@ -107,12 +107,17 @@ Page {
         id: contextMenu
         MenuLayout {
             MenuItem {
-                text: "Delete note"
-                onClicked: deleteDialog.open()
+                text: noteList.currentItem.favorite ? "Remove from favorites": "Add to favorites"
+                //onClicked: noteList.currentItem.favorite = !noteList.currentItem.favorite
+                onClicked: noteStore.toggleFavorite(noteList.currentItem.uuid)
             }
             MenuItem {
                 text: "<s>Share note</s>"
                 onClicked: console.log("TODO: implement")
+            }
+            MenuItem {
+                text: "Delete note"
+                onClicked: deleteDialog.open()
             }
         }
     }
