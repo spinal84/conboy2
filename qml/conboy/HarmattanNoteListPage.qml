@@ -8,7 +8,6 @@ Page {
 
     Menu {
         id: menu
-        visualParent: pageStack
         MenuLayout {
             MenuItem {text: "<s>Delete notes</s>"}
             MenuItem {text: "<s>Settings</s>"}
@@ -97,7 +96,34 @@ Page {
                 editor.showNote(uuid)
                 showEditor()
             }
+            onPressAndHold: {
+                noteList.currentIndex = index
+                contextMenu.open()
+            }
         }
+    }
+
+    ContextMenu {
+        id: contextMenu
+        MenuLayout {
+            MenuItem {
+                text: "Delete note"
+                onClicked: deleteDialog.open()
+            }
+            MenuItem {
+                text: "<s>Share note</s>"
+                onClicked: console.log("TODO: implement")
+            }
+        }
+    }
+
+    QueryDialog {
+        id: deleteDialog
+        titleText: "Delete note?"
+        message: noteList.currentItem.title
+        acceptButtonText: "Yes"
+        rejectButtonText: "No"
+        onAccepted: noteStore.del(noteList.currentItem.uuid)
     }
 
     ScrollDecorator {

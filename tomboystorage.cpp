@@ -160,9 +160,9 @@ bool TomboyStorage::save(NoteData *note)
     return true;
 }
 
-bool TomboyStorage::del(NoteData *note)
+bool TomboyStorage::del(QString uuid)
 {
-    QString path = pathToXmlFiles.absoluteFilePath(note->getUuid() + ".note");
+    QString path = pathToXmlFiles.absoluteFilePath(uuid + ".note");
     QFile file(path);
 
     if (!file.exists()) {

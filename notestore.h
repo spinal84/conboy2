@@ -30,6 +30,7 @@ public slots:
     void loadAll();
     void save(NoteData *note);
     void del(NoteData *note);
+    void del(QString uuid);
 
 signals:
     void noteAdded(NoteData *note);

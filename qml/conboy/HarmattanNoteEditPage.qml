@@ -14,14 +14,10 @@ Page {
 
     Menu {
         id: menu
-        visualParent: pageStack
         MenuLayout {
             MenuItem {
                 text: "Delete note"
-                onClicked: {
-                    pageStack.pop()
-                    editor.deleteNote()
-                }
+                onClicked: deleteDialog.open()
             }
             MenuItem {
                 text: "<s>Share note</s>"
@@ -241,6 +237,17 @@ Page {
         ToolIcon {
             iconId: "toolbar-view-menu"
             onClicked: (menu.status == DialogStatus.Closed) ? menu.open() : menu.close()
+        }
+    }
+
+    QueryDialog {
+        id: deleteDialog
+        titleText: "Delete note?"
+        acceptButtonText: "Yes"
+        rejectButtonText: "No"
+        onAccepted: {
+            pageStack.pop()
+            editor.deleteNote()
         }
     }
 }

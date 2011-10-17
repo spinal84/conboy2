@@ -77,10 +77,18 @@ QList<NoteData*> NoteStore::getNotes()
     return notes.values();
 }
 
+void NoteStore::del(QString uuid)
+{
+    NoteData *note = findNote(uuid);
+    if (note) {
+        del(note);
+    }
+}
+
 void NoteStore::del(NoteData *note)
 {
     TomboyStorage storage;
-    if (storage.del(note)) {
+    if (storage.del(note->getUuid())) {
         emit noteRemoved(note);
         qDebug() << "Delete NoteData object";
         delete note;

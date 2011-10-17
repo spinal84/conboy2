@@ -5,6 +5,7 @@ Item {
     id: root
 
     signal clicked(string uuid)
+    signal pressAndHold(string uuid)
 
     property string uuid: "123-456-789"
     property string title: "Unknown title"
@@ -53,6 +54,7 @@ Item {
         id: mouse
         anchors.fill: parent
         onClicked: root.clicked(uuid)
+        onPressAndHold: root.pressAndHold(uuid)
     }
 }
 

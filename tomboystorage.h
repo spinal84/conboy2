@@ -22,7 +22,7 @@ public:
 
     NoteData* load(QString uuid);
     bool save(NoteData *note);
-    bool del(NoteData *note);
+    bool del(QString uuid);
     QList<QString> getAllUuids();
 
 signals:
