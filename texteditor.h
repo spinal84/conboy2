@@ -18,6 +18,8 @@ public:
     void setQmlHeight(int height);
     void ignoreNextMouseMoves();
     void inputMethodEvent(QInputMethodEvent *e);
+    void dragEnterEvent(QDragEnterEvent *e);
+
 
 signals:
     void heightChanged(int height);

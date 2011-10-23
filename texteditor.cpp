@@ -105,7 +105,11 @@ void TextEditor::inputMethodEvent(QInputMethodEvent *e)
     qDebug() << "Preedit: " << e->preeditString();
     qDebug() << "";
 
-
-
     QTextEdit::inputMethodEvent(e);
+}
+
+void TextEditor::dragEnterEvent(QDragEnterEvent *e)
+{
+    // Disable drag & drop
+    e->ignore();
 }

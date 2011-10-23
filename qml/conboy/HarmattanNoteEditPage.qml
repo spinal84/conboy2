@@ -28,7 +28,6 @@ Page {
 
     Menu {
         id: styleMenu
-        visualParent: pageStack
 
         Column {
             anchors.left: parent.left
