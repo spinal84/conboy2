@@ -391,29 +391,36 @@ void QMLTextEditor::removeBullet(QTextCursor *cursor)
 
 void QMLTextEditor::indentBlock(QTextCursor *cursor, int depth)
 {
-    QTextBlockFormat format;
+    QTextBlockFormat blockFormat;
+    QTextCharFormat tmpFormat = cursor->charFormat();
+    QTextCursor tmpCursor = *cursor;
+
+    removeBullet(cursor);
 
     // Remove bullet and set indent to 0
     if (depth <= 0) {
-        removeBullet(cursor);
-        format = cursor->blockFormat();
-        format.setIndent(0);
-        format.setTextIndent(0);
-        cursor->setBlockFormat(format);
+        blockFormat = cursor->blockFormat();
+        blockFormat.setIndent(0);
+        blockFormat.setTextIndent(0);
+        cursor->setBlockFormat(blockFormat);
 
     // Remove old bullet, add new bullet, set indent
     } else {
-        removeBullet(cursor);
 
-        // Add new bullet
+        // Add new bullet with default format
         cursor->movePosition(QTextCursor::StartOfBlock);
+        cursor->setCharFormat(Style::getDefaultCharFormat());
         cursor->insertText(Style::getBullet(depth));
 
         // Set indent
-        format = cursor->blockFormat();
-        format.setIndent(depth);
-        format.setTextIndent(-15);
-        cursor->setBlockFormat(format);
+        blockFormat = cursor->blockFormat();
+        blockFormat.setIndent(depth);
+        blockFormat.setTextIndent(-15);
+        cursor->setBlockFormat(blockFormat);
+
+        // After inserting the bullet switch format of the current cursor back to as it was before
+        tmpCursor.setCharFormat(tmpFormat);
+        textEdit->setTextCursor(tmpCursor);
     }
 }
 

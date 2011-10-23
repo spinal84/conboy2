@@ -26,15 +26,15 @@
 * (Done) Before deleting a note, ask for confirmation
 * (Done) Add context menu to notes list to add/remove from favs.
 * (Done) Implement simple about dialog
+* (Done) Bullets should always be painted using the default font (e.g. not bold)
 
 == First public release ==
-* Bullets should always be painted using the default font (e.g. not bold)
 * Preedit (word suggestions) should be displayed in the target format
 * Everything (esp. lists) need to work correctly if selections over multiple lines exist
 * Pressing 'Delete' at the end of a list item needs to join it with the next line
 * Entering text in front of a bullet or directly behind it shoudn't be allowed. Instead, place cursor after bullet and insert there.
 * Read and write favorites from/to local storage
-
+* Not all formattings work reliable
 
 == Later ==
 * Try using QGraphicsTextItem instead of QTextEdit. Maybe the performance is better because we don't need the proxy item.
