@@ -20,7 +20,6 @@ public:
     void inputMethodEvent(QInputMethodEvent *e);
     void dragEnterEvent(QDragEnterEvent *e);
 
-
 signals:
     void heightChanged(int height);
     void linkClicked(QString link);

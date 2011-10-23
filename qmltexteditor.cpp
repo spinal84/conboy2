@@ -228,6 +228,13 @@ void QMLTextEditor::onCursorPositionChanged()
     }
     lastBlockNumber = blockNumber;
 
+    if (cursor.positionInBlock() <= 2 && blockStartsWithBullet(cursor)) {
+        // TODO: Does not work
+        qDebug() << "Adding input hints";
+        textEdit->setInputMethodHints(Qt::ImhPreferUppercase);
+        setInputMethodHints(Qt::ImhPreferUppercase);
+    }
+
     QRect rect = textEdit->cursorRect();
     emit cursorPositionChanged(rect);
 }

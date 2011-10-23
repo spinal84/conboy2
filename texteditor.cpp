@@ -1,4 +1,6 @@
 #include <QDebug>
+#include <QInputContext>
+
 #include "texteditor.h"
 
 TextEditor::TextEditor(QWidget *parent) :
@@ -101,11 +103,16 @@ void TextEditor::ignoreNextMouseMoves()
 
 void TextEditor::inputMethodEvent(QInputMethodEvent *e)
 {
-    qDebug() << "";
-    qDebug() << "Preedit: " << e->preeditString();
-    qDebug() << "";
+//    qDebug() << "";
+//    qDebug() << "Preedit: " << e->preeditString();
+//    qDebug() << "";
+
+    //QInputContext *ctx = inputContext();
+    //qDebug() << "Font italic:" << ctx->font().italic();
 
     QTextEdit::inputMethodEvent(e);
+//    QTextEdit::inputMethodHints();
+    //QTextEdit::setInputMethodHints()
 }
 
 void TextEditor::dragEnterEvent(QDragEnterEvent *e)

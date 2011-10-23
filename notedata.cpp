@@ -159,6 +159,19 @@ void NoteData::setFavorite(bool fav)
     }
 }
 
+bool NoteData::getSelected() const
+{
+    return selected;
+}
+
+void NoteData::setSelected(bool sel)
+{
+    if (selected != sel) {
+        selected = sel;
+        emit selectedChanged();
+    }
+}
+
 void NoteData::setStore(NoteStore *store)
 {
     this->store = store;

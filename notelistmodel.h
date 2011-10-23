@@ -15,7 +15,8 @@ public:
         UuidRole = Qt::UserRole + 100,
         TitleRole,
         LastChangeDateRole,
-        FavoriteRole
+        FavoriteRole,
+        SelectedRole
     };
 
     explicit NoteListModel(NoteStore *store, QObject *parent = 0);

@@ -9,6 +9,7 @@ NoteListModel::NoteListModel(NoteStore *store, QObject *parent) :
     roles[TitleRole] = "title";
     roles[LastChangeDateRole] = "lastChangeDate";
     roles[FavoriteRole] = "favorite";
+    roles[SelectedRole] = "selected";
     setRoleNames(roles);
 
     notes = store->getNotes();
@@ -18,6 +19,7 @@ NoteListModel::NoteListModel(NoteStore *store, QObject *parent) :
         connect(notes[i], SIGNAL(titleChanged()), this, SLOT(onNoteChanged()));
         connect(notes[i], SIGNAL(lastChangeDateChanged()), this, SLOT(onNoteChanged()));
         connect(notes[i], SIGNAL(favoriteChanged()), this, SLOT(onNoteChanged()));
+        connect(notes[i], SIGNAL(selectedChanged()), this, SLOT(onSelectedChanged()));
     }
 
     // All notes that are added afterwards will trigger the addNote slot
@@ -44,6 +46,7 @@ QVariant NoteListModel::data(const QModelIndex &index, int role) const
     case TitleRole: return note->getTitle();
     case LastChangeDateRole: return note->getLastChangeDate();
     case FavoriteRole: return note->getFavorite();
+    case SelectedRole: return note->getSelected();
     default: return QVariant();
     }
 }
@@ -60,6 +63,7 @@ void NoteListModel::addNote(NoteData *note)
     connect(note, SIGNAL(titleChanged()), this, SLOT(onNoteChanged()));
     connect(note, SIGNAL(lastChangeDateChanged()), this, SLOT(onNoteChanged()));
     connect(note, SIGNAL(favoriteChanged()), this, SLOT(onNoteChanged()));
+    connect(note, SIGNAL(selectedChanged()), this, SLOT(onSelectedChanged()));
     emit endInsertRows();
 }
 
@@ -72,6 +76,7 @@ void NoteListModel::removeNote(NoteData *note)
     disconnect(note, SIGNAL(titleChanged()), this, SLOT(onNoteChanged()));
     disconnect(note, SIGNAL(lastChangeDateChanged()), this, SLOT(onNoteChanged()));
     disconnect(note, SIGNAL(favoriteChanged()), this, SLOT(onNoteChanged()));
+    disconnect(note, SIGNAL(selectedChanged()), this, SLOT(onSelectedChanged()));
     emit endRemoveRows();
 }
 

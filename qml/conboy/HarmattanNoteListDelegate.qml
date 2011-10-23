@@ -11,9 +11,18 @@ Item {
     property string title: "Unknown title"
     property date lastChangeDate: "2000-01-01"
     property bool favorite: false
+    property bool selected: false
+    property QObject note
 
     width: 600
     height: 70
+
+    BorderImage {
+        id: selectedBackground
+        anchors.fill: parent
+        visible: selected
+        source: "image://theme/meegotouch-list-background-selected-center"
+    }
 
     BorderImage {
         id: background

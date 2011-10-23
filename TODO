@@ -36,6 +36,7 @@
 * Everything (esp. lists) need to work correctly if selections over multiple lines exist
 * Pressing 'Delete' at the end of a list item needs to join it with the next line
 * Read and write favorites from/to local storage
+* Don't apply styling to bullets if they are selected before selecting a text style
 
 == Later ==
 * First letter after a bullet should be capitalized

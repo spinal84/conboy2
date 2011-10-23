@@ -28,6 +28,7 @@ class NoteData : public QObject
     Q_PROPERTY(QDateTime lastMetadataChangeDate READ getLastMetadataChangeDate NOTIFY lastMetadataChangeDateChanged)
     Q_PROPERTY(QDateTime createDate READ getCreateDate NOTIFY createDateChanged)
     Q_PROPERTY(bool favorite READ getFavorite NOTIFY favoriteChanged)
+    Q_PROPERTY(bool selected READ getSelected NOTIFY selectedChanged)
 
 public:
     explicit NoteData(QObject *parent = 0);
@@ -71,6 +72,9 @@ public:
     bool getFavorite() const;
     void setFavorite(bool fav);
 
+    bool getSelected() const;
+    void setSelected(bool sel);
+
     void setStore(NoteStore* store);
     void save();
 
@@ -82,6 +86,7 @@ signals:
     void lastMetadataChangeDateChanged();
     void createDateChanged();
     void favoriteChanged();
+    void selectedChanged();
 
 private:
     QString uuid;
@@ -97,6 +102,7 @@ private:
     int y;
     bool openOnStartup;
     bool favorite;
+    bool selected;
     QList<QString> tags;
     NoteStore* store;
 
