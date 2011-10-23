@@ -12,7 +12,6 @@ Item {
     property date lastChangeDate: "2000-01-01"
     property bool favorite: false
     property bool selected: false
-    property QObject note
 
     width: 600
     height: 70

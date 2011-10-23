@@ -7,13 +7,40 @@ Page {
     property QtObject editor
 
     Sheet {
-        id: sheet
+        id: deleteMultipleSheet
         acceptButtonText: "Delete"
         rejectButtonText: "Cancle"
-        content: HarmattanNoteList {
-            multiSelect: true
+        content: Item {
             anchors.fill: parent
+            HarmattanNoteList {
+                multiSelect: true
+                anchors.top: parent.top
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.bottom: deleteToolBar.top
+            }
+            ToolBar {
+                id: deleteToolBar
+                anchors.bottom: parent.bottom
+                anchors.left: parent.left
+                anchors.right: parent.right
+                visible: true
+                tools: ToolBarLayout {
+                    ToolButton {
+                        text: "Mark all"
+                        onClicked: noteStore.selectAll()
+                    }
+                }
+            }
         }
+        onAccepted: {
+            deleteMultipleDialog.count = noteStore.getSelectedCount()
+            deleteMultipleDialog.open()
+        }
+        onRejected: {
+            noteStore.unselectAll()
+        }
+
     }
 
     Menu {
@@ -21,7 +48,7 @@ Page {
         MenuLayout {
             MenuItem {
                 text: "Delete notes"
-                onClicked: sheet.open()
+                onClicked: deleteMultipleSheet.open()
             }
             MenuItem {text: "<s>Settings</s>"}
             MenuItem {text: "<s>Synchronization</s>"}
@@ -103,6 +130,16 @@ Page {
         acceptButtonText: "Yes"
         rejectButtonText: "No"
         onAccepted: noteStore.del(noteList.currentItem.uuid)
+    }
+
+    QueryDialog {
+        id: deleteMultipleDialog
+        property int count: 0
+        titleText: "Delete " + count + " notes?"
+        acceptButtonText: "Yes"
+        rejectButtonText: "No"
+        onAccepted: noteStore.deleteSelected()
+        onRejected: noteStore.unselectAll()
     }
 
     QueryDialog {

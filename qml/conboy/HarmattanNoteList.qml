@@ -44,18 +44,21 @@ Item {
             title: model.title
             lastChangeDate: model.lastChangeDate
             favorite: model.favorite
-            note: model.note
+            selected: model.selected
             onClicked: {
                 if (multiSelect) {
-                    currentItem.selected = true
+                    noteList.currentIndex = index
+                    noteStore.toggleSelected(noteList.currentItem.uuid)
                 } else {
                     editor.showNote(uuid)
                     showEditor()
                 }
             }
             onPressAndHold: {
-                noteList.currentIndex = index
-                contextMenu.open()
+                if (!multiSelect) {
+                    noteList.currentIndex = index
+                    contextMenu.open()
+                }
             }
         }
     }

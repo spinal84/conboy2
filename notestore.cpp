@@ -91,12 +91,64 @@ void NoteStore::del(NoteData *note)
     if (storage.del(note->getUuid())) {
         emit noteRemoved(note);
         qDebug() << "Delete NoteData object";
+        notes.remove(note->getUuid());
         delete note;
     }
 }
 
+// TODO: Move into NoteListModel (implement setData() there)
 void NoteStore::toggleFavorite(QString uuid)
 {
     NoteData *note = findNote(uuid);
     note->setFavorite(!note->getFavorite());
+}
+
+// TODO: Move into NoteListModel (implement setData() there)
+void NoteStore::toggleSelected(QString uuid)
+{
+    NoteData *note = findNote(uuid);
+    note->setSelected(!note->getSelected());
+}
+
+void NoteStore::deleteSelected()
+{
+    QList<NoteData*> noteList = notes.values();
+    for (int i = 0; i < noteList.length(); i++) {
+        NoteData *note = noteList[i];
+        if (note->getSelected()) {
+            del(noteList[i]);
+        }
+    }
+}
+
+// TODO: Move into NoteListModel (implement setData() there)
+void NoteStore::unselectAll()
+{
+    QList<NoteData*> noteList = notes.values();
+    for (int i = 0; i < noteList.length(); i++) {
+        noteList[i]->setSelected(false);
+    }
+}
+
+// TODO: Move into NoteListModel (implement setData() there)
+void NoteStore::selectAll()
+{
+    QList<NoteData*> noteList = notes.values();
+    for (int i = 0; i < noteList.length(); i++) {
+        noteList[i]->setSelected(true);
+    }
+}
+
+// TODO: Move into NoteListModel
+int NoteStore::getSelectedCount()
+{
+    int count = 0;
+    QList<NoteData*> noteList = notes.values();
+    for (int i = 0; i < noteList.length(); i++) {
+        NoteData *note = noteList[i];
+        if (note->getSelected()) {
+            count++;
+        }
+    }
+    return count;
 }

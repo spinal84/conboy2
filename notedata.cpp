@@ -18,6 +18,7 @@ NoteData::NoteData(QObject *parent) :
     y = 50;
     openOnStartup = false;
     favorite = false;
+    selected = false;
 }
 
 QString NoteData::getUuid() const

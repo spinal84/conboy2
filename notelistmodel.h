@@ -16,7 +16,8 @@ public:
         TitleRole,
         LastChangeDateRole,
         FavoriteRole,
-        SelectedRole
+        SelectedRole,
+        NoteRole
     };
 
     explicit NoteListModel(NoteStore *store, QObject *parent = 0);

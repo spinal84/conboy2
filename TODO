@@ -30,6 +30,7 @@
 * (Done) Not all formattings work reliable
 * (Done) Entering text in front of a bullet or directly behind it shoudn't be allowed. Instead, place cursor after bullet and insert there.
 * (Done) Disable drag & drop
+* (Done) Implement way to delete several notes at once
 
 == First public release ==
 * Preedit (word suggestions) should be displayed in the target format
