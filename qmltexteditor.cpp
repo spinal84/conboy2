@@ -221,11 +221,7 @@ void QMLTextEditor::onCursorPositionChanged()
 
 void QMLTextEditor::toggleBold()
 {
-    if (bold) {
-        textEdit->setFontWeight(QFont::Normal);
-    } else {
-        textEdit->setFontWeight(QFont::Bold);
-    }
+    textEdit->setFontWeight(bold ? QFont::Normal : QFont::Bold);
 }
 
 void QMLTextEditor::toggleItalic()
@@ -240,9 +236,11 @@ void QMLTextEditor::toggleUnderline()
 
 void QMLTextEditor::toggleStrikeout()
 {
+    QTextCursor cursor = textEdit->textCursor();
     QTextCharFormat f;
     f.setFontStrikeOut(!strikeout);
-    textEdit->textCursor().mergeCharFormat(f);
+    cursor.mergeCharFormat(f);
+    textEdit->setTextCursor(cursor);
 }
 
 void QMLTextEditor::toggleHighlight()
@@ -256,6 +254,7 @@ void QMLTextEditor::toggleHighlight()
         f.setBackground(QBrush(yellow));
     }
     cursor.setCharFormat(f);
+    textEdit->setTextCursor(cursor);
 }
 
 void QMLTextEditor::toggleFixedWidth()
@@ -268,11 +267,12 @@ void QMLTextEditor::toggleFixedWidth()
         f = Style::getFixedWidthFormat();
     }
     cursor.mergeCharFormat(f);
+    textEdit->setTextCursor(cursor);
 }
 
 void QMLTextEditor::setFontSize(int size)
 {
-    qDebug() << "Setting font size to: " << size;
+    QTextCursor cursor = textEdit->textCursor();
     QTextCharFormat f;
     switch (size) {
         case 0: f = Style::getSmallTextFormat(); break;
@@ -282,7 +282,8 @@ void QMLTextEditor::setFontSize(int size)
         default: f = Style::getNormalTextFormat(); break;
     }
 
-    textEdit->textCursor().mergeCharFormat(f);
+    cursor.mergeCharFormat(f);
+    textEdit->setTextCursor(cursor);
 }
 
 bool QMLTextEditor::getBold() const
