@@ -72,7 +72,7 @@ void TextEditor::keyPressEvent(QKeyEvent *e)
         case Qt::Key_Return:    emit enterPressed(); break;
         case Qt::Key_Backspace: emit backspacePressed(); break;
         case Qt::Key_Delete:    emit deletePressed(); break;
-        default:                QTextEdit::keyPressEvent(e); return;
+        default:                emit otherKeyPressed(); QTextEdit::keyPressEvent(e); return;
     }
 
     e->accept();

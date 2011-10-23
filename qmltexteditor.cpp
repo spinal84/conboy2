@@ -38,6 +38,7 @@ QMLTextEditor::QMLTextEditor(QDeclarativeItem *parent) :
     connect(textEdit, SIGNAL(enterPressed()), this, SLOT(onEnterPressed()));
     connect(textEdit, SIGNAL(backspacePressed()), this, SLOT(onBackspacePressed()));
     connect(textEdit, SIGNAL(deletePressed()), this, SLOT(onDeletePressed()));
+    connect(textEdit, SIGNAL(otherKeyPressed()), this, SLOT(onOtherKeyPressed()));
 }
 
 NoteStore* QMLTextEditor::getNoteStore()
@@ -158,6 +159,18 @@ void QMLTextEditor::onDeletePressed()
         return;
     }
     cursor.deleteChar();
+}
+
+void QMLTextEditor::onOtherKeyPressed()
+{
+    QTextCursor cursor = textEdit->textCursor();
+
+    // If directly before or after a bullet, place cursor correctly before inserting
+    if (cursor.positionInBlock() < 2 && blockStartsWithBullet(cursor)) {
+        cursor.movePosition(QTextCursor::StartOfBlock);
+        cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, 2);
+        textEdit->setTextCursor(cursor);
+    }
 }
 
 void QMLTextEditor::onSaveTimerFired()

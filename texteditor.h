@@ -25,6 +25,7 @@ signals:
     void enterPressed();
     void deletePressed();
     void backspacePressed();
+    void otherKeyPressed();
 
 private slots:
     void resizeHeight();

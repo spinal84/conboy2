@@ -113,6 +113,7 @@ private slots:
     void onEnterPressed();
     void onBackspacePressed();
     void onDeletePressed();
+    void onOtherKeyPressed();
     void onNoteRemoved(NoteData* note);
 
 
