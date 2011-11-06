@@ -12,7 +12,12 @@ TomboyStorage::TomboyStorage(QObject *parent) :
 {
     // TODO: Check if exists, etc.
     pathToXmlFiles = QDir::home();
-    pathToXmlFiles.cd(".conboy");
+    pathToXmlFiles.cd("MyDocs");
+    if (!pathToXmlFiles.cd(".conboy")) {
+        pathToXmlFiles.mkdir(".conboy");
+        pathToXmlFiles.cd(".conboy");
+    }
+    qDebug() << "INFO: Storing notes in:" << pathToXmlFiles.absolutePath();
 }
 
 NoteData* TomboyStorage::load(QString uuid)

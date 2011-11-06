@@ -33,6 +33,8 @@
 * (Done) Implement way to delete several notes at once
 
 == First public release ==
+* Decide where to store notes. /home/user/.conboy or /home/user/MyDocs/.conboy? What happens if MyDocs gets unmounted because of USB access?
+* Get theming (BorderImage) of ListDelegate right.
 * Preedit (word suggestions) should be displayed in the target format
 * Everything (esp. lists) need to work correctly if selections over multiple lines exist
 * Pressing 'Delete' at the end of a list item needs to join it with the next line
