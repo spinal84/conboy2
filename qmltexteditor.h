@@ -29,6 +29,7 @@ class QMLTextEditor : public QDeclarativeItem
     Q_PROPERTY(QColor selectionColor READ getSelectionColor WRITE setSelectionColor NOTIFY selectionColorChanged)
     Q_PROPERTY(bool favorite READ getFavorite WRITE setFavorite NOTIFY favoriteChanged)
     Q_PROPERTY(QString uuid READ getUuid NOTIFY uuidChanged)
+    Q_PROPERTY(bool interactive READ getInteractive WRITE setInteractive NOTIFY interactiveChanged)
 
 
 public:
@@ -67,6 +68,9 @@ public:
 
     QString getUuid() const;
 
+    bool getInteractive() const;
+    void setInteractive(bool active);
+
 signals:
     void noteStoreChanged();
     void minHeightChanged();
@@ -85,6 +89,7 @@ signals:
     void selectionColorChanged();
     void favoriteChanged();
     void uuidChanged();
+    void interactiveChanged();
 
 public slots:
     void toggleBold();

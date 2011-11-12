@@ -19,6 +19,8 @@ public:
     void ignoreNextMouseMoves();
     void inputMethodEvent(QInputMethodEvent *e);
     void dragEnterEvent(QDragEnterEvent *e);
+    bool getInteractive() const;
+    void setInteractive(bool active);
 
 signals:
     void heightChanged(int height);
@@ -36,6 +38,7 @@ private:
     void init();
     bool ignoreNxtMouseMoves;
     QPoint mousePressPos;
+    bool interactive;
 
 };
 

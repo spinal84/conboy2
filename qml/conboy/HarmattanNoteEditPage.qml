@@ -159,8 +159,11 @@ Page {
                iconId: "icon-m-toolbar-rich-text"
                onClicked: (styleMenu.status == DialogStatus.Closed) ? styleMenu.open() : styleMenu.close()
            }
-           ToolIcon {
-               iconId: "icon-m-toolbar-select-text"
+           ToolButton {
+               iconSource: "image://theme/icon-m-toolbar-select-text"
+               width: 50
+               onClicked: flickable.interactive = !flickable.interactive
+               checked: !flickable.interactive
            }
         }
     }
@@ -169,16 +172,19 @@ Page {
         id: flickable
         contentHeight: editor.height
         clip: true
+        pressDelay: 1000
         anchors.top: topBar.bottom
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.bottom: parent.bottom
+        onMovingChanged: console.log("Moving: " + moving)
 
         ConboyEditor {
             id: editor
             width:  flickable.width
             // We want the editor always at least as high as the flickable
             minHeight: flickable.height
+            interactive: !flickable.moving
             platformStyle: TextAreaStyle {}
         }
     }

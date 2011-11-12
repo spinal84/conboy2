@@ -38,34 +38,41 @@ void TextEditor::resizeEvent(QResizeEvent *e)
 
 void TextEditor::mousePressEvent(QMouseEvent *e)
 {
-    mousePressPos = e->pos();
-    QTextEdit::mousePressEvent(e);
+    if (interactive) {
+        mousePressPos = e->pos();
+        return QTextEdit::mousePressEvent(e);
+    }
+
+    e->accept();
 }
 
 void TextEditor::mouseReleaseEvent(QMouseEvent *e)
 {
-    // If the user didn't move the mouse more then 30px, check if we have a link.
-    if ((abs(e->x() - mousePressPos.x()) < 30) && abs(e->y() - mousePressPos.y() < 30)) {
-        QString anchor = anchorAt(mousePressPos);
-        if (anchor.length() > 0) {
-            qDebug() << "DEBUG: Link clicked: " << anchor;
-            emit linkClicked(anchor);
+    if (interactive) {
+        // If the user didn't move the mouse more then 30px, check if we have a link.
+        if ((abs(e->x() - mousePressPos.x()) < 30) && abs(e->y() - mousePressPos.y() < 30)) {
+            QString anchor = anchorAt(mousePressPos);
+            if (anchor.length() > 0) {
+                qDebug() << "DEBUG: Link clicked: " << anchor;
+                emit linkClicked(anchor);
+            }
         }
+
+        ignoreNxtMouseMoves = false;
+        return QTextEdit::mouseReleaseEvent(e);
     }
 
-    ignoreNxtMouseMoves = false;
-    QTextEdit::mouseReleaseEvent(e);
+    e->accept();
 }
 
 void TextEditor::mouseMoveEvent(QMouseEvent *e)
 {
-    // If ignoreNxtMouseMoves is set, we ignore mouse move events until the next mouse release event.
-    if (ignoreNxtMouseMoves) {
+    if (!interactive || ignoreNxtMouseMoves) {
         e->accept();
         return;
     }
 
-    QTextEdit::mouseMoveEvent(e);
+    return QTextEdit::mouseMoveEvent(e);
 }
 
 void TextEditor::keyPressEvent(QKeyEvent *e)
@@ -120,4 +127,14 @@ void TextEditor::dragEnterEvent(QDragEnterEvent *e)
 {
     // Disable drag & drop
     e->ignore();
+}
+
+bool TextEditor::getInteractive() const
+{
+    return interactive;
+}
+
+void TextEditor::setInteractive(bool active)
+{
+    interactive = active;
 }

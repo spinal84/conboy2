@@ -648,6 +648,19 @@ QString QMLTextEditor::getUuid() const
     return QString();
 }
 
+bool QMLTextEditor::getInteractive() const
+{
+    return textEdit->getInteractive();
+}
+
+void QMLTextEditor::setInteractive(bool active)
+{
+    if (textEdit->getInteractive() != active) {
+        textEdit->setInteractive(active);
+        emit interactiveChanged();
+    }
+}
+
 void QMLTextEditor::share()
 {
     /*
