@@ -10,9 +10,9 @@
 TomboyStorage::TomboyStorage(QObject *parent) :
     QObject(parent)
 {
+    // TODO: Use QDesktopServices::DataLocation
     // TODO: Check if exists, etc.
     pathToXmlFiles = QDir::home();
-    pathToXmlFiles.cd("MyDocs");
     if (!pathToXmlFiles.cd(".conboy")) {
         pathToXmlFiles.mkdir(".conboy");
         pathToXmlFiles.cd(".conboy");

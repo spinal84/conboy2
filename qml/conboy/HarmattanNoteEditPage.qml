@@ -213,7 +213,7 @@ Page {
 
         ToolIcon {
             iconId: editor.favorite ? "icon-m-toolbar-favorite-mark" : "icon-m-toolbar-favorite-unmark"
-            onClicked: editor.favorite = !editor.favorite
+            onClicked: noteStore.toggleFavorite(editor.uuid) //editor.favorite = !editor.favorite
         }
 
         /*

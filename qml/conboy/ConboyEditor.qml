@@ -15,6 +15,7 @@ FocusScope {
     property alias highlight: editor.highlight
     property alias fixedWidth: editor.fixedWidth
     property alias fontSize: editor.fontSize
+    property alias uuid: editor.uuid
 
     property Item platformStyle
 

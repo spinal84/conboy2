@@ -31,6 +31,7 @@
 * (Done) Entering text in front of a bullet or directly behind it shoudn't be allowed. Instead, place cursor after bullet and insert there.
 * (Done) Disable drag & drop
 * (Done) Implement way to delete several notes at once
+* (Done) Read and write favorites from/to local storage
 
 == First public release ==
 * Decide where to store notes. /home/user/.conboy or /home/user/MyDocs/.conboy? What happens if MyDocs gets unmounted because of USB access?
@@ -38,7 +39,6 @@
 * Preedit (word suggestions) should be displayed in the target format
 * Everything (esp. lists) need to work correctly if selections over multiple lines exist
 * Pressing 'Delete' at the end of a list item needs to join it with the next line
-* Read and write favorites from/to local storage
 * Don't apply styling to bullets if they are selected before selecting a text style
 
 == Later ==

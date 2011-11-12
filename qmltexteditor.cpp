@@ -493,6 +493,7 @@ void QMLTextEditor::showNote(QString uuid)
     }
 
     currentNote = note;
+    emit uuidChanged();
 
     connect(currentNote, SIGNAL(favoriteChanged()), this, SIGNAL(favoriteChanged()));
 
@@ -636,6 +637,15 @@ void QMLTextEditor::setFavorite(bool fav)
     if (currentNote) {
         currentNote->setFavorite(fav);
     }
+}
+
+QString QMLTextEditor::getUuid() const
+{
+    if (currentNote) {
+        return currentNote->getUuid();
+    }
+
+    return QString();
 }
 
 void QMLTextEditor::share()

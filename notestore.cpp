@@ -1,5 +1,6 @@
 #include <QTime>
 #include <QDebug>
+#include <QSettings>
 
 #include "notestore.h"
 #include "tomboystorage.h"
@@ -17,8 +18,12 @@ void NoteStore::loadAll()
     TomboyStorage storage;
     QList<QString> allUuids = storage.getAllUuids();
 
+    QSettings settings("Zwong", "Conboy");
+
     for (int i = 0; i < allUuids.count(); i++) {
         NoteData *note = storage.load(allUuids[i]);
+        QString key = "favorites/" + note->getUuid();
+        note->setFavorite(settings.value(key, false).toBool());
         addNote(allUuids[i], note);
     }
 
@@ -101,6 +106,18 @@ void NoteStore::toggleFavorite(QString uuid)
 {
     NoteData *note = findNote(uuid);
     note->setFavorite(!note->getFavorite());
+
+    // Store state permanent in settings
+    QSettings settings("Zwong", "Conboy");
+    QString key = "favorites/" + note->getUuid();
+    if (note->getFavorite()) {
+        settings.setValue(key, true);
+    } else {
+        settings.remove(key);
+    }
+
+    // TODO: Move somewhere where it's only executed upon exit
+    settings.sync();
 }
 
 // TODO: Move into NoteListModel (implement setData() there)
