@@ -3,6 +3,7 @@
 #include <QDomDocument>
 #include <QXmlStreamReader>
 #include <QXmlStreamWriter>
+#include <QDesktopServices>
 
 #include "tomboystorage.h"
 #include "tomboyxmlstreamreader.h"
@@ -10,8 +11,6 @@
 TomboyStorage::TomboyStorage(QObject *parent) :
     QObject(parent)
 {
-    // TODO: Use QDesktopServices::DataLocation
-    // TODO: Check if exists, etc.
     pathToXmlFiles = QDir::home();
     if (!pathToXmlFiles.cd(".conboy")) {
         pathToXmlFiles.mkdir(".conboy");

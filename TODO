@@ -32,9 +32,9 @@
 * (Done) Disable drag & drop
 * (Done) Implement way to delete several notes at once
 * (Done) Read and write favorites from/to local storage
+* (Done) Decide where to store notes. /home/user/.conboy or /home/user/MyDocs/.conboy? What happens if MyDocs gets unmounted because of USB access?
 
 == First public release ==
-* Decide where to store notes. /home/user/.conboy or /home/user/MyDocs/.conboy? What happens if MyDocs gets unmounted because of USB access?
 * Get theming (BorderImage) of ListDelegate right.
 * Preedit (word suggestions) should be displayed in the target format
 * Everything (esp. lists) need to work correctly if selections over multiple lines exist
