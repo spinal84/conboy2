@@ -56,7 +56,6 @@
 * Unknown tags need to be added to the QTextDocument. Otherwise we can't write them back later and might loose information that is important for some Tomboy plug-in. Try to Use custom properties in QTextFormat.
 * Sometimes no input possible. Then no virtual keyboard pops up on real device
 * Implement note sharing. Started, but not trivial. Only files indexed by tracker can be shared.
-* Stop cursor from blinking
 * Use Harmattan list widget (allows jumping via first letter of entry). No ready made QML component. Only MTF.
 * Integrate into system backup
 * Add 'link' button to top bar
