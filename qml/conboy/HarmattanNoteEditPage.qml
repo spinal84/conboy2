@@ -1,4 +1,4 @@
-import QtQuick 1.0
+import QtQuick 1.1
 import com.nokia.meego 1.0
 
 Page {
@@ -150,6 +150,12 @@ Page {
 
     ToolBar {
         id: topBar
+        platformStyle: ToolBarStyle {
+//            background: "meegotouch-toolbar-" +
+//                        ((screen.currentOrientation == Screen.Portrait || screen.currentOrientation == Screen.PortraitInverted) ? "portrait" : "landscape") +
+//                        __invertedString + "-background.png"
+            background: "image://theme/color6-meegotouch-view-header-fixed"
+        }
         anchors.top: parent.top
         tools: ToolBarLayout {
             ToolIcon {
@@ -169,6 +175,7 @@ Page {
                onClicked: (styleMenu.status == DialogStatus.Closed) ? styleMenu.open() : styleMenu.close()
            }
            ToolButton {
+               id: selectionBtn
                iconSource: "image://theme/icon-m-toolbar-select-text"
                width: 50
                onClicked: flickable.interactive = !flickable.interactive

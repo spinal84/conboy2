@@ -1,4 +1,4 @@
-import QtQuick 1.0
+import QtQuick 1.1
 import Conboy 1.0
 import com.nokia.meego 1.0
 import "TextAreaHelper.js" as TextAreaHelper
@@ -104,7 +104,7 @@ FocusScope {
 
         Component.onCompleted: {
             // Without this, we can't enter text
-            editor.forceActiveFocus()
+            editor.forceFocus()
         }
 
         onCursorPositionChanged: {
@@ -139,13 +139,21 @@ FocusScope {
         target: inputContext
 
         onSoftwareInputPanelVisibleChanged: {
-            if (activeFocus)
+            if (activeFocus) {
                 TextAreaHelper.repositionFlickable(contentMovingAnimation);
+            }
+
+            // If the user hides the virtual keyboard set the focus again.
+            // This is a workaround because we loos focus if the keyboard is closed
+            if (!inputContext.softwareInputPanelVisible) {
+                editor.forceFocus()
+            }
         }
 
         onSoftwareInputPanelRectChanged: {
-            if (activeFocus)
+            if (activeFocus) {
                 TextAreaHelper.repositionFlickable(contentMovingAnimation);
+            }
         }
     }
 }

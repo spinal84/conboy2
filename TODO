@@ -36,13 +36,18 @@
 * (Done) Cursor should not change position if user touches to flick. Only if tap without movement happend or long tap.
 * (Done) Add splash screen
 
-== First public release ==
+== First public beta release ==
 * Preedit (word suggestions) should be displayed in the target format
 * Everything (esp. lists) need to work correctly if selections over multiple lines exist
 * Pressing 'Delete' at the end of a list item needs to join it with the next line
 * Don't apply styling to bullets if they are selected before selecting a text style
+* Linking
+* Add GPLv3 headers
 
 == Later ==
+* Opening the virtual keyboard takes two taps. Should only be one tap
+* Flicking with closed VK shouldn't set the focus (show cursor)
+* Localize strings
 * Get theming (BorderImage) of ListDelegate right.
 * First letter after a bullet should be capitalized
 * Try using QGraphicsTextItem instead of QTextEdit. Maybe the performance is better because we don't need the proxy item.

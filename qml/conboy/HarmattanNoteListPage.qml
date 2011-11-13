@@ -166,7 +166,7 @@ Page {
     QueryDialog {
         id: aboutDialog
         titleText: "Conboy"
-        message: "Conboy v0.8\n(c) 2011 Cornelius Hald\nhald@icandy.de"
+        message: "Conboy v1.9.1\n(c) 2011 Cornelius Hald\nhald@icandy.de\n\nLicensed under GPLv3"
         acceptButtonText: "Website"
         rejectButtonText: "Close"
         onAccepted: Qt.openUrlExternally("http://zwong.de")

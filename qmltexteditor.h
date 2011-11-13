@@ -108,6 +108,7 @@ public slots:
     void save();
     void share();
     void deleteNote();
+    void forceFocus();
 
 private slots:
     void onWidthChanged();

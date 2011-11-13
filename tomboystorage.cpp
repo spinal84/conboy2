@@ -122,9 +122,9 @@ bool TomboyStorage::save(NoteData *note)
     // Write content
     // TODO: Is there a more efficient way? Now we're reparsing the xml-string just
     // to write it out. Maybe store in parsed form?
-    qDebug() << "###########################";
-    qDebug() << note->getContent();
-    qDebug() << "###########################";
+//    qDebug() << "###########################";
+//    qDebug() << note->getContent();
+//    qDebug() << "###########################";
 
     QXmlStreamReader reader(note->getContent());
     // Add namespaces, otherwise we get parse errors

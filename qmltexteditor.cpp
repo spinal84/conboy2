@@ -697,3 +697,12 @@ void QMLTextEditor::deleteNote()
         store->del(currentNote);
     }
 }
+
+// Our version of forceActiveFocus(). It forces the focus on the declarative item
+// and also focuses the QTextEdit inside.
+void QMLTextEditor::forceFocus()
+{
+    qDebug() << "INFO: C++ forceActiveFocus() called.";
+    textEdit->setFocus();
+    QDeclarativeItem::forceActiveFocus();
+}
