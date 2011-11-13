@@ -4,7 +4,7 @@ Version=1.0
 Type=Application
 Terminal=false
 Name=Conboy
-Exec=invoker --single-instance --splash=/usr/share/conboy/splash.jpg --type=e /opt/conboy/bin/conboy
+Exec=invoker --single-instance --splash=/usr/share/conboy/splash.png --type=e /opt/conboy/bin/conboy
 Icon=/usr/share/icons/hicolor/80x80/apps/conboy.png
 X-Window-Icon=
 X-HildonDesk-ShowInToolbar=true

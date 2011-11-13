@@ -87,7 +87,7 @@ contains(MEEGO_EDITION,harmattan) {
 }
 
 contains(MEEGO_EDITION,harmattan) {
-    splash.files = splash.jpg
+    splash.files = splash.png
     splash.path = /usr/share/conboy
     INSTALLS += splash
 }
