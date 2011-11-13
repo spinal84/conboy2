@@ -23,6 +23,7 @@ void TextEditor::init()
     document()->setDocumentMargin(20);
     ignoreNxtMouseMoves = false;
     qmlHeight = 0;
+    setFrameStyle(QFrame::NoFrame);
     connect(this, SIGNAL(textChanged()), this, SLOT(resizeHeight()));
 }
 
