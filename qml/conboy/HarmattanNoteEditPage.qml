@@ -29,6 +29,7 @@ Page {
     Menu {
         id: styleMenu
 
+
         Column {
             anchors.left: parent.left
             anchors.right: parent.right
@@ -94,47 +95,55 @@ Page {
             }
             */
 
-            Button {
-                text: "<b>Bold</b>"
-                checked: editor.bold
+            Row {
                 anchors.left: parent.left
                 anchors.right: parent.right
-                onClicked: editor.toggleBold()
+                Button {
+                    text: "<b>Bold</b>"
+                    checked: editor.bold
+                    width: parent.width/2
+                    onClicked: editor.toggleBold()
+                }
+                Button {
+                    text: "<i>Italic</i>"
+                    checked: editor.italic
+                    width: parent.width/2
+                    onClicked: editor.toggleItalic()
+                }
             }
-            Button {
-                text: "<i>Italic</i>"
-                checked: editor.italic
+
+            Row {
                 anchors.left: parent.left
                 anchors.right: parent.right
-                onClicked: editor.toggleItalic()
+                Button {
+                    text: "<u>Underline</u>"
+                    checked: editor.underline
+                    width: parent.width/2
+                    onClicked: editor.toggleUnderline()
+                }
+                Button {
+                    text: "<s>Strikeout</s>"
+                    checked: editor.strikeout
+                    width: parent.width/2
+                    onClicked: editor.toggleStrikeout()
+                }
             }
-            Button {
-                text: "<u>Underline</u>"
-                checked: editor.underline
+
+            Row {
                 anchors.left: parent.left
                 anchors.right: parent.right
-                onClicked: editor.toggleUnderline()
-            }
-            Button {
-                text: "<s>Strikeout</s>"
-                checked: editor.strikeout
-                anchors.left: parent.left
-                anchors.right: parent.right
-                onClicked: editor.toggleStrikeout()
-            }
-            Button {
-                text: "<span style='background-color: yellow'>Highlight</span>"
-                checked: editor.highlight
-                anchors.left: parent.left
-                anchors.right: parent.right
-                onClicked: editor.toggleHighlight()
-            }
-            Button {
-                text: "<pre>Fixed width</pre>"
-                checked: editor.fixedWidth
-                anchors.left: parent.left
-                anchors.right: parent.right
-                onClicked: editor.toggleFixedWidth()
+                Button {
+                    text: "<span style='background-color: yellow'>Highlight</span>"
+                    checked: editor.highlight
+                    width: parent.width/2
+                    onClicked: editor.toggleHighlight()
+                }
+                Button {
+                    text: "<pre>Fixed width</pre>"
+                    checked: editor.fixedWidth
+                    width: parent.width/2
+                    onClicked: editor.toggleFixedWidth()
+                }
             }
         }
     }
