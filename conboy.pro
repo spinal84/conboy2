@@ -86,12 +86,8 @@ contains(MEEGO_EDITION,harmattan) {
     INSTALLS += icon
 }
 
-
-
-
-
-
-
-
-
-
+contains(MEEGO_EDITION,harmattan) {
+    splash.files = splash.jpg
+    splash.path = /usr/share/conboy
+    INSTALLS += splash
+}

@@ -34,6 +34,7 @@
 * (Done) Read and write favorites from/to local storage
 * (Done) Decide where to store notes. /home/user/.conboy or /home/user/MyDocs/.conboy? What happens if MyDocs gets unmounted because of USB access?
 * (Done) Cursor should not change position if user touches to flick. Only if tap without movement happend or long tap.
+* (Done) Add splash screen
 
 == First public release ==
 * Preedit (word suggestions) should be displayed in the target format
@@ -54,7 +55,7 @@
 * Use Harmattan list widget (allows jumping via first letter of entry). No ready made QML component. Only MTF.
 * Integrate into system backup
 * Add 'link' button to top bar
-* Alow theme switching. Colors + inverted/normal
+* Allow switching between inverted/normal
 * Add settings
 * Add automatic linking of notes while typing
 * Add automatic linkning to URLs, etc.
