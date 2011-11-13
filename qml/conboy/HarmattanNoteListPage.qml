@@ -8,8 +8,36 @@ Page {
 
     Sheet {
         id: deleteMultipleSheet
-        acceptButtonText: "Delete"
-        rejectButtonText: "Cancle"
+        // Instead of using the default sheet buttons, we create or own to get the theming right
+        buttons: Item {
+            anchors.fill: parent
+            SheetButton {
+                text: "Cancle"
+                anchors.left: parent.left
+                anchors.leftMargin: deleteMultipleSheet.platformStyle.rejectButtonLeftMargin
+                anchors.verticalCenter: parent.verticalCenter
+                onClicked: {
+                    deleteMultipleSheet.close()
+                    noteStore.unselectAll()
+                }
+            }
+
+            SheetButton {
+                text: "Delete"
+                anchors.right: parent.right
+                anchors.rightMargin: deleteMultipleSheet.platformStyle.acceptButtonRightMargin
+                anchors.verticalCenter: parent.verticalCenter
+                platformStyle: SheetButtonAccentStyle {
+                    background: "image://theme/color6-meegotouch-sheet-button-accent"+__invertedString+"-background"
+                }
+                onClicked: {
+                    deleteMultipleSheet.close()
+                    deleteMultipleDialog.count = noteStore.getSelectedCount()
+                    deleteMultipleDialog.open()
+                }
+            }
+        }
+
         content: Item {
             anchors.fill: parent
             HarmattanNoteList {
@@ -29,18 +57,11 @@ Page {
                     ToolButton {
                         text: "Mark all"
                         onClicked: noteStore.selectAll()
+                        anchors.horizontalCenter: parent.horizontalCenter
                     }
                 }
             }
         }
-        onAccepted: {
-            deleteMultipleDialog.count = noteStore.getSelectedCount()
-            deleteMultipleDialog.open()
-        }
-        onRejected: {
-            noteStore.unselectAll()
-        }
-
     }
 
     Menu {
@@ -78,10 +99,10 @@ Page {
         }
     }
 
-    Rectangle {
+    Image {
         id: header
         height: 72
-        color: "green"
+        source: "image://theme/color6-meegotouch-view-header-fixed"
         anchors.left: parent.left
         anchors.top: parent.top
         anchors.right: parent.right

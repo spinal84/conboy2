@@ -20,7 +20,7 @@ Item {
         id: selectedBackground
         anchors.fill: parent
         visible: selected
-        source: "image://theme/meegotouch-list-background-selected-center"
+        source: "image://theme/color6-meegotouch-list-background-selected-center"
     }
 
     BorderImage {
@@ -46,15 +46,16 @@ Item {
 
         Text {
             text: title
-            //font.pointSize: 18
+            font.family: "Nokia Pure Text"
             font.pixelSize: 30
             font.bold: true
         }
 
         Text {
             text: Qt.formatDateTime(lastChangeDate)
-            //font.pointSize: 12
+            font.family: "Nokia Pure Text"
             font.pixelSize: 20
+            color: "gray"
         }
     }
 

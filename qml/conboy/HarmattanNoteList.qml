@@ -7,7 +7,9 @@ Item {
 
     TextField {
         id: search
-        platformStyle: TextFieldStyle {}
+        platformStyle: TextFieldStyle {
+            backgroundSelected: "image://theme/color6-meegotouch-textedit-background-selected"
+        }
         placeholderText: "Search"
         anchors { top: parent.top; left: parent.left; right: parent.right }
         anchors.margins: 16 // TODO: Use platform margins

@@ -164,6 +164,9 @@ Page {
                width: 50
                onClicked: flickable.interactive = !flickable.interactive
                checked: !flickable.interactive
+               platformStyle: ToolButtonStyle {
+                   checkedBackground: "image://theme/" + "color6" + "-meegotouch-button" + __invertedString + "-background-selected" + (position ? "-" + position : "")
+               }
            }
         }
     }
@@ -177,7 +180,6 @@ Page {
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.bottom: parent.bottom
-        onMovingChanged: console.log("Moving: " + moving)
 
         ConboyEditor {
             id: editor
